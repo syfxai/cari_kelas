@@ -41,7 +41,7 @@ export default function AppShell({ children }: AppShellProps) {
   return (
     <div className="min-h-screen bg-[#F8FAFC] text-slate-900 flex flex-col">
       {/* Minimal Top Header - Gaya Apple Minimal */}
-      <header className="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-slate-100 px-4 sm:px-8 py-3.5 flex items-center justify-between">
+      <header className="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-slate-100 px-4 sm:px-8 py-3.5 flex items-center justify-between print:hidden">
         <div className="flex items-center gap-4">
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -136,7 +136,7 @@ export default function AppShell({ children }: AppShellProps) {
       </main>
 
       {/* Minimal Footer */}
-      <footer className="border-t border-slate-100 bg-white py-6 px-4 text-center text-xs text-slate-400 flex flex-col sm:flex-row items-center justify-center gap-2">
+      <footer className="border-t border-slate-100 bg-white py-6 px-4 text-center text-xs text-slate-400 flex flex-col sm:flex-row items-center justify-center gap-2 print:hidden">
         <Image
           src="/icon.png"
           alt="Logo Cari Kelas"
