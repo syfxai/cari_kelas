@@ -96,7 +96,7 @@ export default function TeachersPage() {
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-slate-900 flex items-center gap-2">
             <span>Jadual Pensyarah</span>
-            <span className="text-xs font-mono font-semibold text-[#00A3FF] bg-sky-50 border border-sky-100 px-2 py-0.5 rounded-md">
+            <span className="text-xs font-semibold text-[#00A3FF] bg-sky-50 border border-sky-100 px-2 py-0.5 rounded-md">
               {teachers.length} Pensyarah
             </span>
           </h1>
@@ -181,7 +181,7 @@ export default function TeachersPage() {
             <h2 className="text-sm font-semibold text-slate-900">
               Senarai Semua Pensyarah
             </h2>
-            <span className="text-xs font-mono font-medium text-[#00A3FF] bg-sky-50 border border-sky-100 px-2 py-0.5 rounded">
+            <span className="text-xs font-semibold text-[#00A3FF] bg-sky-50 border border-sky-100 px-2 py-0.5 rounded">
               {filteredTeachers.length} rekod
             </span>
           </div>
@@ -200,7 +200,7 @@ export default function TeachersPage() {
                   <div className="text-xs font-semibold text-slate-900 group-hover:text-[#00A3FF] truncate transition-colors">
                     {name}
                   </div>
-                  <div className="text-[10px] text-slate-400 font-mono">
+                  <div className="text-[10px] text-slate-400">
                     KPTM Ipoh
                   </div>
                 </div>

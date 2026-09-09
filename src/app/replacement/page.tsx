@@ -607,7 +607,7 @@ export default function ReplacementPage() {
             <div className="space-y-0.5">
               <div className="font-semibold text-slate-900 flex items-center gap-2">
                 <span>{selectedSourceSlot.subject}</span>
-                <span className="text-[11px] font-mono text-slate-600 bg-white border border-slate-200 px-2 py-0.2 rounded">
+                <span className="text-[11px] font-semibold text-slate-700 bg-white border border-slate-200 px-2.5 py-0.5 rounded-md">
                   Tempoh Asal: {sourceDurationHours} Jam
                 </span>
               </div>
@@ -717,7 +717,7 @@ export default function ReplacementPage() {
                           <div className="font-extrabold text-slate-900 text-xs">
                             Waktu {p.period}
                           </div>
-                          <div className="text-[10px] text-slate-500 whitespace-nowrap font-mono mt-0.5">
+                          <div className="text-[10px] text-slate-500 whitespace-nowrap mt-0.5">
                             {p.start.slice(0, 2)}:00 – {p.end.slice(0, 2)}:00
                           </div>
                         </th>
@@ -777,7 +777,7 @@ export default function ReplacementPage() {
                                     </div>
 
                                     <div
-                                      className={`text-[10px] font-mono font-semibold px-2 py-0.5 rounded-md mt-1 transition-colors ${
+                                      className={`text-[10px] font-semibold px-2 py-0.5 rounded-md mt-1 transition-colors ${
                                         isSelectedActive
                                           ? 'bg-white text-sky-900 shadow-xs font-bold'
                                           : 'bg-white/90 text-emerald-700 border border-emerald-200/60 shadow-2xs'
@@ -796,7 +796,7 @@ export default function ReplacementPage() {
                                 <td key={p.period} className="p-0 align-middle">
                                   <div className="bg-gradient-to-b from-slate-800 to-slate-900 text-white border border-slate-700 rounded-xl p-2 min-h-[60px] flex flex-col items-center justify-center shadow-xs">
                                     <span className="font-bold text-[11px] text-white">Slot Asal</span>
-                                    <span className="text-[9px] font-mono text-slate-300 mt-0.5">Diganti</span>
+                                    <span className="text-[9px] font-medium text-slate-300 mt-0.5">Diganti</span>
                                   </div>
                                 </td>
                               );
@@ -870,7 +870,7 @@ export default function ReplacementPage() {
                           }`}
                         >
                           <td className="p-2.5 font-medium text-slate-900">{DAY_LABELS[opt.day] || opt.day}</td>
-                          <td className="p-2.5 font-mono">{formatTime(opt.time)} – {formatTime(opt.timeEnd)}</td>
+                          <td className="p-2.5 font-medium text-slate-800">{formatTime(opt.time)} – {formatTime(opt.timeEnd)}</td>
                           <td className="p-2.5 text-slate-500">{opt.periodLabel}</td>
                           <td className="p-2.5 text-emerald-700 font-medium">{validRooms.length} bilik fizikal</td>
                           <td className="p-2.5 text-right">
@@ -968,7 +968,7 @@ export default function ReplacementPage() {
                 </div>
 
                 {/* Preview of Memo */}
-                <div className="p-3 bg-white rounded-lg border border-slate-200 text-xs font-mono text-slate-700 space-y-0.5">
+                <div className="p-3 bg-white rounded-lg border border-slate-200 text-xs text-slate-700 space-y-1">
                   <div className="font-bold text-slate-900">[CADANGAN KELAS GANTI]</div>
                   <div>• Pensyarah: {teacher?.name}</div>
                   <div>• Kelas: {className}</div>

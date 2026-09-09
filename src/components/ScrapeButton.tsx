@@ -63,7 +63,7 @@ export default function ScrapeButton({ onComplete }: ScrapeButtonProps) {
             <span>{result.message}</span>
           </div>
           {result.success && result.data && (
-            <div className="mt-0.5 font-mono text-[11px] text-emerald-600 pl-3">
+            <div className="mt-0.5 text-[11px] text-emerald-600 pl-3">
               Pensyarah: {result.data.teachers} | Kelas: {result.data.classes} | Bilik: {result.data.rooms}
             </div>
           )}

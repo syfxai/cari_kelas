@@ -58,7 +58,7 @@ export default function TimetableGrid({ slots, title, subtitle }: TimetableGridP
             <h2 className="text-sm font-bold text-slate-900 tracking-tight">{title}</h2>
             {subtitle && <span className="text-xs text-slate-500">• {subtitle}</span>}
           </div>
-          <span className="text-[11px] font-mono font-semibold text-[#00A3FF] bg-sky-50 border border-sky-100 px-2.5 py-0.5 rounded-md">
+          <span className="text-[11px] font-semibold text-[#00A3FF] bg-sky-50 border border-sky-100 px-2.5 py-0.5 rounded-md">
             {slots.length} sesi berjadual
           </span>
         </div>
@@ -89,7 +89,7 @@ export default function TimetableGrid({ slots, title, subtitle }: TimetableGridP
                 {/* Period & Time Column */}
                 <td className="px-3 py-2.5 bg-white border border-slate-200/80 rounded-xl shadow-2xs align-top whitespace-nowrap">
                   <div className="font-extrabold text-slate-900 text-xs">Waktu {p.period}</div>
-                  <div className="font-mono text-[11px] text-slate-500 mt-0.5">{p.label}</div>
+                  <div className="text-[11px] text-slate-500 mt-0.5">{p.label}</div>
                 </td>
 
                 {/* 5 Day Cells */}
@@ -104,7 +104,7 @@ export default function TimetableGrid({ slots, title, subtitle }: TimetableGridP
                           </div>
 
                           {slot.classroom && (
-                            <div className="text-[11px] font-mono font-semibold text-[#00A3FF] flex items-center gap-1">
+                            <div className="text-[11px] font-semibold text-[#00A3FF] flex items-center gap-1">
                               <svg className="w-3 h-3 shrink-0 text-[#00A3FF]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                               </svg>

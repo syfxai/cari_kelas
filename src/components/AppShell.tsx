@@ -78,8 +78,8 @@ export default function AppShell({ children }: AppShellProps) {
               >
                 <span>{item.name}</span>
                 {item.badge && (
-                  <span className={`text-[10px] px-1.5 py-0.2 rounded font-mono ${
-                    isActive ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-700'
+                  <span className={`text-[10px] px-2 py-0.5 rounded-md font-semibold tracking-normal ${
+                    isActive ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-700 border border-slate-200/60'
                   }`}>
                     {item.badge}
                   </span>

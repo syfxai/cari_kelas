@@ -63,7 +63,7 @@ export default function ClassesPage() {
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-slate-900 flex items-center gap-2">
             <span>Jadual Kelas</span>
-            <span className="text-xs font-mono font-semibold text-[#00A3FF] bg-sky-50 border border-sky-100 px-2 py-0.5 rounded-md">
+            <span className="text-xs font-semibold text-[#00A3FF] bg-sky-50 border border-sky-100 px-2 py-0.5 rounded-md">
               {classes.length} Kumpulan Kelas
             </span>
           </h1>
@@ -117,7 +117,7 @@ export default function ClassesPage() {
                 <button
                   key={cls}
                   onClick={() => handleSearch(cls)}
-                  className={`text-[11px] font-mono px-2 py-0.5 rounded-md border transition-all cursor-pointer ${
+                  className={`text-[11px] font-medium px-2.5 py-0.5 rounded-md border transition-all cursor-pointer ${
                     selected?.name === cls
                       ? 'bg-slate-900 text-white border-slate-900 font-semibold'
                       : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300'
@@ -138,8 +138,9 @@ export default function ClassesPage() {
                 subtitle={`Kolej Poly-Tech MARA Ipoh`}
               />
               {selected.slots.length === 1 && selected.slots[0].subject.includes('Mentor Mentee') && (
-                <div className="p-3 bg-amber-50 border border-amber-200 text-amber-800 text-xs rounded-xl">
-                  <strong>Nota Kelas Semester 1:</strong> Kod kelas ini hanya mempunyai sesi Mentor Mentee dalam pangkalan data EduPage KPTM buat masa ini. Kelas senior (seperti DIA0301, DDM0601) mempunyai jadual subjek penuh.
+                <div className="p-3.5 bg-slate-50 border border-slate-200 text-slate-700 text-xs rounded-xl flex items-start gap-2 shadow-2xs">
+                  <span className="font-bold text-slate-900 shrink-0">Nota Kelas Semester 1:</span>
+                  <span>Kod kelas ini hanya mempunyai sesi Mentor Mentee dalam pangkalan data EduPage KPTM buat masa ini. Kelas senior (seperti DIA0301, DDM0601) mempunyai jadual subjek penuh.</span>
                 </div>
               )}
             </div>
