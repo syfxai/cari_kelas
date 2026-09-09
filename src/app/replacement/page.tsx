@@ -13,6 +13,7 @@ import {
   type TeacherData,
   type TimetableSlot,
 } from '@/lib/types';
+import { parseRoomBadge } from '@/lib/roomUtils';
 
 const STORAGE_KEYS = {
   TEACHER: 'kptm_replacement_teacher',
@@ -1586,9 +1587,20 @@ export default function ReplacementPage() {
                             </span>
                           </td>
                           <td className="py-3.5 px-4">
-                            <span className="text-[#3f8ceb] font-medium">
-                              {slot.classroom || 'Bilik Asal'}
-                            </span>
+                            {slot.classroom ? (
+                              <span
+                                className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-bold border ${
+                                  parseRoomBadge(slot.classroom).bgClass
+                                } ${parseRoomBadge(slot.classroom).textClass} ${
+                                  parseRoomBadge(slot.classroom).borderClass
+                                }`}
+                              >
+                                <span>{parseRoomBadge(slot.classroom).icon}</span>
+                                <span>{parseRoomBadge(slot.classroom).code}</span>
+                              </span>
+                            ) : (
+                              <span className="text-slate-400 text-xs italic">Tiada Bilik</span>
+                            )}
                           </td>
                           <td className="py-3.5 px-4 text-right">
                             {isChecked ? (

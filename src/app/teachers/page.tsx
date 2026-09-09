@@ -245,7 +245,12 @@ export default function TeachersPage() {
               <span>→</span>
             </Link>
           </div>
-          <TimetableGrid slots={selected.slots} title={`Jadual Mengajar: ${selected.name}`} />
+          <TimetableGrid
+            slots={selected.slots}
+            title={`Jadual Mengajar: ${selected.name}`}
+            subtitle="KPTM Ipoh"
+            viewType="teacher"
+          />
         </div>
       )}
 

@@ -137,7 +137,8 @@ export default function ClassesPage() {
               <TimetableGrid
                 slots={selected.slots}
                 title={`Jadual Kelas: ${selected.name}`}
-                subtitle={`Kolej Poly-Tech MARA Ipoh`}
+                subtitle="Kolej Poly-Tech MARA Ipoh"
+                viewType="class"
               />
               {selected.slots.length === 1 && selected.slots[0].subject.includes('Mentor Mentee') && (
                 <div className="p-4 sm:p-5 bg-slate-50 text-slate-700 text-xs rounded-2xl flex items-start gap-3 shadow-2xs">

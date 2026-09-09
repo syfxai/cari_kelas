@@ -1160,6 +1160,10 @@ export default function TestStylesPage() {
                 <span className="w-5 h-5 rounded-full bg-slate-100 text-slate-900 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">6</span>
                 <div><strong>Kotak Notis Elegan:</strong> Latar `bg-slate-50` dengan teks gelap, elakkan kotak kuning/oren yang menyilaukan mata.</div>
               </li>
+              <li className="flex items-start gap-2.5">
+                <span className="w-5 h-5 rounded-full bg-slate-100 text-slate-900 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">7</span>
+                <div><strong>Jadual Waktu Fit-to-Screen & Kod Bilik (MK/BK/Online):</strong> Gunakan `table-fixed w-full` dengan `colSpan` automatik untuk blok 2 jam supaya jadual W1–W10 muat penuh pada skrin desktop tanpa skrol melintang. Paparkan lencana lokasi rasmi: `🧪 MK` (Makmal Komputer), `🏛️ BK` (Bilik Kuliah), `🌐 Online`, `📝 BT` (Bilik Tutorial).</div>
+              </li>
             </ul>
           </div>
         </div>
