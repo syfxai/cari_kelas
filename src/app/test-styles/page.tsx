@@ -244,7 +244,7 @@ export default function TestStylesPage() {
                     ✓
                   </span>
                 </div>
-                <h4 className="text-base font-extrabold text-slate-950">MAKMAL CYBER 1</h4>
+                <h4 className="text-base font-extrabold text-slate-950">MAKMAL KOMPUTER 1-01</h4>
                 <p className="text-xs text-slate-500">Aras 2 • Muatan 40 Pelajar</p>
               </div>
 
@@ -255,7 +255,7 @@ export default function TestStylesPage() {
                     ✓
                   </span>
                 </div>
-                <h4 className="text-base font-extrabold text-slate-950">MAKMAL IT 3</h4>
+                <h4 className="text-base font-extrabold text-slate-950">MAKMAL KOMPUTER 2-03</h4>
                 <p className="text-xs text-slate-500">Aras 3 • Muatan 35 Pelajar</p>
               </div>
 
@@ -266,7 +266,7 @@ export default function TestStylesPage() {
                     ✓
                   </span>
                 </div>
-                <h4 className="text-base font-extrabold text-slate-950">BILIK KULIAH 201</h4>
+                <h4 className="text-base font-extrabold text-slate-950">BILIK KULIAH 1-01</h4>
                 <p className="text-xs text-slate-500">Aras 2 • Muatan 50 Pelajar</p>
               </div>
             </div>
@@ -417,7 +417,7 @@ export default function TestStylesPage() {
                     ✓
                   </span>
                 </div>
-                <h4 className="text-base font-extrabold text-slate-900">MAKMAL CYBER 1</h4>
+                <h4 className="text-base font-extrabold text-slate-900">MAKMAL KOMPUTER 1-01</h4>
                 <p className="text-xs text-slate-500">Aras 2 • Muatan 40 Pelajar</p>
               </div>
 
@@ -428,7 +428,7 @@ export default function TestStylesPage() {
                     ✓
                   </span>
                 </div>
-                <h4 className="text-base font-extrabold text-slate-900">MAKMAL IT 3</h4>
+                <h4 className="text-base font-extrabold text-slate-900">MAKMAL KOMPUTER 2-03</h4>
                 <p className="text-xs text-slate-500">Aras 3 • Muatan 35 Pelajar</p>
               </div>
 
@@ -439,7 +439,7 @@ export default function TestStylesPage() {
                     ✓
                   </span>
                 </div>
-                <h4 className="text-base font-extrabold text-slate-900">BILIK KULIAH 201</h4>
+                <h4 className="text-base font-extrabold text-slate-900">BILIK KULIAH 1-01</h4>
                 <p className="text-xs text-slate-500">Aras 2 • Muatan 50 Pelajar</p>
               </div>
             </div>
@@ -590,7 +590,7 @@ export default function TestStylesPage() {
                     ✓
                   </span>
                 </div>
-                <h4 className="text-base font-extrabold text-slate-900">MAKMAL CYBER 1</h4>
+                <h4 className="text-base font-extrabold text-slate-900">MAKMAL KOMPUTER 1-01</h4>
                 <p className="text-xs text-slate-500">Aras 2 • Muatan 40 Pelajar</p>
               </div>
 
@@ -601,7 +601,7 @@ export default function TestStylesPage() {
                     ✓
                   </span>
                 </div>
-                <h4 className="text-base font-extrabold text-slate-900">MAKMAL IT 3</h4>
+                <h4 className="text-base font-extrabold text-slate-900">MAKMAL KOMPUTER 2-03</h4>
                 <p className="text-xs text-slate-500">Aras 3 • Muatan 35 Pelajar</p>
               </div>
 
@@ -612,7 +612,7 @@ export default function TestStylesPage() {
                     ✓
                   </span>
                 </div>
-                <h4 className="text-base font-extrabold text-slate-900">BILIK KULIAH 201</h4>
+                <h4 className="text-base font-extrabold text-slate-900">BILIK KULIAH 1-01</h4>
                 <p className="text-xs text-slate-500">Aras 2 • Muatan 50 Pelajar</p>
               </div>
             </div>
@@ -763,7 +763,7 @@ export default function TestStylesPage() {
                     ✓
                   </span>
                 </div>
-                <h4 className="text-base font-extrabold text-slate-900">MAKMAL CYBER 1</h4>
+                <h4 className="text-base font-extrabold text-slate-900">MAKMAL KOMPUTER 1-01</h4>
                 <p className="text-xs text-slate-500">Aras 2 • Muatan 40 Pelajar</p>
               </div>
 
@@ -774,7 +774,7 @@ export default function TestStylesPage() {
                     ✓
                   </span>
                 </div>
-                <h4 className="text-base font-extrabold text-slate-900">MAKMAL IT 3</h4>
+                <h4 className="text-base font-extrabold text-slate-900">MAKMAL KOMPUTER 2-03</h4>
                 <p className="text-xs text-slate-500">Aras 3 • Muatan 35 Pelajar</p>
               </div>
 
@@ -785,7 +785,7 @@ export default function TestStylesPage() {
                     ✓
                   </span>
                 </div>
-                <h4 className="text-base font-extrabold text-slate-900">BILIK KULIAH 201</h4>
+                <h4 className="text-base font-extrabold text-slate-900">BILIK KULIAH 1-01</h4>
                 <p className="text-xs text-slate-500">Aras 2 • Muatan 50 Pelajar</p>
               </div>
             </div>
@@ -936,7 +936,7 @@ export default function TestStylesPage() {
                     ✓
                   </span>
                 </div>
-                <h4 className="text-base font-extrabold text-slate-950">MAKMAL CYBER 1</h4>
+                <h4 className="text-base font-extrabold text-slate-950">MAKMAL KOMPUTER 1-01</h4>
                 <p className="text-xs text-slate-500">Aras 2 • Muatan 40 Pelajar</p>
               </div>
 
@@ -947,7 +947,7 @@ export default function TestStylesPage() {
                     ✓
                   </span>
                 </div>
-                <h4 className="text-base font-extrabold text-slate-950">MAKMAL IT 3</h4>
+                <h4 className="text-base font-extrabold text-slate-950">MAKMAL KOMPUTER 2-03</h4>
                 <p className="text-xs text-slate-500">Aras 3 • Muatan 35 Pelajar</p>
               </div>
 
@@ -958,7 +958,7 @@ export default function TestStylesPage() {
                     ✓
                   </span>
                 </div>
-                <h4 className="text-base font-extrabold text-slate-950">BILIK KULIAH 201</h4>
+                <h4 className="text-base font-extrabold text-slate-950">BILIK KULIAH 1-01</h4>
                 <p className="text-xs text-slate-500">Aras 2 • Muatan 50 Pelajar</p>
               </div>
             </div>

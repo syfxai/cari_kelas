@@ -41,6 +41,48 @@ const DAY_CODES: Record<string, string> = {
   Friday: 'Fri',
 };
 
+const KPTM_MAKMAL_KOMPUTER = [
+  'MAKMAL KOMPUTER 1-01',
+  'MAKMAL KOMPUTER 1-02',
+  'MAKMAL KOMPUTER 2-03',
+  'MAKMAL KOMPUTER 2-04',
+  'MAKMAL KOMPUTER 2-05',
+  'MAKMAL KOMPUTER 2-06',
+  'MAKMAL KOMPUTER 3-07',
+  'MAKMAL KOMPUTER 3-08',
+  'MAKMAL KOMPUTER 3-09',
+  'MAKMAL KOMPUTER 3-10',
+  'MAKMAL KOMPUTER 3-11',
+  'MAKMAL KOMPUTER 3-12',
+] as const;
+
+const KPTM_BILIK_KULIAH = [
+  'BILIK KULIAH 1-01',
+  'BILIK KULIAH 1-02',
+  'BILIK KULIAH 2-03',
+  'BILIK KULIAH 2-04',
+  'BILIK KULIAH 2-05',
+  'BILIK KULIAH 2-06',
+  'BILIK KULIAH 2-07',
+  'BILIK KULIAH 2-08',
+  'BILIK KULIAH 2-09',
+  'BILIK KULIAH 2-10',
+  'BILIK KULIAH 3-11',
+  'BILIK KULIAH 3-12 & 3-13',
+  'BILIK KULIAH 3-14 & 3-15',
+  'BILIK KULIAH 3-16 & 3-17',
+  'BILIK KULIAH 4-18',
+  'BILIK KULIAH 4-19',
+  'BILIK KULIAH 4-20',
+  'BILIK KULIAH 4-21',
+  'BILIK KULIAH 4-22',
+  'BILIK KULIAH 4-23',
+  'BILIK TUTORIAL 2-01',
+  'BILIK TUTORIAL 2-02',
+  'BILIK TUTORIAL 3-03',
+  'BILIK TUTORIAL 3-04',
+] as const;
+
 const timeToMinutes = (timeStr: string): number => {
   if (!timeStr) return 0;
   const [h, m] = timeStr.split(':').map(Number);
@@ -1783,21 +1825,30 @@ export default function ReplacementPage() {
                             {plan.availableRooms && plan.availableRooms.length > 0 ? (
                               plan.availableRooms.map(r => (
                                 <option key={r.name} value={r.name}>
-                                  ✓ {r.name} {r.category === 'lab' ? '(Makmal)' : r.category === 'lecture' ? '(Bilik Kuliah)' : ''}
+                                  ✓ {r.name} {r.category === 'lab' ? '(Makmal Kosong)' : r.category === 'lecture' ? '(Bilik Kosong)' : ''}
                                 </option>
                               ))
+                            ) : isLab ? (
+                              <>
+                                <option value={slot.classroom || 'MAKMAL KOMPUTER 1-01'}>
+                                  {slot.classroom || 'MAKMAL KOMPUTER 1-01'}
+                                </option>
+                                {KPTM_MAKMAL_KOMPUTER.map(mk => (
+                                  <option key={mk} value={mk}>
+                                    {mk}
+                                  </option>
+                                ))}
+                              </>
                             ) : (
                               <>
-                                <option value={slot.classroom || 'MAKMAL KOMPUTER 1-01'}>{slot.classroom || 'MAKMAL KOMPUTER 1-01'}</option>
-                                <option value="MAKMAL KOMPUTER 1-01">MAKMAL KOMPUTER 1-01</option>
-                                <option value="MAKMAL KOMPUTER 1-02">MAKMAL KOMPUTER 1-02</option>
-                                <option value="MAKMAL KOMPUTER 2-03">MAKMAL KOMPUTER 2-03</option>
-                                <option value="MAKMAL KOMPUTER 2-04">MAKMAL KOMPUTER 2-04</option>
-                                <option value="MAKMAL KOMPUTER 3-07">MAKMAL KOMPUTER 3-07</option>
-                                <option value="BILIK KULIAH 1-01">BILIK KULIAH 1-01</option>
-                                <option value="BILIK KULIAH 2-03">BILIK KULIAH 2-03</option>
-                                <option value="BILIK KULIAH 2-04">BILIK KULIAH 2-04</option>
-                                <option value="ONLINE 51">ONLINE 51</option>
+                                <option value={slot.classroom || 'BILIK KULIAH 1-01'}>
+                                  {slot.classroom || 'BILIK KULIAH 1-01'}
+                                </option>
+                                {KPTM_BILIK_KULIAH.map(bk => (
+                                  <option key={bk} value={bk}>
+                                    {bk}
+                                  </option>
+                                ))}
                               </>
                             )}
                           </select>
