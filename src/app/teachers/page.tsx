@@ -90,17 +90,18 @@ export default function TeachersPage() {
   };
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto">
+    <div className="space-y-8 max-w-7xl mx-auto">
       {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-3 border-b border-slate-200">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900 flex items-center gap-2">
-            <span>Jadual Pensyarah</span>
-            <span className="text-xs font-semibold text-[#00A3FF] bg-sky-50 border border-sky-100 px-2 py-0.5 rounded-md">
-              {teachers.length} Pensyarah
-            </span>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2">
+        <div className="space-y-1">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 text-slate-800 text-xs font-semibold">
+            <span className="w-2 h-2 rounded-full bg-[#3f8ceb] animate-pulse" />
+            <span>{teachers.length} Pensyarah KPTM Ipoh</span>
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-950">
+            Jadual Pensyarah
           </h1>
-          <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
+          <p className="text-xs sm:text-sm text-slate-500 leading-relaxed max-w-2xl">
             Pilih nama pensyarah untuk melihat jadual mengajar penuh Waktu 1 hingga Waktu 10 (Isnin – Jumaat).
           </p>
         </div>
@@ -108,9 +109,9 @@ export default function TeachersPage() {
 
       {/* Scraping Status Banner */}
       {scrapeMsg && (
-        <div className="px-4 py-2.5 bg-white border border-slate-200 rounded-lg text-xs font-medium text-slate-700 shadow-2xs flex items-center gap-2">
+        <div className="p-4 sm:p-5 bg-white rounded-2xl shadow-[0_4px_24px_-4px_rgba(0,0,0,0.04)] text-xs font-medium text-slate-700 flex items-center gap-2.5">
           {scraping ? (
-            <svg className="animate-spin h-3.5 w-3.5 text-[#00A3FF] shrink-0" viewBox="0 0 24 24">
+            <svg className="animate-spin h-4 w-4 text-[#3f8ceb] shrink-0" viewBox="0 0 24 24">
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
             </svg>
@@ -122,9 +123,9 @@ export default function TeachersPage() {
       )}
 
       {/* Search & Actions Bar */}
-      <div className="flex flex-wrap gap-2.5 items-center">
+      <div className="flex flex-wrap gap-3 items-center">
         <div className="relative flex-1 min-w-[260px] max-w-md">
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+          <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
             <svg className="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
@@ -134,15 +135,15 @@ export default function TeachersPage() {
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
             placeholder="Cari nama pensyarah..."
-            className="w-full h-9 pl-9 pr-3 text-xs bg-white border border-slate-200 rounded-lg text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-[#00A3FF] focus:border-[#00A3FF] transition-all"
+            className="w-full h-10 pl-10 pr-3.5 text-xs sm:text-sm bg-white rounded-xl text-slate-900 placeholder:text-slate-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#3f8ceb] transition-all"
           />
           {searchQuery && filteredTeachers.length > 0 && !selected && (
-            <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-slate-200 rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto p-1">
+            <div className="absolute top-full left-0 right-0 mt-1.5 bg-white rounded-2xl shadow-xl z-50 max-h-60 overflow-y-auto p-1.5 border border-slate-100">
               {filteredTeachers.map((name, i) => (
                 <button
                   key={i}
                   onClick={() => handleSelectTeacher(name)}
-                  className="w-full text-left px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-100 hover:text-[#00A3FF] rounded transition-colors cursor-pointer"
+                  className="w-full text-left px-3.5 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 hover:text-[#3f8ceb] rounded-xl transition-colors cursor-pointer"
                 >
                   {name}
                 </button>
@@ -153,7 +154,7 @@ export default function TeachersPage() {
         <button
           onClick={doScrape}
           disabled={scraping}
-          className="h-9 px-4 bg-[#00A3FF] hover:bg-[#008fe0] text-white rounded-lg font-medium text-xs disabled:opacity-50 transition-all flex items-center gap-1.5 shrink-0 shadow-xs cursor-pointer"
+          className="h-10 px-5 bg-[#3f8ceb] hover:bg-[#3280e2] text-white rounded-xl font-semibold text-xs disabled:opacity-50 transition-all flex items-center gap-2 shrink-0 shadow-sm hover:scale-[1.02] cursor-pointer"
         >
           {scraping ? (
             <>
@@ -168,39 +169,39 @@ export default function TeachersPage() {
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
-              <span>Cari</span>
+              <span>Cari Pensyarah</span>
             </>
           )}
         </button>
       </div>
 
-      {/* Teacher List Grid */}
+      {/* Teacher List Grid - Gaya Apple Minimal */}
       {teachers.length > 0 && !selected && !scrapingTeacher && (
-        <div className="bg-white rounded-xl border border-slate-200 shadow-2xs p-5 space-y-3">
-          <div className="flex items-center justify-between pb-2 border-b border-slate-100">
-            <h2 className="text-sm font-semibold text-slate-900">
+        <div className="bg-white rounded-3xl shadow-[0_4px_24px_-4px_rgba(0,0,0,0.04)] p-6 sm:p-8 space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+            <h2 className="text-base font-bold text-slate-950">
               Senarai Semua Pensyarah
             </h2>
-            <span className="text-xs font-semibold text-[#00A3FF] bg-sky-50 border border-sky-100 px-2 py-0.5 rounded">
+            <span className="text-xs font-semibold text-[#3f8ceb] bg-sky-50 px-3 py-1 rounded-full">
               {filteredTeachers.length} rekod
             </span>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
             {filteredTeachers.map((name, i) => (
               <button
                 key={i}
                 onClick={() => handleSelectTeacher(name)}
                 disabled={loading}
-                className="group text-left p-3 bg-slate-50 hover:bg-white hover:border-[#00A3FF] hover:shadow-xs border border-slate-200 rounded-lg transition-all flex items-center gap-2.5 cursor-pointer disabled:opacity-50"
+                className="group text-left p-4 bg-white hover:shadow-[0_8px_24px_-4px_rgba(0,0,0,0.08)] hover:scale-[1.01] shadow-[0_2px_12px_-2px_rgba(0,0,0,0.04)] rounded-2xl transition-all duration-200 flex items-center gap-3 cursor-pointer disabled:opacity-50"
               >
-                <div className="w-8 h-8 rounded-md bg-[#00A3FF] text-white flex items-center justify-center font-bold text-xs shrink-0">
+                <div className="w-9 h-9 rounded-xl bg-slate-900 text-white flex items-center justify-center font-bold text-xs shrink-0 group-hover:bg-[#3f8ceb] transition-colors">
                   {getInitials(name)}
                 </div>
                 <div className="min-w-0 flex-1">
-                  <div className="text-xs font-semibold text-slate-900 group-hover:text-[#00A3FF] truncate transition-colors">
+                  <div className="text-xs font-bold text-slate-900 group-hover:text-[#3f8ceb] truncate transition-colors">
                     {name}
                   </div>
-                  <div className="text-[10px] text-slate-400">
+                  <div className="text-[11px] text-slate-400 mt-0.5">
                     KPTM Ipoh
                   </div>
                 </div>
@@ -212,33 +213,33 @@ export default function TeachersPage() {
 
       {/* Scraping Individual Teacher Schedule State */}
       {scrapingTeacher && (
-        <div className="bg-white rounded-xl border border-slate-200 p-8 text-center shadow-2xs space-y-2">
-          <svg className="animate-spin h-6 w-6 mx-auto text-[#00A3FF]" viewBox="0 0 24 24">
+        <div className="bg-white rounded-3xl p-10 text-center shadow-[0_4px_24px_-4px_rgba(0,0,0,0.04)] space-y-3">
+          <svg className="animate-spin h-7 w-7 mx-auto text-[#3f8ceb]" viewBox="0 0 24 24">
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
           </svg>
-          <p className="text-sm font-semibold text-slate-900">Sedang memuat jadual untuk {scrapingTeacher}...</p>
+          <p className="text-base font-bold text-slate-950">Sedang memuat jadual untuk {scrapingTeacher}...</p>
           <p className="text-xs text-slate-400">Sila tunggu sebentar.</p>
         </div>
       )}
 
       {/* Selected Teacher Timetable */}
       {selected && !scrapingTeacher && (
-        <div className="space-y-4">
+        <div className="space-y-5">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <button
               onClick={() => setSelected(null)}
-              className="h-8 px-3 text-xs font-medium text-slate-700 hover:text-slate-900 bg-white border border-slate-200 rounded-lg shadow-2xs hover:bg-slate-50 transition-all inline-flex items-center gap-1.5 cursor-pointer"
+              className="h-10 px-4 text-xs font-semibold text-slate-700 hover:text-slate-950 bg-white rounded-xl shadow-sm hover:shadow-md hover:scale-[1.02] transition-all inline-flex items-center gap-2 cursor-pointer"
             >
-              <svg className="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
-              <span>Kembali ke Senarai Pensyarah</span>
+              <span>← Kembali ke Senarai Pensyarah</span>
             </button>
 
             <Link
               href={`/replacement?teacher=${encodeURIComponent(selected.name)}`}
-              className="h-8 px-4 bg-gradient-to-r from-[#00A3FF] to-[#0084FF] hover:from-[#0092e6] hover:to-[#0074e6] text-white rounded-lg text-xs font-semibold shadow-xs flex items-center gap-1.5 transition-all hover:scale-[1.02] cursor-pointer"
+              className="h-10 px-5 bg-slate-900 hover:bg-black text-white rounded-xl text-xs font-semibold shadow-sm flex items-center gap-2 transition-all hover:scale-[1.02] cursor-pointer"
             >
               <span>Langkah 2: Cari Kelas Ganti untuk {selected.name}</span>
               <span>→</span>
@@ -250,8 +251,8 @@ export default function TeachersPage() {
 
       {/* Initial Loading */}
       {loading && !scraping && !scrapingTeacher && (
-        <div className="bg-white rounded-xl border border-slate-200 p-8 text-center text-xs text-slate-500 shadow-2xs">
-          <svg className="animate-spin h-6 w-6 mx-auto mb-2 text-[#00A3FF]" viewBox="0 0 24 24">
+        <div className="bg-white rounded-3xl p-10 text-center text-xs text-slate-500 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.04)]">
+          <svg className="animate-spin h-7 w-7 mx-auto mb-3 text-[#3f8ceb]" viewBox="0 0 24 24">
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
           </svg>
@@ -261,4 +262,3 @@ export default function TeachersPage() {
     </div>
   );
 }
-

@@ -49,33 +49,33 @@ export default function TimetableGrid({ slots, title, subtitle }: TimetableGridP
   };
 
   return (
-    <div className="bg-white border border-slate-200 rounded-2xl shadow-xs overflow-hidden">
+    <div className="bg-white rounded-3xl shadow-[0_4px_24px_-4px_rgba(0,0,0,0.04)] overflow-hidden">
       {/* Header Bar */}
       {title && (
-        <div className="border-b border-slate-200 px-5 py-3.5 bg-slate-50/70 flex flex-wrap items-center justify-between gap-2">
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-[#00A3FF]" />
-            <h2 className="text-sm font-bold text-slate-900 tracking-tight">{title}</h2>
+        <div className="px-6 py-4 border-b border-slate-100 flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-2.5">
+            <span className="w-2 h-2 rounded-full bg-[#3f8ceb]" />
+            <h2 className="text-base font-bold text-slate-950 tracking-tight">{title}</h2>
             {subtitle && <span className="text-xs text-slate-500">• {subtitle}</span>}
           </div>
-          <span className="text-[11px] font-semibold text-[#00A3FF] bg-sky-50 border border-sky-100 px-2.5 py-0.5 rounded-md">
+          <span className="text-xs font-semibold text-[#3f8ceb] bg-sky-50 px-3 py-1 rounded-full">
             {slots.length} sesi berjadual
           </span>
         </div>
       )}
 
       {/* Complete Weekly Schedule Grid (Waktu 1 – Waktu 10) */}
-      <div className="overflow-x-auto p-2.5 sm:p-3.5 bg-slate-50/50">
-        <table className="w-full text-left border-separate border-spacing-1.5 text-xs">
+      <div className="overflow-x-auto p-4 sm:p-6">
+        <table className="w-full text-left border-separate border-spacing-2 text-xs">
           <thead>
             <tr>
-              <th className="px-3 py-2.5 font-extrabold w-28 text-xs uppercase tracking-wider text-slate-700 bg-white/90 border border-slate-200/80 rounded-xl shadow-2xs">
+              <th className="px-4 py-3 font-extrabold w-28 text-xs uppercase tracking-wider text-slate-700 bg-slate-50 rounded-2xl">
                 Masa
               </th>
               {DAYS.map(day => (
                 <th
                   key={day}
-                  className="px-3 py-2.5 font-extrabold text-center min-w-[155px] text-xs uppercase tracking-wider text-slate-700 bg-white/90 border border-slate-200/80 rounded-xl shadow-2xs"
+                  className="px-4 py-3 font-extrabold text-center min-w-[160px] text-xs uppercase tracking-wider text-slate-700 bg-slate-50 rounded-2xl"
                 >
                   <span className="hidden sm:inline">{DAY_LABELS[day]}</span>
                   <span className="sm:hidden">{DAY_LABELS[day].substring(0, 3)}</span>
@@ -87,7 +87,7 @@ export default function TimetableGrid({ slots, title, subtitle }: TimetableGridP
             {STANDARD_PERIODS.map(p => (
               <tr key={p.time}>
                 {/* Period & Time Column */}
-                <td className="px-3 py-2.5 bg-white border border-slate-200/80 rounded-xl shadow-2xs align-top whitespace-nowrap">
+                <td className="px-4 py-3 bg-slate-50 rounded-2xl align-top whitespace-nowrap">
                   <div className="font-extrabold text-slate-900 text-xs">Waktu {p.period}</div>
                   <div className="text-[11px] text-slate-500 mt-0.5">{p.label}</div>
                 </td>
@@ -98,14 +98,14 @@ export default function TimetableGrid({ slots, title, subtitle }: TimetableGridP
                   return (
                     <td key={day} className="p-0 align-top">
                       {slot ? (
-                        <div className="bg-white border border-sky-200/90 hover:border-[#00A3FF] rounded-xl p-2.5 shadow-2xs hover:shadow-xs transition-all space-y-1 min-h-[64px]">
+                        <div className="bg-white hover:shadow-md hover:scale-[1.01] rounded-2xl p-3 shadow-2xs transition-all space-y-1.5 min-h-[70px] border border-slate-100">
                           <div className="font-bold text-slate-900 text-xs leading-snug">
                             {slot.subject}
                           </div>
 
                           {slot.classroom && (
-                            <div className="text-[11px] font-semibold text-[#00A3FF] flex items-center gap-1">
-                              <svg className="w-3 h-3 shrink-0 text-[#00A3FF]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div className="text-[11px] font-semibold text-[#3f8ceb] flex items-center gap-1.5">
+                              <svg className="w-3.5 h-3.5 shrink-0 text-[#3f8ceb]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                               </svg>
                               <span className="truncate">{slot.classroom}</span>
@@ -113,8 +113,8 @@ export default function TimetableGrid({ slots, title, subtitle }: TimetableGridP
                           )}
 
                           {slot.class && (
-                            <div className="text-[11px] text-slate-600 flex items-center gap-1">
-                              <svg className="w-3 h-3 shrink-0 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div className="text-[11px] text-slate-600 flex items-center gap-1.5">
+                              <svg className="w-3.5 h-3.5 shrink-0 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                               </svg>
                               <span className="truncate">{slot.class}</span>
@@ -122,8 +122,8 @@ export default function TimetableGrid({ slots, title, subtitle }: TimetableGridP
                           )}
 
                           {slot.teacher && (
-                            <div className="text-[11px] text-slate-500 flex items-center gap-1">
-                              <svg className="w-3 h-3 shrink-0 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div className="text-[11px] text-slate-500 flex items-center gap-1.5">
+                              <svg className="w-3.5 h-3.5 shrink-0 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                               </svg>
                               <span className="truncate">{slot.teacher}</span>
@@ -131,7 +131,7 @@ export default function TimetableGrid({ slots, title, subtitle }: TimetableGridP
                           )}
                         </div>
                       ) : (
-                        <div className="min-h-[64px] rounded-xl bg-white/40 border border-slate-200/40" />
+                        <div className="min-h-[70px] rounded-2xl bg-slate-50/50" />
                       )}
                     </td>
                   );

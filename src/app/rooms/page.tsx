@@ -67,7 +67,7 @@ const formatTime = (time: string): string => {
 };
 
 const roomCategoryLabel = (category?: string): string => {
-  if (category === 'lab') return 'Makmal';
+  if (category === 'lab') return 'Makmal Komputer';
   if (category === 'lecture') return 'Bilik Kuliah';
   if (category === 'online') return 'Online';
   return 'Bilik Khas';
@@ -317,30 +317,31 @@ export default function RoomsPage() {
   }, [availability]);
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto">
+    <div className="space-y-8 max-w-7xl mx-auto">
       {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-3 border-b border-slate-200">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900 flex items-center gap-2">
-            <span>Cari Bilik Kosong</span>
-            <span className="text-xs font-semibold text-[#00A3FF] bg-sky-50 border border-sky-100 px-2 py-0.5 rounded-md">
-              Waktu 1–10
-            </span>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2">
+        <div className="space-y-1">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 text-slate-800 text-xs font-semibold">
+            <span className="w-2 h-2 rounded-full bg-[#3f8ceb] animate-pulse" />
+            <span>Waktu 1–10 (Isnin – Jumaat)</span>
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-950">
+            Cari Bilik Kosong
           </h1>
-          <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
+          <p className="text-xs sm:text-sm text-slate-500 leading-relaxed max-w-2xl">
             Semak makmal komputer dan bilik kuliah fizikal yang lapang mengikut slot waktu pembelajaran.
           </p>
         </div>
-        <div className="text-xs font-medium text-slate-700 bg-white border border-slate-200 px-3.5 py-1.5 rounded-lg shadow-2xs self-start sm:self-auto flex items-center gap-2">
+        <div className="text-xs font-bold text-slate-900 bg-white px-4 py-2 rounded-2xl shadow-[0_4px_24px_-4px_rgba(0,0,0,0.04)] self-start sm:self-auto flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-emerald-500" />
-          <span>Bilik Fizikal: <strong className="text-[#00A3FF] font-semibold">{physicalCounts.available}</strong> lapang / {physicalCounts.total} jumlah</span>
+          <span>Bilik Fizikal: <strong className="text-[#3f8ceb] font-extrabold">{physicalCounts.available}</strong> lapang / {physicalCounts.total} jumlah</span>
         </div>
       </div>
 
       {scrapeNeeded ? (
-        <div className="bg-white rounded-xl border border-slate-200 p-8 text-center max-w-md mx-auto space-y-3 shadow-2xs">
-          <h3 className="text-sm font-semibold text-slate-900">Pangkalan Data Belum Dimuatkan</h3>
-          <p className="text-xs text-slate-500">
+        <div className="bg-white rounded-3xl p-8 sm:p-10 text-center max-w-md mx-auto space-y-4 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.04)]">
+          <h3 className="text-base font-bold text-slate-950">Pangkalan Data Belum Dimuatkan</h3>
+          <p className="text-xs text-slate-500 leading-relaxed">
             Sila lakukan scraping jadual waktu dari EduPage KPTM untuk memulakan semakan ketersediaan bilik.
           </p>
           <div className="pt-2">
@@ -349,14 +350,14 @@ export default function RoomsPage() {
         </div>
       ) : (
         <>
-          {/* Control & Filter Panel */}
-          <div className="bg-white rounded-xl border border-slate-200 p-5 space-y-4 shadow-2xs">
+          {/* Control & Filter Panel - Gaya Apple Minimal */}
+          <div className="bg-white rounded-3xl shadow-[0_4px_24px_-4px_rgba(0,0,0,0.04)] p-6 sm:p-8 space-y-5">
             {/* Row 1: Day Selector Pills */}
-            <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-slate-700 uppercase tracking-wider">
+            <div className="space-y-2">
+              <label className="text-xs font-bold text-slate-900">
                 Pilih Hari
               </label>
-              <div className="flex flex-wrap gap-1 p-1 bg-slate-100 rounded-lg border border-slate-200 max-w-fit">
+              <div className="flex flex-wrap gap-1.5 p-1.5 bg-slate-100 rounded-2xl max-w-fit">
                 {DAYS.map(day => {
                   const isSelected = selectedDay === day;
                   return (
@@ -364,9 +365,9 @@ export default function RoomsPage() {
                       key={day}
                       type="button"
                       onClick={() => handleDayChange(day)}
-                      className={`px-3.5 py-1.5 rounded-md text-xs font-medium transition-all cursor-pointer ${
+                      className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                         isSelected
-                          ? 'bg-[#00A3FF] text-white shadow-2xs font-semibold'
+                          ? 'bg-slate-900 text-white shadow-sm scale-[1.02]'
                           : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
                       }`}
                     >
@@ -378,23 +379,23 @@ export default function RoomsPage() {
             </div>
 
             {/* Row 2: Time Range Dari - Hingga */}
-            <div className="pt-3 border-t border-slate-100 space-y-3">
+            <div className="pt-4 border-t border-slate-100 space-y-3.5">
               <div className="flex items-center justify-between">
-                <label className="text-xs font-semibold text-slate-700 uppercase tracking-wider">
+                <label className="text-xs font-bold text-slate-900">
                   Waktu Dari – Hingga
                 </label>
-                <span className="text-xs font-semibold text-[#00A3FF] bg-sky-50 border border-sky-100 px-2 py-0.5 rounded-md">
+                <span className="text-xs font-semibold text-[#3f8ceb] bg-sky-50 px-3 py-1 rounded-full">
                   Tempoh: {durationInfo.hours} Jam ({durationInfo.periodStr})
                 </span>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3 items-center">
-                <div className="lg:col-span-6 space-y-1">
-                  <span className="text-xs font-medium text-slate-500">Waktu Mula:</span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-4 items-center">
+                <div className="lg:col-span-6 space-y-1.5">
+                  <span className="text-xs font-semibold text-slate-800">Waktu Mula:</span>
                   <select
                     value={timeStart}
                     onChange={e => handleTimeStartChange(e.target.value)}
-                    className="w-full h-9 px-3 bg-white border border-slate-200 rounded-lg text-xs font-medium text-slate-900 focus:outline-none focus:ring-1 focus:ring-[#00A3FF] focus:border-[#00A3FF] transition-colors cursor-pointer"
+                    className="w-full h-10 px-3.5 bg-slate-50 rounded-xl text-xs sm:text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#3f8ceb] transition-colors cursor-pointer"
                   >
                     {PERIOD_START_OPTIONS.map(opt => (
                       <option key={opt.value} value={opt.value}>
@@ -404,12 +405,12 @@ export default function RoomsPage() {
                   </select>
                 </div>
 
-                <div className="lg:col-span-6 space-y-1">
-                  <span className="text-xs font-medium text-slate-500">Waktu Tamat:</span>
+                <div className="lg:col-span-6 space-y-1.5">
+                  <span className="text-xs font-semibold text-slate-800">Waktu Tamat:</span>
                   <select
                     value={timeEnd}
                     onChange={e => handleTimeEndChange(e.target.value)}
-                    className="w-full h-9 px-3 bg-white border border-slate-200 rounded-lg text-xs font-medium text-slate-900 focus:outline-none focus:ring-1 focus:ring-[#00A3FF] focus:border-[#00A3FF] transition-colors cursor-pointer"
+                    className="w-full h-10 px-3.5 bg-slate-50 rounded-xl text-xs sm:text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#3f8ceb] transition-colors cursor-pointer"
                   >
                     {PERIOD_END_OPTIONS.map(opt => {
                       const disabled = timeToMinutes(opt.value) <= timeToMinutes(timeStart);
@@ -424,64 +425,39 @@ export default function RoomsPage() {
               </div>
 
               {/* Quick Presets */}
-              <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
-                <span className="text-[11px] font-medium text-slate-400 mr-1">Preset Cepat:</span>
-                <button
-                  type="button"
-                  onClick={() => applyDurationPreset(1)}
-                  className="h-6 px-2.5 rounded text-[11px] font-medium bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors cursor-pointer"
-                >
-                  1 Jam
-                </button>
-                <button
-                  type="button"
-                  onClick={() => applyDurationPreset(2)}
-                  className="h-6 px-2.5 rounded text-[11px] font-medium bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors cursor-pointer"
-                >
-                  2 Jam
-                </button>
-                <button
-                  type="button"
-                  onClick={() => applyDurationPreset(3)}
-                  className="h-6 px-2.5 rounded text-[11px] font-medium bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors cursor-pointer"
-                >
-                  3 Jam
-                </button>
-                <button
-                  type="button"
-                  onClick={() => applySlotPreset('08:00', '13:00')}
-                  className="h-6 px-2.5 rounded text-[11px] font-medium bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors cursor-pointer"
-                >
-                  Sesi Pagi (08:00 – 13:00)
-                </button>
-                <button
-                  type="button"
-                  onClick={() => applySlotPreset('13:00', '18:00')}
-                  className="h-6 px-2.5 rounded text-[11px] font-medium bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors cursor-pointer"
-                >
-                  Sesi Petang (01:00 – 06:00 PM)
-                </button>
-                <button
-                  type="button"
-                  onClick={() => applySlotPreset('08:00', '18:00')}
-                  className="h-6 px-2.5 rounded text-[11px] font-medium bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors cursor-pointer"
-                >
-                  Sepanjang Hari
-                </button>
+              <div className="flex flex-wrap items-center gap-2 pt-1">
+                <span className="text-xs font-semibold text-slate-400 mr-1">Preset Pantas:</span>
+                {[
+                  { label: '1 Jam', action: () => applyDurationPreset(1) },
+                  { label: '2 Jam', action: () => applyDurationPreset(2) },
+                  { label: '3 Jam', action: () => applyDurationPreset(3) },
+                  { label: 'Sesi Pagi (08:00 – 13:00)', action: () => applySlotPreset('08:00', '13:00') },
+                  { label: 'Sesi Petang (01:00 – 06:00 PM)', action: () => applySlotPreset('13:00', '18:00') },
+                  { label: 'Sepanjang Hari', action: () => applySlotPreset('08:00', '18:00') },
+                ].map((p, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={p.action}
+                    className="h-7 px-3 rounded-xl text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-800 hover:scale-[1.02] transition-all cursor-pointer"
+                  >
+                    {p.label}
+                  </button>
+                ))}
               </div>
             </div>
 
             {/* Row 3: Exclude Online & Search */}
-            <div className="pt-3 border-t border-slate-100 grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
+            <div className="pt-4 border-t border-slate-100 grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
               <div className="md:col-span-6">
-                <label className="inline-flex items-center gap-2 text-xs font-medium text-slate-700 cursor-pointer select-none">
+                <label className="inline-flex items-center gap-2.5 text-xs font-semibold text-slate-800 cursor-pointer select-none">
                   <input
                     type="checkbox"
                     checked={excludeOnline}
                     onChange={toggleExcludeOnline}
-                    className="w-4 h-4 rounded text-[#00A3FF] focus:ring-[#00A3FF]"
+                    className="w-4 h-4 rounded text-[#3f8ceb] focus:ring-[#3f8ceb]"
                   />
-                  <span>Exclude Bilik ONLINE (Tapis Bilik Fizikal Sahaja)</span>
+                  <span>Tapis Bilik Fizikal Sahaja (Abaikan Bilik Online)</span>
                 </label>
               </div>
 
@@ -491,17 +467,17 @@ export default function RoomsPage() {
                   value={searchQuery}
                   onChange={e => setSearchQuery(e.target.value)}
                   placeholder="Cari nama bilik (cth: MAKMAL 2, BK 4-22)..."
-                  className="w-full h-9 px-3 bg-white border border-slate-200 rounded-lg text-xs font-medium text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-[#00A3FF] focus:border-[#00A3FF] transition-all"
+                  className="w-full h-10 px-3.5 bg-slate-50 rounded-xl text-xs sm:text-sm font-medium text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#3f8ceb] transition-all"
                 />
               </div>
             </div>
 
             {/* Row 4: Categories & Action Button */}
-            <div className="pt-3 border-t border-slate-100 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-              <div className="flex flex-wrap items-center gap-1">
+            <div className="pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
+              <div className="flex flex-wrap items-center gap-1.5 p-1 bg-slate-100 rounded-2xl">
                 {[
                   { id: 'all', label: 'Semua' },
-                  { id: 'lab', label: 'Makmal' },
+                  { id: 'lab', label: 'Makmal Komputer' },
                   { id: 'lecture', label: 'Bilik Kuliah' },
                   { id: 'other', label: 'Bilik Khas' },
                   ...(!excludeOnline ? [{ id: 'online', label: 'Online' }] : []),
@@ -510,10 +486,10 @@ export default function RoomsPage() {
                     key={cat.id}
                     type="button"
                     onClick={() => handleCategoryFilterChange(cat.id)}
-                    className={`h-7 px-3 rounded-md text-xs font-medium transition-all cursor-pointer ${
+                    className={`h-8 px-3.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                       categoryFilter === cat.id
-                        ? 'bg-[#00A3FF] text-white font-semibold shadow-2xs'
-                        : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
+                        ? 'bg-slate-900 text-white shadow-xs scale-[1.02]'
+                        : 'text-slate-700 hover:text-slate-900 hover:bg-white/60'
                     }`}
                   >
                     {cat.label}
@@ -525,49 +501,49 @@ export default function RoomsPage() {
                 type="button"
                 onClick={() => fetchAvailability()}
                 disabled={loading}
-                className="h-9 px-5 bg-[#00A3FF] hover:bg-[#008fe0] text-white font-medium text-xs rounded-lg transition-all flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer shadow-xs"
+                className="h-10 px-6 bg-[#3f8ceb] hover:bg-[#3280e2] text-white font-semibold text-xs rounded-xl shadow-sm hover:scale-[1.02] transition-all flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
               >
-                {loading ? 'Menyemak...' : 'Semak Ketersediaan'}
+                {loading ? 'Menyemak...' : 'Semak Ketersediaan Bilik →'}
               </button>
             </div>
           </div>
 
           {/* Status Tabs Switcher */}
           {availability && (
-            <div className="flex items-center gap-1 p-0.5 bg-slate-100 rounded-lg border border-slate-200 max-w-fit text-xs">
+            <div className="flex items-center gap-1.5 p-1.5 bg-slate-100 rounded-2xl max-w-fit text-xs">
               <button
                 type="button"
                 onClick={() => handleStatusTabChange('available')}
-                className={`px-3 py-1.5 rounded-md font-medium transition-all flex items-center gap-1.5 cursor-pointer ${
+                className={`px-4 py-2 rounded-xl font-bold transition-all flex items-center gap-2 cursor-pointer ${
                   statusTab === 'available'
-                    ? 'bg-white text-slate-900 shadow-2xs font-semibold'
-                    : 'text-slate-600 hover:text-slate-900'
+                    ? 'bg-white text-slate-950 shadow-sm scale-[1.02]'
+                    : 'text-slate-600 hover:text-slate-950'
                 }`}
               >
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                <span className="w-2 h-2 rounded-full bg-emerald-500" />
                 <span>Bilik Kosong ({filteredAvailable.length})</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => handleStatusTabChange('occupied')}
-                className={`px-3 py-1.5 rounded-md font-medium transition-all flex items-center gap-1.5 cursor-pointer ${
+                className={`px-4 py-2 rounded-xl font-bold transition-all flex items-center gap-2 cursor-pointer ${
                   statusTab === 'occupied'
-                    ? 'bg-white text-slate-900 shadow-2xs font-semibold'
-                    : 'text-slate-600 hover:text-slate-900'
+                    ? 'bg-white text-slate-950 shadow-sm scale-[1.02]'
+                    : 'text-slate-600 hover:text-slate-950'
                 }`}
               >
-                <span className="w-1.5 h-1.5 rounded-full bg-rose-500" />
+                <span className="w-2 h-2 rounded-full bg-rose-500" />
                 <span>Bilik Ditempah ({filteredOccupied.length})</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => handleStatusTabChange('all')}
-                className={`px-3 py-1.5 rounded-md font-medium transition-all flex items-center gap-1 cursor-pointer ${
+                className={`px-4 py-2 rounded-xl font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
                   statusTab === 'all'
-                    ? 'bg-white text-slate-900 shadow-2xs font-semibold'
-                    : 'text-slate-600 hover:text-slate-900'
+                    ? 'bg-white text-slate-950 shadow-sm scale-[1.02]'
+                    : 'text-slate-600 hover:text-slate-950'
                 }`}
               >
                 <span>Semua ({filteredAvailable.length + filteredOccupied.length})</span>
@@ -575,44 +551,41 @@ export default function RoomsPage() {
             </div>
           )}
 
-          {/* Results Grid */}
+          {/* Results Grid - Gaya Apple Minimal */}
           <div className="space-y-6">
             {/* Available Rooms Grid */}
             {(statusTab === 'available' || statusTab === 'all') && (
-              <div className="space-y-3">
+              <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <h2 className="text-sm font-semibold text-slate-900">
+                  <h2 className="text-base font-bold text-slate-950">
                     Bilik Kosong & Tersedia ({filteredAvailable.length})
                   </h2>
-                  <span className="text-xs text-slate-400">
+                  <span className="text-xs text-slate-500">
                     {DAY_LABELS[selectedDay]}, {formatTime(timeStart)} – {formatTime(timeEnd)}
                   </span>
                 </div>
 
                 {filteredAvailable.length > 0 ? (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                     {filteredAvailable.map(room => {
                       const isCopied = copiedRoom === room.name;
 
                       return (
                         <div
                           key={room.id}
-                          className="bg-white rounded-xl border border-slate-200 p-4 shadow-2xs hover:border-[#00A3FF] hover:shadow-xs transition-all flex flex-col justify-between"
+                          className="bg-white rounded-3xl p-5 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.04)] hover:shadow-[0_12px_32px_-4px_rgba(0,0,0,0.08)] hover:scale-[1.01] transition-all duration-300 flex flex-col justify-between space-y-4"
                         >
-                          <div className="space-y-1.5">
+                          <div className="space-y-2">
                             <div className="flex items-center justify-between">
-                              <span className="text-[11px] font-semibold text-slate-700 bg-slate-100 border border-slate-200 px-2.5 py-0.5 rounded-md">
+                              <span className="text-[11px] font-semibold text-slate-600 bg-slate-100 px-3 py-1 rounded-full">
                                 {roomCategoryLabel(room.category)}
                               </span>
-                              <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200/80 shadow-2xs">
-                                <svg className="w-3 h-3 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                                </svg>
-                                <span>Tersedia</span>
+                              <span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full">
+                                ✓ Tersedia
                               </span>
                             </div>
 
-                            <div className="text-sm font-bold text-slate-900 pt-0.5">
+                            <div className="text-base font-extrabold text-slate-950 pt-1">
                               {room.name}
                             </div>
 
@@ -621,16 +594,16 @@ export default function RoomsPage() {
                             </div>
                           </div>
 
-                          <div className="pt-2.5 mt-2.5 border-t border-slate-100 flex items-center justify-between text-xs">
-                            <span className="text-[11px] text-slate-400">
+                          <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+                            <span className="text-[11px] font-medium text-slate-400">
                               {room.id.replace('*', '')}
                             </span>
                             <button
                               type="button"
                               onClick={() => handleCopyRoom(room.name)}
-                              className="h-6 px-2.5 text-[11px] font-medium bg-slate-100 hover:bg-[#00A3FF] hover:text-white text-slate-700 rounded transition-all cursor-pointer flex items-center gap-1"
+                              className="h-7 px-3 text-xs font-semibold bg-slate-100 hover:bg-slate-900 hover:text-white text-slate-700 rounded-xl transition-all cursor-pointer flex items-center gap-1.5 hover:scale-[1.02]"
                             >
-                              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
                               </svg>
                               <span>{isCopied ? 'Disalin!' : 'Salin'}</span>
@@ -641,7 +614,7 @@ export default function RoomsPage() {
                     })}
                   </div>
                 ) : (
-                  <div className="bg-white rounded-xl border border-slate-200 p-8 text-center text-xs text-slate-400 shadow-2xs">
+                  <div className="bg-white rounded-3xl p-10 text-center text-xs text-slate-400 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.04)]">
                     Tiada bilik kosong untuk penapis ini. Sila pilih waktu atau hari lain.
                   </div>
                 )}
@@ -650,62 +623,62 @@ export default function RoomsPage() {
 
             {/* Occupied Rooms Grid */}
             {(statusTab === 'occupied' || statusTab === 'all') && (
-              <div className="space-y-3 pt-2">
+              <div className="space-y-4 pt-2">
                 <div className="flex items-center justify-between">
-                  <h2 className="text-sm font-semibold text-slate-900">
+                  <h2 className="text-base font-bold text-slate-950">
                     Bilik Sudah Ditempah ({filteredOccupied.length})
                   </h2>
-                  <span className="text-xs text-slate-400">
+                  <span className="text-xs text-slate-500">
                     Ada kelas berjadual
                   </span>
                 </div>
 
                 {filteredOccupied.length > 0 ? (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                     {filteredOccupied.map(room => (
                       <div
                         key={room.id}
-                        className="bg-white rounded-xl border border-slate-200 p-4 shadow-2xs flex flex-col justify-between space-y-2.5"
+                        className="bg-white rounded-3xl p-5 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.04)] flex flex-col justify-between space-y-3"
                       >
-                        <div className="space-y-1.5">
+                        <div className="space-y-2">
                           <div className="flex items-center justify-between">
-                            <span className="text-[11px] font-semibold text-slate-600 bg-slate-100 px-2.5 py-0.5 rounded-md border border-slate-200">
+                            <span className="text-[11px] font-semibold text-slate-600 bg-slate-100 px-3 py-1 rounded-full">
                               {roomCategoryLabel(room.category)}
                             </span>
-                            <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-rose-700 bg-rose-50 px-2 py-0.5 rounded-md border border-rose-100">
+                            <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-rose-700 bg-rose-50 px-3 py-1 rounded-full">
                               <span className="w-1.5 h-1.5 rounded-full bg-rose-500" />
                               Ditempah
                             </span>
                           </div>
 
-                          <div className="text-sm font-bold text-slate-900 pt-0.5">
+                          <div className="text-base font-extrabold text-slate-950 pt-1">
                             {room.name}
                           </div>
 
                           {room.slot && (
-                            <div className="bg-slate-50 rounded-lg p-2 border border-slate-200/80 text-xs space-y-0.5">
-                              <div className="font-semibold text-slate-900 truncate">
+                            <div className="bg-slate-50 rounded-2xl p-3 text-xs space-y-1">
+                              <div className="font-bold text-slate-900 truncate">
                                 {room.slot.subject}
                               </div>
-                              <div className="text-slate-600 truncate text-[11px]">
+                              <div className="text-slate-600 truncate text-xs">
                                 {room.slot.teacher || '—'} • {room.slot.class || '—'}
                               </div>
-                              <div className="text-slate-500 text-[10px]">
+                              <div className="text-slate-400 text-[11px]">
                                 {formatTime(room.slot.time)} – {formatTime(room.slot.timeEnd)}
                               </div>
                             </div>
                           )}
                         </div>
 
-                        <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400">
+                        <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400">
                           <span>{room.id.replace('*', '')}</span>
-                          <span className="text-rose-600 font-medium">Bertembung</span>
+                          <span className="text-rose-600 font-semibold">Bertembung</span>
                         </div>
                       </div>
                     ))}
                   </div>
                 ) : (
-                  <div className="bg-white rounded-xl border border-slate-200 p-8 text-center text-xs text-slate-400 shadow-2xs">
+                  <div className="bg-white rounded-3xl p-10 text-center text-xs text-slate-400 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.04)]">
                     Tiada bilik ditempah untuk penapis ini.
                   </div>
                 )}
@@ -717,4 +690,3 @@ export default function RoomsPage() {
     </div>
   );
 }
-

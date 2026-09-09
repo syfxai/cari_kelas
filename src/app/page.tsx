@@ -10,7 +10,7 @@ export default function Home() {
       href: '/teachers',
       description: 'Cari nama pensyarah untuk melihat jadual mengajar penuh Waktu 1 hingga Waktu 10 (Isnin – Jumaat).',
       tag: 'Langkah 1 • Semak Jadual',
-      tagColor: 'bg-sky-50 text-sky-700 border-sky-100',
+      tagColor: 'bg-sky-50 text-[#3f8ceb]',
       highlights: [
         'Carian pantas 140+ pensyarah KPTM',
         'Paparan jadual mingguan Waktu 1–10',
@@ -24,7 +24,7 @@ export default function Home() {
       href: '/replacement',
       description: 'Pilih nama pensyarah dan kod kelas untuk menyemak jadual matriks mingguan 5 Hari × 10 Waktu & bilik kosong serentak.',
       tag: 'Langkah 2 • Penjana Pintar',
-      tagColor: 'bg-[#00A3FF]/10 text-[#00A3FF] border-[#00A3FF]/20',
+      tagColor: 'bg-sky-50 text-[#3f8ceb]',
       highlights: [
         'Kesan slot lapang tanpa pertembungan waktu',
         'Tapis makmal komputer & bilik fizikal serentak',
@@ -38,7 +38,7 @@ export default function Home() {
       href: '/rooms',
       description: 'Semak ketersediaan makmal komputer dan bilik kuliah fizikal mengikut Waktu 1 hingga Waktu 10 (Isnin – Jumaat).',
       tag: 'Waktu 1–10',
-      tagColor: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+      tagColor: 'bg-emerald-50 text-emerald-700',
       highlights: [
         'Pilih tempoh masa (1 Jam, 2 Jam, Sesi Pagi/Petang)',
         'Tapis bilik fizikal & abaikan pautan online',
@@ -52,7 +52,7 @@ export default function Home() {
       href: '/classes',
       description: 'Semak jadual waktu subjek, kod pensyarah, dan lokasi bilik untuk setiap kumpulan kelas diploma.',
       tag: '80+ Kumpulan Kelas',
-      tagColor: 'bg-slate-100 text-slate-700 border-slate-200',
+      tagColor: 'bg-slate-100 text-slate-800',
       highlights: [
         'Sokongan kelas DIA, DDM, DIM, DIT, DCW',
         'Paparan grid 10 waktu yang seragam',
@@ -65,21 +65,21 @@ export default function Home() {
 
   return (
     <div className="max-w-6xl mx-auto py-4 sm:py-8 space-y-8 sm:space-y-10">
-      {/* Hero Header */}
+      {/* Hero Header - Kekal 100% Seperti Pilihan Pengguna */}
       <div className="relative rounded-3xl bg-gradient-to-b from-white via-white to-sky-50/40 border border-slate-200/80 p-6 sm:p-10 shadow-sm overflow-hidden">
         {/* Subtle Background Glow Accent */}
-        <div className="absolute -top-24 -right-24 w-80 h-80 bg-[#00A3FF]/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -top-24 -right-24 w-80 h-80 bg-[#3f8ceb]/10 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute -bottom-24 -left-24 w-80 h-80 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative z-10 max-w-3xl space-y-4">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-slate-200 text-slate-800 text-xs font-semibold shadow-2xs">
-            <span className="w-2 h-2 rounded-full bg-[#00A3FF] animate-pulse" />
+            <span className="w-2 h-2 rounded-full bg-[#3f8ceb] animate-pulse" />
             <span>Sistem Cari Kelas Pintar • KPTM Ipoh</span>
           </div>
 
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 leading-tight">
             Cari Kelas Ganti & Bilik Kosong{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00A3FF] via-sky-500 to-blue-600">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#3f8ceb] via-sky-500 to-blue-600">
               Pantas & Tepat
             </span>
           </h1>
@@ -91,7 +91,7 @@ export default function Home() {
           <div className="pt-2 flex flex-wrap items-center gap-3">
             <Link
               href="/teachers"
-              className="h-10 px-5 bg-gradient-to-r from-[#00A3FF] to-[#0084FF] hover:from-[#0092e6] hover:to-[#0074e6] text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-sky-500/20 flex items-center gap-2 cursor-pointer hover:scale-[1.02]"
+              className="h-10 px-5 bg-gradient-to-r from-[#3f8ceb] to-[#2575dc] hover:from-[#3280e2] hover:to-[#1e66c6] text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-sky-500/20 flex items-center gap-2 cursor-pointer hover:scale-[1.02]"
             >
               <span>1. Jadual Pensyarah</span>
               <span>→</span>
@@ -132,47 +132,43 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Feature Navigation Cards Grid */}
+      {/* Feature Navigation Cards Grid - Gaya Apple Minimal */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         {features.map(item => (
           <Link
             key={item.href}
             href={item.href}
-            className={`group rounded-2xl border p-6 transition-all duration-200 flex flex-col justify-between cursor-pointer ${
-              item.featured
-                ? 'bg-white border-[#00A3FF]/40 shadow-md shadow-sky-500/5 hover:border-[#00A3FF] hover:shadow-lg hover:shadow-sky-500/10'
-                : 'bg-white border-slate-200/90 shadow-2xs hover:border-slate-300 hover:shadow-md'
-            }`}
+            className="group bg-white rounded-3xl p-7 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.04)] hover:shadow-[0_12px_32px_-4px_rgba(0,0,0,0.08)] hover:scale-[1.01] transition-all duration-300 flex flex-col justify-between cursor-pointer"
           >
-            <div className="space-y-3">
+            <div className="space-y-3.5">
               <div className="flex items-center justify-between gap-2">
-                <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full border ${item.tagColor}`}>
+                <span className={`text-[11px] font-bold px-3 py-1 rounded-full ${item.tagColor}`}>
                   {item.tag}
                 </span>
-                <span className="text-xs font-bold text-slate-400 group-hover:text-[#00A3FF] group-hover:translate-x-1 transition-all">
+                <span className="text-xs font-bold text-slate-400 group-hover:text-[#3f8ceb] group-hover:translate-x-1 transition-all">
                   Buka →
                 </span>
               </div>
 
-              <h2 className="text-lg font-bold text-slate-900 group-hover:text-[#00A3FF] transition-colors">
+              <h2 className="text-xl font-bold text-slate-900 group-hover:text-[#3f8ceb] transition-colors">
                 {item.title}
               </h2>
 
-              <p className="text-xs text-slate-500 leading-relaxed">
+              <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
                 {item.description}
               </p>
 
-              <ul className="space-y-1.5 pt-1 text-xs text-slate-600">
+              <ul className="space-y-2 pt-1 text-xs text-slate-600">
                 {item.highlights.map((h, i) => (
-                  <li key={i} className="flex items-center gap-2">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#00A3FF] shrink-0" />
+                  <li key={i} className="flex items-center gap-2.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#3f8ceb] shrink-0" />
                     <span>{h}</span>
                   </li>
                 ))}
               </ul>
             </div>
 
-            <div className="mt-5 pt-3.5 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-slate-700 group-hover:text-[#00A3FF] transition-colors">
+            <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-slate-800 group-hover:text-[#3f8ceb] transition-colors">
               <span>{item.cta}</span>
               <span className="group-hover:translate-x-1 transition-transform">→</span>
             </div>
@@ -180,17 +176,17 @@ export default function Home() {
         ))}
       </div>
 
-      {/* System Status Footnote */}
-      <div className="rounded-2xl border border-slate-200/80 bg-white p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-slate-500 shadow-2xs">
-        <div className="flex items-center gap-2">
+      {/* System Status Footnote - Gaya Apple Minimal */}
+      <div className="bg-white rounded-3xl p-5 sm:p-6 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.04)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-slate-500">
+        <div className="flex items-center gap-2.5">
           <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
           <span>
-            <strong className="text-slate-800">EduPage KPTM Ipoh:</strong> Data jadual waktu semester semasa diselaraskan secara langsung.
+            <strong className="text-slate-900 font-semibold">EduPage KPTM Ipoh:</strong> Data jadual waktu semester semasa diselaraskan secara langsung.
           </span>
         </div>
         <Link
           href="/replacement"
-          className="text-xs font-bold text-[#00A3FF] hover:underline shrink-0"
+          className="text-xs font-bold text-[#3f8ceb] hover:underline shrink-0"
         >
           Terus ke Carian Kelas Ganti →
         </Link>
@@ -198,4 +194,3 @@ export default function Home() {
     </div>
   );
 }
-

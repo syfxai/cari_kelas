@@ -6,7 +6,6 @@ import {
   DAY_LABELS,
   DAYS,
   type ReplacementOption,
-  type ReplacementReason,
   type ReplacementResult,
   type RoomOption,
   type TeacherData,
@@ -452,63 +451,67 @@ export default function ReplacementPage() {
   const canSubmit = Boolean(teacher && className && selectedSourceSlot && !loading);
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto">
+    <div className="space-y-8 max-w-7xl mx-auto">
       {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-3 border-b border-slate-200">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900">
-            Cari Kelas Ganti
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2">
+        <div className="space-y-1">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 text-slate-800 text-xs font-semibold">
+            <span className="w-2 h-2 rounded-full bg-[#3f8ceb] animate-pulse" />
+            <span>Penjana Kelas Ganti Pintar</span>
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-950">
+            Cari Kelas Ganti & Bilik Kosong
           </h1>
-          <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
-            Pilih pensyarah dan kelas untuk melihat slot waktu lapang pada jadual mingguan (Isnin – Jumaat).
+          <p className="text-xs sm:text-sm text-slate-500 leading-relaxed max-w-2xl">
+            Pilih pensyarah dan kelas untuk menyemak slot waktu lapang pada jadual matriks mingguan tanpa pertembungan waktu.
           </p>
         </div>
 
         {(teacherName || className || sourceKey) && (
           <button
             onClick={handleReset}
-            className="self-start sm:self-auto text-xs font-medium text-slate-600 hover:text-slate-900 px-3 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 transition-colors cursor-pointer"
+            className="self-start sm:self-auto text-xs font-semibold text-slate-700 hover:text-slate-950 px-4 py-2 rounded-xl border border-slate-900 bg-transparent hover:bg-slate-900 hover:text-white hover:scale-[1.02] transition-all duration-200 cursor-pointer"
           >
             Set Semula Pilihan
           </button>
         )}
       </div>
 
-      {/* Step Workflow Guide Alert */}
-      <div className="rounded-xl bg-gradient-to-r from-sky-50 via-white to-slate-50 border border-sky-100 p-4 shadow-2xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-[#00A3FF] text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-xs">
+      {/* Step Workflow Guide Card - Gaya Apple Minimal */}
+      <div className="p-5 sm:p-6 bg-white rounded-3xl shadow-[0_4px_24px_-4px_rgba(0,0,0,0.04)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div className="flex items-center gap-3.5">
+          <div className="w-10 h-10 rounded-2xl bg-[#3f8ceb] text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-sm">
             1→2
           </div>
           <div className="space-y-0.5">
             <div className="text-xs font-bold text-slate-900 flex items-center gap-2">
               <span>Aliran Kerja 2 Langkah:</span>
-              <span className="text-[10px] font-semibold text-[#00A3FF] bg-sky-100/70 px-2 py-0.2 rounded-full">
+              <span className="text-[11px] font-semibold text-[#3f8ceb] bg-sky-50 px-2.5 py-0.5 rounded-full">
                 Langkah 1: Jadual Pensyarah → Langkah 2: Cari Kelas Ganti
               </span>
             </div>
-            <p className="text-[11px] text-slate-500">
+            <p className="text-xs text-slate-500 leading-relaxed">
               Belum pasti slot mana hendak diganti? Semak jadual pensyarah dahulu untuk melihat jadual penuh 10 waktu.
             </p>
           </div>
         </div>
         <Link
           href="/teachers"
-          className="h-7 px-3 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 hover:text-[#00A3FF] rounded-lg text-xs font-semibold shadow-2xs inline-flex items-center gap-1.5 transition-all shrink-0 cursor-pointer"
+          className="h-9 px-4 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-xl text-xs font-semibold hover:scale-[1.02] transition-all inline-flex items-center gap-1.5 shrink-0 cursor-pointer"
         >
           <span>🔍 Buka Jadual Pensyarah</span>
         </Link>
       </div>
 
-      {/* Step 1-2-3 Selection Form */}
-      <section className="bg-white rounded-xl border border-slate-200 p-5 space-y-4 shadow-2xs">
-        <div className="flex items-center justify-between">
-          <h2 className="text-sm font-semibold text-slate-900">
+      {/* Step 1-2-3 Selection Form - Gaya Apple Minimal */}
+      <section className="bg-white rounded-3xl p-6 sm:p-8 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.04)] space-y-5">
+        <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+          <h2 className="text-base font-bold text-slate-950">
             Pilih Slot Kelas Asal
           </h2>
           {typeof window !== 'undefined' && (teacherName || className) && (
-            <span className="text-[11px] text-slate-400">
-              Diingati dalam pelayar
+            <span className="text-xs font-medium text-slate-400">
+              Pilihan diingati dalam pelayar
             </span>
           )}
         </div>
@@ -517,12 +520,12 @@ export default function ReplacementPage() {
           {/* Step 1: Lecturer Select */}
           <div className="space-y-1.5">
             <div className="flex items-center justify-between">
-              <label htmlFor="select-teacher" className="text-xs font-medium text-slate-600">
+              <label htmlFor="select-teacher" className="text-xs font-semibold text-slate-800">
                 1. Nama Pensyarah
               </label>
               <Link
                 href="/teachers"
-                className="text-[11px] text-[#00A3FF] hover:underline font-medium inline-flex items-center gap-0.5"
+                className="text-[11px] text-[#3f8ceb] hover:underline font-semibold inline-flex items-center gap-0.5"
               >
                 <span>🔍 Jadual Penuh</span>
               </Link>
@@ -531,7 +534,7 @@ export default function ReplacementPage() {
               id="select-teacher"
               value={teacherName}
               onChange={e => handleTeacherChange(e.target.value)}
-              className="w-full h-9 px-3 bg-white border border-slate-200 rounded-lg text-xs font-medium text-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-400 transition-colors cursor-pointer"
+              className="w-full h-10 px-3.5 bg-slate-50 rounded-xl text-xs sm:text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#3f8ceb] transition-colors cursor-pointer"
             >
               <option value="">Pilih Pensyarah</option>
               {teacherNames.map(name => (
@@ -548,8 +551,8 @@ export default function ReplacementPage() {
           </div>
 
           {/* Step 2: Class Select */}
-          <div className="space-y-1">
-            <label htmlFor="select-class" className="text-xs font-medium text-slate-500">
+          <div className="space-y-1.5">
+            <label htmlFor="select-class" className="text-xs font-semibold text-slate-800">
               2. Kelas yang Diajar
             </label>
             <select
@@ -557,7 +560,7 @@ export default function ReplacementPage() {
               value={className}
               onChange={e => handleClassChange(e.target.value)}
               disabled={!teacher || classesTaughtByTeacher.length === 0}
-              className="w-full h-9 px-3 bg-white border border-slate-200 rounded-lg text-xs font-medium text-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-400 transition-colors disabled:bg-slate-50 disabled:text-slate-400 cursor-pointer"
+              className="w-full h-10 px-3.5 bg-slate-50 rounded-xl text-xs sm:text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#3f8ceb] transition-colors disabled:opacity-50 cursor-pointer"
             >
               <option value="">
                 {!teacher
@@ -575,8 +578,8 @@ export default function ReplacementPage() {
           </div>
 
           {/* Step 3: Slot selection */}
-          <div className="space-y-1">
-            <label htmlFor="select-slot" className="text-xs font-medium text-slate-500">
+          <div className="space-y-1.5">
+            <label htmlFor="select-slot" className="text-xs font-semibold text-slate-800">
               3. Sesi Kelas Asal
             </label>
             <select
@@ -584,7 +587,7 @@ export default function ReplacementPage() {
               value={sourceKey}
               onChange={e => handleSlotChange(e.target.value)}
               disabled={!className || classSlotsForTeacher.length === 0}
-              className="w-full h-9 px-3 bg-white border border-slate-200 rounded-lg text-xs font-medium text-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-400 transition-colors disabled:bg-slate-50 disabled:text-slate-400 cursor-pointer"
+              className="w-full h-10 px-3.5 bg-slate-50 rounded-xl text-xs sm:text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#3f8ceb] transition-colors disabled:opacity-50 cursor-pointer"
             >
               <option value="">
                 {!className ? 'Pilih kelas dahulu' : 'Pilih slot waktu'}
@@ -603,11 +606,11 @@ export default function ReplacementPage() {
 
         {/* Source Slot Context Display */}
         {selectedSourceSlot && (
-          <div className="rounded-lg border border-slate-200 bg-slate-50 p-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+          <div className="rounded-2xl bg-slate-50 p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
             <div className="space-y-0.5">
-              <div className="font-semibold text-slate-900 flex items-center gap-2">
+              <div className="font-bold text-slate-900 flex items-center gap-2">
                 <span>{selectedSourceSlot.subject}</span>
-                <span className="text-[11px] font-semibold text-slate-700 bg-white border border-slate-200 px-2.5 py-0.5 rounded-md">
+                <span className="text-[11px] font-semibold text-slate-700 bg-white px-2.5 py-0.5 rounded-md shadow-2xs">
                   Tempoh Asal: {sourceDurationHours} Jam
                 </span>
               </div>
@@ -631,9 +634,9 @@ export default function ReplacementPage() {
           <button
             onClick={checkOptions}
             disabled={!canSubmit}
-            className="h-9 px-5 bg-[#00A3FF] hover:bg-[#008fe0] text-white rounded-lg text-xs font-medium transition-colors flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer shadow-xs"
+            className="h-10 px-6 bg-[#3f8ceb] hover:bg-[#3280e2] text-white rounded-xl text-xs font-semibold shadow-sm hover:scale-[1.02] transition-all flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
           >
-            {loading ? 'Menyemak Jadual...' : 'Cari Pilihan Slot Ganti'}
+            {loading ? 'Menyemak Jadual...' : 'Cari Pilihan Slot Ganti →'}
           </button>
 
           {message && (
@@ -646,15 +649,15 @@ export default function ReplacementPage() {
 
       {/* Results Section */}
       {result && matrixData && (
-        <section className="space-y-4">
-          <div className="bg-white rounded-xl border border-slate-200 p-5 space-y-4 shadow-2xs">
+        <section className="space-y-6">
+          <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.04)] space-y-6">
             {/* Header & Controls */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-slate-100">
               <div>
-                <h2 className="text-sm font-semibold text-slate-900">
+                <h2 className="text-base font-bold text-slate-950">
                   Jadual Ketersediaan Slot Mingguan
                 </h2>
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-slate-500 mt-0.5">
                   {result.available.length} slot lapang ditemui sepanjang minggu Isnin – Jumaat
                 </p>
               </div>
@@ -664,7 +667,7 @@ export default function ReplacementPage() {
                 <select
                   value={durationFilter}
                   onChange={e => setDurationFilter(e.target.value)}
-                  className="h-8 px-2.5 bg-white border border-slate-200 rounded-lg text-xs text-slate-800 focus:outline-none"
+                  className="h-9 px-3 bg-slate-50 rounded-xl text-xs font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#3f8ceb]"
                 >
                   <option value="match_source">
                     Ikut Asal ({result.source.durationHours || sourceDurationHours} Jam)
@@ -675,23 +678,23 @@ export default function ReplacementPage() {
                   <option value="all">Semua Durasi</option>
                 </select>
 
-                <div className="flex items-center gap-1 p-0.5 bg-slate-100 rounded-lg border border-slate-200 text-xs">
+                <div className="flex items-center gap-1 p-1 bg-slate-100 rounded-xl text-xs">
                   <button
                     onClick={() => setViewMode('matrix')}
-                    className={`px-2.5 py-1 rounded-md transition-all cursor-pointer ${
+                    className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer text-xs font-semibold ${
                       viewMode === 'matrix'
-                        ? 'bg-white text-slate-900 shadow-2xs font-semibold'
-                        : 'text-slate-600 hover:text-slate-900'
+                        ? 'bg-white text-slate-950 shadow-sm'
+                        : 'text-slate-600 hover:text-slate-950'
                     }`}
                   >
-                    Jadual (Gambar 3)
+                    Jadual Matriks
                   </button>
                   <button
                     onClick={() => setViewMode('list')}
-                    className={`px-2.5 py-1 rounded-md transition-all cursor-pointer ${
+                    className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer text-xs font-semibold ${
                       viewMode === 'list'
-                        ? 'bg-white text-slate-900 shadow-2xs font-semibold'
-                        : 'text-slate-600 hover:text-slate-900'
+                        ? 'bg-white text-slate-950 shadow-sm'
+                        : 'text-slate-600 hover:text-slate-950'
                     }`}
                   >
                     Senarai Ringkas
@@ -700,19 +703,19 @@ export default function ReplacementPage() {
               </div>
             </div>
 
-            {/* FORMAT JADUAL MATRIKS MINGGUAN (GAMBAR 3) */}
+            {/* FORMAT JADUAL MATRIKS MINGGUAN GAYA APPLE (1px Outline to Fill) */}
             {viewMode === 'matrix' && (
-              <div className="overflow-x-auto rounded-2xl border border-slate-200/90 bg-slate-50/50 p-2.5 sm:p-3.5 shadow-2xs">
-                <table className="w-full text-center border-separate border-spacing-1.5 text-xs min-w-[920px]">
+              <div className="overflow-x-auto p-1">
+                <table className="w-full text-center border-separate border-spacing-2 text-xs min-w-[920px]">
                   <thead>
                     <tr>
-                      <th className="p-2 w-16 font-extrabold text-xs uppercase tracking-wider text-slate-700 bg-white/90 border border-slate-200/80 rounded-xl shadow-2xs">
+                      <th className="p-3 w-16 font-extrabold text-xs uppercase tracking-wider text-slate-700 bg-slate-50 rounded-2xl">
                         Hari
                       </th>
                       {PERIODS.map(p => (
                         <th
                           key={p.period}
-                          className="p-2 bg-white/90 border border-slate-200/80 rounded-xl shadow-2xs font-medium"
+                          className="p-3 bg-slate-50 rounded-2xl font-medium"
                         >
                           <div className="font-extrabold text-slate-900 text-xs">
                             Waktu {p.period}
@@ -729,7 +732,7 @@ export default function ReplacementPage() {
                       return (
                         <tr key={day}>
                           {/* Day Row Header */}
-                          <td className="p-2.5 font-black text-slate-900 text-xs bg-white border border-slate-200/80 rounded-xl shadow-2xs whitespace-nowrap align-middle">
+                          <td className="p-3 font-black text-slate-900 text-xs bg-slate-50 rounded-2xl whitespace-nowrap align-middle">
                             {DAY_CODES[day] || day}
                           </td>
 
@@ -744,7 +747,7 @@ export default function ReplacementPage() {
                             const isSelectedActive =
                               activeSlotOption?.day === day && activeSlotOption?.time === p.start;
 
-                            // 1. Available Slot Cell (Curved & Engaging)
+                            // 1. Available Slot Cell (Gaya Apple 1px Outline to Fill)
                             if (availSlot) {
                               const validRooms = getFilteredRooms(availSlot.rooms);
                               return (
@@ -755,32 +758,26 @@ export default function ReplacementPage() {
                                   title={`Klik untuk pilih slot ${DAY_LABELS[day]} Waktu ${p.period}`}
                                 >
                                   <div
-                                    className={`rounded-xl p-2 min-h-[60px] transition-all duration-200 flex flex-col items-center justify-center cursor-pointer ${
+                                    className={`rounded-2xl p-2.5 min-h-[64px] transition-all duration-200 flex flex-col items-center justify-center cursor-pointer ${
                                       isSelectedActive
-                                        ? 'bg-gradient-to-tr from-[#00A3FF] to-[#0077EE] text-white shadow-lg shadow-sky-500/25 ring-2 ring-[#00A3FF] ring-offset-2 scale-[1.04] border-0'
-                                        : 'bg-gradient-to-b from-emerald-50/90 to-teal-50/60 border border-emerald-200/90 hover:border-emerald-400 hover:bg-emerald-100/70 hover:shadow-md hover:scale-[1.03] text-emerald-950'
+                                        ? 'bg-[#3f8ceb] text-white shadow-lg shadow-sky-500/20 scale-[1.03]'
+                                        : 'bg-white border border-[#3f8ceb] text-[#3f8ceb] hover:bg-[#3f8ceb] hover:text-white hover:scale-[1.02] shadow-2xs group'
                                     }`}
                                   >
-                                    <div
-                                      className={`flex items-center gap-1 font-bold text-[11px] tracking-tight ${
-                                        isSelectedActive ? 'text-white font-extrabold' : 'text-emerald-800'
-                                      }`}
-                                    >
+                                    <div className="flex items-center gap-1 font-extrabold text-[11px] tracking-tight">
                                       <span
                                         className={`w-1.5 h-1.5 rounded-full ${
-                                          isSelectedActive
-                                            ? 'bg-white ring-2 ring-white/50 animate-pulse'
-                                            : 'bg-emerald-500 ring-2 ring-emerald-300/60 animate-pulse'
+                                          isSelectedActive ? 'bg-white' : 'bg-[#3f8ceb] group-hover:bg-white'
                                         }`}
                                       />
                                       <span>{isSelectedActive ? 'DIPILIH' : 'LAPANG'}</span>
                                     </div>
 
                                     <div
-                                      className={`text-[10px] font-semibold px-2 py-0.5 rounded-md mt-1 transition-colors ${
+                                      className={`text-[10px] font-semibold px-2 py-0.5 rounded-lg mt-1 transition-colors ${
                                         isSelectedActive
-                                          ? 'bg-white text-sky-900 shadow-xs font-bold'
-                                          : 'bg-white/90 text-emerald-700 border border-emerald-200/60 shadow-2xs'
+                                          ? 'bg-white/20 text-white'
+                                          : 'bg-slate-50 text-[#3f8ceb] group-hover:bg-white/20 group-hover:text-white'
                                       }`}
                                     >
                                       {validRooms.length} bilik
@@ -794,9 +791,9 @@ export default function ReplacementPage() {
                             if (isSource) {
                               return (
                                 <td key={p.period} className="p-0 align-middle">
-                                  <div className="bg-gradient-to-b from-slate-800 to-slate-900 text-white border border-slate-700 rounded-xl p-2 min-h-[60px] flex flex-col items-center justify-center shadow-xs">
+                                  <div className="bg-slate-950 text-white rounded-2xl p-2.5 min-h-[64px] flex flex-col items-center justify-center shadow-xs">
                                     <span className="font-bold text-[11px] text-white">Slot Asal</span>
-                                    <span className="text-[9px] font-medium text-slate-300 mt-0.5">Diganti</span>
+                                    <span className="text-[10px] font-medium text-slate-400 mt-0.5">Diganti</span>
                                   </div>
                                 </td>
                               );
@@ -806,9 +803,9 @@ export default function ReplacementPage() {
                             if (isFridayMentor && conflictSlot) {
                               return (
                                 <td key={p.period} className="p-0 align-middle">
-                                  <div className="bg-slate-100/90 border border-slate-200/80 rounded-xl p-2 min-h-[60px] flex flex-col items-center justify-center text-slate-600 text-[10px] leading-tight">
-                                    <span className="font-bold text-slate-700">Mentor</span>
-                                    <span className="font-bold text-slate-700">Mentee</span>
+                                  <div className="bg-slate-100 rounded-2xl p-2.5 min-h-[64px] flex flex-col items-center justify-center text-slate-600 text-[10px] leading-tight">
+                                    <span className="font-bold text-slate-800">Mentor</span>
+                                    <span className="font-bold text-slate-800">Mentee</span>
                                   </div>
                                 </td>
                               );
@@ -819,8 +816,8 @@ export default function ReplacementPage() {
                               const reasonText = conflictSlot.reasons?.[0]?.message || 'Ada Kelas';
                               return (
                                 <td key={p.period} className="p-0 align-middle" title={reasonText}>
-                                  <div className="bg-white/60 hover:bg-white border border-slate-200/60 rounded-xl p-2 min-h-[60px] flex flex-col items-center justify-center text-slate-400 text-[10px] leading-tight transition-colors">
-                                    <span className="truncate max-w-[76px] font-medium text-slate-500">
+                                  <div className="bg-slate-50 rounded-2xl p-2.5 min-h-[64px] flex flex-col items-center justify-center text-slate-400 text-[10px] leading-tight opacity-70">
+                                    <span className="truncate max-w-[76px] font-medium text-slate-600">
                                       {reasonText.replace('Pensyarah', 'Pensy.')}
                                     </span>
                                   </div>
@@ -831,7 +828,7 @@ export default function ReplacementPage() {
                             // 5. Empty / Out of bounds
                             return (
                               <td key={p.period} className="p-0 align-middle">
-                                <div className="bg-slate-50/40 border border-slate-200/40 rounded-xl min-h-[60px]" />
+                                <div className="bg-slate-50/50 rounded-2xl min-h-[64px]" />
                               </td>
                             );
                           })}
@@ -845,18 +842,18 @@ export default function ReplacementPage() {
 
             {/* FORMAT SENARAI RINGKAS (LIST VIEW) */}
             {viewMode === 'list' && (
-              <div className="border border-slate-200 rounded-lg overflow-hidden">
+              <div className="rounded-2xl overflow-hidden bg-slate-50 p-2">
                 <table className="w-full text-left text-xs border-collapse">
                   <thead>
-                    <tr className="bg-slate-50 border-b border-slate-200 text-slate-600 font-semibold">
-                      <th className="p-2.5">Hari</th>
-                      <th className="p-2.5">Waktu</th>
-                      <th className="p-2.5">Tempoh</th>
-                      <th className="p-2.5">Bilik Kosong</th>
-                      <th className="p-2.5 text-right">Tindakan</th>
+                    <tr className="text-slate-600 font-bold">
+                      <th className="p-3">Hari</th>
+                      <th className="p-3">Waktu</th>
+                      <th className="p-3">Tempoh</th>
+                      <th className="p-3">Bilik Kosong</th>
+                      <th className="p-3 text-right">Tindakan</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-100">
+                  <tbody className="divide-y divide-slate-200/60">
                     {result.available.map((opt, idx) => {
                       const validRooms = getFilteredRooms(opt.rooms);
                       const isSelected =
@@ -865,19 +862,19 @@ export default function ReplacementPage() {
                         <tr
                           key={idx}
                           onClick={() => handleSelectSlot(opt)}
-                          className={`hover:bg-slate-50 transition-colors cursor-pointer ${
-                            isSelected ? 'bg-slate-100 font-medium' : ''
+                          className={`hover:bg-white rounded-xl transition-all cursor-pointer ${
+                            isSelected ? 'bg-white font-bold shadow-sm' : ''
                           }`}
                         >
-                          <td className="p-2.5 font-medium text-slate-900">{DAY_LABELS[opt.day] || opt.day}</td>
-                          <td className="p-2.5 font-medium text-slate-800">{formatTime(opt.time)} – {formatTime(opt.timeEnd)}</td>
-                          <td className="p-2.5 text-slate-500">{opt.periodLabel}</td>
-                          <td className="p-2.5 text-emerald-700 font-medium">{validRooms.length} bilik fizikal</td>
-                          <td className="p-2.5 text-right">
+                          <td className="p-3 font-semibold text-slate-900">{DAY_LABELS[opt.day] || opt.day}</td>
+                          <td className="p-3 font-semibold text-slate-800">{formatTime(opt.time)} – {formatTime(opt.timeEnd)}</td>
+                          <td className="p-3 text-slate-500">{opt.periodLabel}</td>
+                          <td className="p-3 text-[#3f8ceb] font-semibold">{validRooms.length} bilik fizikal</td>
+                          <td className="p-3 text-right">
                             <button
                               type="button"
                               onClick={(e) => { e.stopPropagation(); handleSelectSlot(opt); }}
-                              className="px-2.5 py-1 text-[11px] font-medium bg-slate-900 text-white rounded hover:bg-slate-800"
+                              className="px-3 py-1.5 text-xs font-semibold bg-slate-900 text-white rounded-xl hover:bg-black hover:scale-[1.02] transition-all cursor-pointer"
                             >
                               Pilih
                             </button>
@@ -890,18 +887,18 @@ export default function ReplacementPage() {
               </div>
             )}
 
-            {/* EXPANDABLE DETAILS & ROOM SELECTOR PANEL (Muncul bila slot dipilih) */}
+            {/* EXPANDABLE DETAILS & ROOM SELECTOR PANEL (Gaya Apple Minimal) */}
             {activeSlotOption && (
               <div
                 ref={detailsPanelRef}
-                className="mt-6 p-4 sm:p-5 rounded-xl border border-slate-300 bg-slate-50 space-y-4 shadow-xs"
+                className="mt-6 p-6 sm:p-8 rounded-3xl bg-slate-50 space-y-5"
               >
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-200">
-                  <div>
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded">
-                      Slot Dipilih
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-200/80">
+                  <div className="space-y-1">
+                    <span className="text-[11px] font-bold text-[#3f8ceb] bg-sky-100/70 px-3 py-1 rounded-full">
+                      ✓ Slot Dipilih
                     </span>
-                    <h3 className="text-sm font-bold text-slate-900 mt-1">
+                    <h3 className="text-base font-extrabold text-slate-950 mt-1">
                       {DAY_LABELS[activeSlotOption.day] || activeSlotOption.day}, {formatTime(activeSlotOption.time)} – {formatTime(activeSlotOption.timeEnd)} ({activeSlotOption.periodLabel})
                     </h3>
                   </div>
@@ -909,9 +906,9 @@ export default function ReplacementPage() {
                   <div className="flex items-center gap-2">
                     <button
                       onClick={handleCopyMemo}
-                      className="h-8 px-4 bg-[#00A3FF] hover:bg-[#008fe0] text-white rounded-lg text-xs font-medium transition-colors flex items-center gap-1.5 cursor-pointer shadow-xs"
+                      className="h-10 px-5 bg-[#3f8ceb] hover:bg-[#3280e2] text-white rounded-xl text-xs font-semibold shadow-sm hover:scale-[1.02] transition-all flex items-center gap-2 cursor-pointer"
                     >
-                      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
                       </svg>
                       <span>{copiedSuccess ? '✓ Berjaya Disalin!' : 'Salin Mesej WhatsApp/Memo'}</span>
@@ -920,9 +917,9 @@ export default function ReplacementPage() {
                 </div>
 
                 {/* Room Selector Inside Panel */}
-                <div className="space-y-2">
+                <div className="space-y-3">
                   <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
-                    <span className="font-semibold text-slate-700">
+                    <span className="font-bold text-slate-800">
                       Pilih Bilik Kosong ({getFilteredRooms(activeSlotOption.rooms).length} pilihan):
                     </span>
 
@@ -930,7 +927,7 @@ export default function ReplacementPage() {
                       <select
                         value={roomCategoryFilter}
                         onChange={e => setRoomCategoryFilter(e.target.value)}
-                        className="h-7 px-2 bg-white border border-slate-200 rounded text-xs text-slate-700"
+                        className="h-8 px-2.5 bg-white rounded-xl text-xs font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#3f8ceb]"
                       >
                         <option value="all">Semua Kategori</option>
                         <option value="lab">Makmal Komputer</option>
@@ -941,12 +938,12 @@ export default function ReplacementPage() {
                         placeholder="Cari bilik..."
                         value={roomSearchQuery}
                         onChange={e => setRoomSearchQuery(e.target.value)}
-                        className="h-7 px-2 bg-white border border-slate-200 rounded text-xs text-slate-800 placeholder:text-slate-400 w-28"
+                        className="h-8 px-3 bg-white rounded-xl text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#3f8ceb] w-32"
                       />
                     </div>
                   </div>
 
-                  <div className="flex flex-wrap gap-1.5 max-h-32 overflow-y-auto p-2 bg-white rounded-lg border border-slate-200">
+                  <div className="flex flex-wrap gap-2 max-h-36 overflow-y-auto p-3 bg-white rounded-2xl shadow-2xs">
                     {getFilteredRooms(activeSlotOption.rooms).length === 0 ? (
                       <span className="text-xs text-slate-400 p-2">Tiada bilik fizikal sepadan.</span>
                     ) : (
@@ -954,10 +951,10 @@ export default function ReplacementPage() {
                         <button
                           key={room.id}
                           onClick={() => setSelectedRoomName(room.name)}
-                          className={`px-2.5 py-1 rounded text-xs font-medium transition-all cursor-pointer ${
+                          className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
                             selectedRoomName === room.name
-                              ? 'bg-[#00A3FF] text-white font-semibold shadow-2xs'
-                              : 'bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-200/60'
+                              ? 'bg-slate-900 text-white shadow-xs scale-[1.02]'
+                              : 'bg-slate-100 hover:bg-slate-200 text-slate-800'
                           }`}
                         >
                           {room.name}
@@ -968,14 +965,14 @@ export default function ReplacementPage() {
                 </div>
 
                 {/* Preview of Memo */}
-                <div className="p-3 bg-white rounded-lg border border-slate-200 text-xs text-slate-700 space-y-1">
-                  <div className="font-bold text-slate-900">[CADANGAN KELAS GANTI]</div>
+                <div className="p-4 sm:p-5 bg-white rounded-2xl shadow-2xs text-xs text-slate-700 space-y-1.5">
+                  <div className="font-extrabold text-slate-950">[CADANGAN KELAS GANTI]</div>
                   <div>• Pensyarah: {teacher?.name}</div>
                   <div>• Kelas: {className}</div>
                   <div>• Subjek: {selectedSourceSlot?.subject}</div>
                   <div>• Slot Asal: {selectedSourceSlot ? formatSlot(selectedSourceSlot) : ''}</div>
                   <div>• Slot Ganti: {DAY_LABELS[activeSlotOption.day] || activeSlotOption.day}, {formatTime(activeSlotOption.time)} – {formatTime(activeSlotOption.timeEnd)} ({activeSlotOption.periodLabel})</div>
-                  <div>• Bilik: <span className="font-bold text-slate-900">{selectedRoomName || 'Bilik Kosong'}</span></div>
+                  <div>• Bilik: <span className="font-bold text-slate-950">{selectedRoomName || 'Bilik Kosong'}</span></div>
                 </div>
               </div>
             )}
