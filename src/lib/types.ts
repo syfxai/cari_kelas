@@ -109,3 +109,31 @@ export const TIMES = [
   '14:00', '14:30', '15:00', '15:30', '16:00', '16:30',
   '17:00', '17:30',
 ] as const;
+
+export interface SmartSuggestionOption {
+  day: string;
+  period: number;
+  timeStart: string;
+  timeEnd: string;
+  durationHours: number;
+  periodLabel: string;
+  roomName: string;
+  roomCategory: 'lab' | 'lecture' | 'online' | 'other' | string;
+  availableMatchingRoomsCount: number;
+  availableRooms: RoomOption[];
+}
+
+export interface MultiPlannedSlotItem {
+  key: string;
+  sourceSlot: TimetableSlot;
+  originalCategory: 'lab' | 'lecture' | 'online' | 'other' | string;
+  targetDay: string;
+  targetPeriod: number;
+  durationHours: number;
+  targetTimeStart: string;
+  targetTimeEnd: string;
+  targetRoom: string;
+  suggestions: SmartSuggestionOption[];
+  availableRooms?: RoomOption[];
+  loadingRooms?: boolean;
+}

@@ -1,12 +1,14 @@
 import rawTimetableData from '@/data/timetable.json';
 import type {
   ClassData,
+  MultiPlannedSlotItem,
   ReplacementOption,
   ReplacementReason,
   ReplacementResult,
   RoomAvailabilityResponse,
   RoomOption,
   RoomStatusItem,
+  SmartSuggestionOption,
   TeacherData,
   TimetableSlot,
 } from './types';
@@ -458,4 +460,204 @@ export function calculateReplacementOptions(req: ReplacementQueryRequest): Repla
     available,
     conflicts,
   };
+}
+
+// 5. Calculate Smart Multi-Class Replacement Distribution
+export function calculateSmartMultiDistribution(
+  teacherName: string,
+  selectedSlots: TimetableSlot[]
+): Record<string, MultiPlannedSlotItem> {
+  const db = getTimetableDb();
+  const teacher = db.teachers.find(t => t.name.toLowerCase() === teacherName.toLowerCase().trim());
+  if (!teacher || selectedSlots.length === 0) return {};
+
+  const daysToCheck = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+  const batchKeys = selectedSlots.map(
+    s => `${s.day}-${s.time}-${s.timeEnd}-${s.subject}-${s.class}`
+  );
+
+  interface SlotCandidatePool {
+    key: string;
+    sourceSlot: TimetableSlot;
+    origCat: 'lab' | 'lecture' | 'online' | 'other';
+    durationHours: number;
+    candidates: SmartSuggestionOption[];
+  }
+
+  const poolList: SlotCandidatePool[] = [];
+
+  selectedSlots.forEach(s => {
+    const key = `${s.day}-${s.time}-${s.timeEnd}-${s.subject}-${s.class}`;
+    let origCat = roomCategory(s.classroom || '');
+    if (origCat === 'other' && (s.subject.toUpperCase().includes('LAB') || s.subject.toUpperCase().includes('KOMPUTER'))) {
+      origCat = 'lab';
+    }
+    const diff = (timeToMinutes(s.timeEnd || s.time) - timeToMinutes(s.time)) / 60;
+    const duration = Math.max(1, Math.round(diff));
+
+    const classNames = (s.class || '').split(',').map(c => c.trim()).filter(Boolean);
+    const classObjs = classNames
+      .map(cn => db.classes.find(c => c.name.toLowerCase() === cn.toLowerCase()))
+      .filter(Boolean) as ClassData[];
+
+    const candidates: SmartSuggestionOption[] = [];
+
+    daysToCheck.forEach(d => {
+      const daySlots = DAY_BASE_SLOTS[d] || [];
+      for (let i = 0; i <= daySlots.length - duration; i++) {
+        const start = daySlots[i][0];
+        const end = daySlots[i + duration - 1][1];
+        const cand = { time: start, timeEnd: end };
+
+        // 1. Check teacher conflict with other slots outside the replacement batch
+        const tConf = teacher.slots.some(ts => {
+          const k = `${ts.day}-${ts.time}-${ts.timeEnd}-${ts.subject}-${ts.class}`;
+          return !batchKeys.includes(k) && ts.day === d && slotsOverlap(ts, cand);
+        });
+        if (tConf) continue;
+
+        // 2. Check student class conflict
+        let cConf = false;
+        for (const co of classObjs) {
+          if (co.slots.some(cs => cs.day === d && slotsOverlap(cs, cand))) {
+            cConf = true;
+            break;
+          }
+        }
+        if (cConf) continue;
+
+        // 3. Find available matching rooms
+        const freeMatchingRooms = db.rooms.filter(r => {
+          const cat = roomCategory(r.name);
+          const match = origCat === 'online' ? cat === 'online' : cat === origCat;
+          if (!match) return false;
+          return !r.slots.some(rs => rs.day === d && slotsOverlap(rs, cand));
+        });
+
+        if (freeMatchingRooms.length > 0) {
+          const pStart = i + 1;
+          const pEnd = i + duration;
+          const pLabel = pStart === pEnd ? `Waktu ${pStart}` : `Waktu ${pStart}–${pEnd}`;
+
+          candidates.push({
+            day: d,
+            period: pStart,
+            timeStart: start,
+            timeEnd: end,
+            durationHours: duration,
+            periodLabel: pLabel,
+            roomName: freeMatchingRooms[0].name,
+            roomCategory: origCat,
+            availableMatchingRoomsCount: freeMatchingRooms.length,
+            availableRooms: freeMatchingRooms.map(r => ({
+              id: r.id || r.name,
+              name: r.name,
+              category: origCat,
+              isOnline: r.name.toUpperCase().includes('ONLINE'),
+            })),
+          });
+        }
+      }
+    });
+
+    poolList.push({
+      key,
+      sourceSlot: s,
+      origCat: origCat as 'lab' | 'lecture' | 'online' | 'other',
+      durationHours: duration,
+      candidates,
+    });
+  });
+
+  // Assign optimal non-overlapping distribution
+  const usedAssignments: { day: string; timeStart: string; timeEnd: string; roomName: string }[] = [];
+  const usedDays = new Set<string>();
+  const resultMap: Record<string, MultiPlannedSlotItem> = {};
+
+  poolList.forEach(pool => {
+    // Top suggestions: up to 1 best per day
+    const daySuggestionMap: Record<string, SmartSuggestionOption> = {};
+    pool.candidates.forEach(c => {
+      if (!daySuggestionMap[c.day]) {
+        daySuggestionMap[c.day] = c;
+      }
+    });
+    const suggestions = Object.values(daySuggestionMap);
+
+    // Sort candidates for optimal conflict-free assignment:
+    // Prioritize days not yet used by another slot in this batch (spread across days!)
+    const sortedCandidates = [...pool.candidates].sort((a, b) => {
+      const aDayUsed = usedDays.has(a.day) ? 1 : 0;
+      const bDayUsed = usedDays.has(b.day) ? 1 : 0;
+      if (aDayUsed !== bDayUsed) return aDayUsed - bDayUsed;
+      // Prefer mid-morning / afternoon (period 2 to 7)
+      const aPeriodScore = Math.abs(a.period - 3);
+      const bPeriodScore = Math.abs(b.period - 3);
+      if (aPeriodScore !== bPeriodScore) return aPeriodScore - bPeriodScore;
+      return b.availableMatchingRoomsCount - a.availableMatchingRoomsCount;
+    });
+
+    // Find first candidate that doesn't collide with already assigned slots in this batch
+    let chosen = sortedCandidates.find(cand => {
+      return !usedAssignments.some(ua => {
+        if (ua.day !== cand.day) return false;
+        const timeOverlap = slotsOverlap(
+          { time: ua.timeStart, timeEnd: ua.timeEnd },
+          { time: cand.timeStart, timeEnd: cand.timeEnd }
+        );
+        if (timeOverlap) return true;
+        if (ua.roomName === cand.roomName && timeOverlap) return true;
+        return false;
+      });
+    });
+
+    // Fallback if strict conflict-free candidate was not found in pool
+    if (!chosen && pool.candidates.length > 0) {
+      chosen = pool.candidates[0];
+    }
+
+    if (!chosen) {
+      // Complete fallback
+      const defaultDay = 'Monday';
+      const defaultStart = '10:00';
+      const defaultEnd = `${String(10 + pool.durationHours).padStart(2, '0')}:00`;
+      chosen = {
+        day: defaultDay,
+        period: 3,
+        timeStart: defaultStart,
+        timeEnd: defaultEnd,
+        durationHours: pool.durationHours,
+        periodLabel: `Waktu 3`,
+        roomName: pool.sourceSlot.classroom || 'MAKMAL KOMPUTER 1-01',
+        roomCategory: pool.origCat,
+        availableMatchingRoomsCount: 1,
+        availableRooms: [],
+      };
+    }
+
+    usedAssignments.push({
+      day: chosen.day,
+      timeStart: chosen.timeStart,
+      timeEnd: chosen.timeEnd,
+      roomName: chosen.roomName,
+    });
+    usedDays.add(chosen.day);
+
+    resultMap[pool.key] = {
+      key: pool.key,
+      sourceSlot: pool.sourceSlot,
+      originalCategory: pool.origCat,
+      targetDay: chosen.day,
+      targetPeriod: chosen.period,
+      durationHours: pool.durationHours,
+      targetTimeStart: chosen.timeStart,
+      targetTimeEnd: chosen.timeEnd,
+      targetRoom: chosen.roomName,
+      suggestions,
+      availableRooms: chosen.availableRooms,
+      loadingRooms: false,
+    };
+  });
+
+  return resultMap;
 }

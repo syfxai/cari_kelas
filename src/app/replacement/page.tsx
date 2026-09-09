@@ -5,9 +5,11 @@ import Link from 'next/link';
 import {
   DAY_LABELS,
   DAYS,
+  type MultiPlannedSlotItem,
   type ReplacementOption,
   type ReplacementResult,
   type RoomOption,
+  type SmartSuggestionOption,
   type TeacherData,
   type TimetableSlot,
 } from '@/lib/types';
@@ -65,19 +67,6 @@ const formatTime = (time: string): string => {
 const formatSlot = (slot: { day: string; time: string; timeEnd: string }): string =>
   `${DAY_LABELS[slot.day] || slot.day}, ${formatTime(slot.time)} - ${formatTime(slot.timeEnd)}`;
 
-interface MultiPlannedSlot {
-  key: string;
-  sourceSlot: TimetableSlot;
-  targetDay: string;
-  targetPeriod: number;
-  durationHours: number;
-  targetTimeStart: string;
-  targetTimeEnd: string;
-  targetRoom: string;
-  availableRooms?: RoomOption[];
-  loadingRooms?: boolean;
-}
-
 export default function ReplacementPage() {
   const [teacherNames, setTeacherNames] = useState<string[]>([]);
   const [teacherName, setTeacherName] = useState<string>('');
@@ -87,6 +76,7 @@ export default function ReplacementPage() {
   const [result, setResult] = useState<ReplacementResult | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [loadingTeacher, setLoadingTeacher] = useState<boolean>(false);
+  const [autoPlanningLoading, setAutoPlanningLoading] = useState<boolean>(false);
   const [message, setMessage] = useState<string>('');
   const [copiedSuccess, setCopiedSuccess] = useState<boolean>(false);
 
@@ -95,7 +85,7 @@ export default function ReplacementPage() {
 
   // Multi-Class Planning States
   const [selectedMultiKeys, setSelectedMultiKeys] = useState<string[]>([]);
-  const [multiPlans, setMultiPlans] = useState<Record<string, MultiPlannedSlot>>({});
+  const [multiPlans, setMultiPlans] = useState<Record<string, MultiPlannedSlotItem>>({});
 
   // View & Filter States (Single Mode)
   const [viewMode, setViewMode] = useState<'matrix' | 'list'>('matrix');
@@ -488,73 +478,153 @@ export default function ReplacementPage() {
   };
 
   // ==================== MULTI-CLASS PLANNER HANDLERS ====================
+
+  // Auto-distribute slots intelligently via API
+  const applySmartDistribution = async (slotsToPlan: TimetableSlot[]) => {
+    if (!teacher || slotsToPlan.length === 0) {
+      setSelectedMultiKeys([]);
+      setMultiPlans({});
+      return;
+    }
+
+    setAutoPlanningLoading(true);
+    try {
+      const res = await fetch('/api/replacement/multi', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          teacher: teacher.name,
+          slots: slotsToPlan,
+        }),
+      });
+
+      const data = await res.json();
+      if (data.success && data.data) {
+        setMultiPlans(data.data);
+        const keys = slotsToPlan.map(
+          s => `${s.day}-${s.time}-${s.timeEnd}-${s.subject}-${s.class}`
+        );
+        setSelectedMultiKeys(keys);
+      }
+    } catch (err) {
+      console.error('Smart distribution error:', err);
+    } finally {
+      setAutoPlanningLoading(false);
+    }
+  };
+
   const toggleMultiSlotSelection = (slot: TimetableSlot) => {
     const key = `${slot.day}-${slot.time}-${slot.timeEnd}-${slot.subject}-${slot.class}`;
-    setSelectedMultiKeys(prev => {
-      if (prev.includes(key)) {
-        const next = prev.filter(k => k !== key);
-        setMultiPlans(old => {
-          const copy = { ...old };
-          delete copy[key];
-          return copy;
-        });
-        return next;
-      } else {
-        const diff = (timeToMinutes(slot.timeEnd) - timeToMinutes(slot.time)) / 60;
-        const duration = Math.max(1, Math.round(diff));
-        const defaultPeriod = 3;
-        const startH = defaultPeriod + 7;
-        const endH = startH + duration;
-        const startStr = `${String(startH).padStart(2, '0')}:00`;
-        const endStr = `${String(endH).padStart(2, '0')}:00`;
-
-        setMultiPlans(old => ({
-          ...old,
-          [key]: {
-            key,
-            sourceSlot: slot,
-            targetDay: 'Wednesday',
-            targetPeriod: defaultPeriod,
-            durationHours: duration,
-            targetTimeStart: startStr,
-            targetTimeEnd: endStr,
-            targetRoom: slot.classroom || 'MAKMAL CYBER 1',
-          },
-        }));
-        return [...prev, key];
-      }
-    });
+    if (selectedMultiKeys.includes(key)) {
+      const nextKeys = selectedMultiKeys.filter(k => k !== key);
+      setSelectedMultiKeys(nextKeys);
+      setMultiPlans(old => {
+        const copy = { ...old };
+        delete copy[key];
+        return copy;
+      });
+    } else {
+      const currentSelectedSlots = allTeacherSlots.filter(s => {
+        const k = `${s.day}-${s.time}-${s.timeEnd}-${s.subject}-${s.class}`;
+        return selectedMultiKeys.includes(k);
+      });
+      const newSelectedSlots = [...currentSelectedSlots, slot];
+      applySmartDistribution(newSelectedSlots);
+    }
   };
 
   const selectAllTeacherSlots = () => {
-    const keys: string[] = [];
-    const plans: Record<string, MultiPlannedSlot> = {};
-    allTeacherSlots.forEach((slot, idx) => {
-      const key = `${slot.day}-${slot.time}-${slot.timeEnd}-${slot.subject}-${slot.class}`;
-      keys.push(key);
-      const diff = (timeToMinutes(slot.timeEnd) - timeToMinutes(slot.time)) / 60;
-      const duration = Math.max(1, Math.round(diff));
-      const targetPeriod = (idx % 8) + 1;
-      const startH = targetPeriod + 7;
-      const endH = startH + duration;
-      plans[key] = {
-        key,
-        sourceSlot: slot,
-        targetDay: DAYS[idx % 5],
-        targetPeriod,
-        durationHours: duration,
-        targetTimeStart: `${String(startH).padStart(2, '0')}:00`,
-        targetTimeEnd: `${String(endH).padStart(2, '0')}:00`,
-        targetRoom: slot.classroom || 'MAKMAL CYBER 1',
-      };
-    });
-    setSelectedMultiKeys(keys);
-    setMultiPlans(plans);
+    applySmartDistribution(allTeacherSlots);
   };
 
   const clearAllMultiSelections = () => {
     setSelectedMultiKeys([]);
     setMultiPlans({});
+  };
+
+  const applySuggestionToSlot = (key: string, suggestion: SmartSuggestionOption) => {
+    setMultiPlans(prev => {
+      const current = prev[key];
+      if (!current) return prev;
+      return {
+        ...prev,
+        [key]: {
+          ...current,
+          targetDay: suggestion.day,
+          targetPeriod: suggestion.period,
+          durationHours: suggestion.durationHours,
+          targetTimeStart: suggestion.timeStart,
+          targetTimeEnd: suggestion.timeEnd,
+          targetRoom: suggestion.roomName,
+          availableRooms: suggestion.availableRooms,
+        },
+      };
+    });
+  };
+
+  const fetchRoomsForMultiItem = async (
+    key: string,
+    dayOverride?: string,
+    startOverride?: string,
+    endOverride?: string
+  ) => {
+    const item = multiPlans[key];
+    if (!item) return;
+
+    const day = dayOverride || item.targetDay;
+    const start = startOverride || item.targetTimeStart;
+    const end = endOverride || item.targetTimeEnd;
+
+    setMultiPlans(prev => ({
+      ...prev,
+      [key]: { ...prev[key], loadingRooms: true },
+    }));
+
+    try {
+      const res = await fetch(
+        `/api/rooms?day=${encodeURIComponent(day)}&time=${encodeURIComponent(
+          start
+        )}&time_end=${encodeURIComponent(end)}`
+      );
+      const data = await res.json();
+      if (data.success && data.data) {
+        const targetCat = item.originalCategory;
+        const allAvail = (data.data.available || []).map((r: any) => ({
+          id: r.id || r.name,
+          name: r.name,
+          category: r.category,
+          isOnline: r.isOnline,
+        }));
+
+        const matching = allAvail.filter((r: any) => {
+          if (targetCat === 'lab') return r.category === 'lab';
+          if (targetCat === 'lecture') return r.category === 'lecture';
+          if (targetCat === 'online') return r.isOnline;
+          return true;
+        });
+
+        const finalRooms = matching.length > 0 ? matching : allAvail;
+
+        setMultiPlans(prev => ({
+          ...prev,
+          [key]: {
+            ...prev[key],
+            availableRooms: finalRooms,
+            loadingRooms: false,
+            targetRoom:
+              finalRooms.length > 0 &&
+              !finalRooms.some((r: any) => r.name === prev[key]?.targetRoom)
+                ? finalRooms[0].name
+                : prev[key]?.targetRoom,
+          },
+        }));
+      }
+    } catch {
+      setMultiPlans(prev => ({
+        ...prev,
+        [key]: { ...prev[key], loadingRooms: false },
+      }));
+    }
   };
 
   const updateMultiPlanField = (
@@ -577,49 +647,19 @@ export default function ReplacementPage() {
       }
       return { ...prev, [key]: updated };
     });
-  };
 
-  const fetchRoomsForMultiItem = async (key: string) => {
-    const item = multiPlans[key];
-    if (!item) return;
-
-    setMultiPlans(prev => ({
-      ...prev,
-      [key]: { ...prev[key], loadingRooms: true },
-    }));
-
-    try {
-      const res = await fetch(
-        `/api/rooms?day=${encodeURIComponent(item.targetDay)}&time=${encodeURIComponent(
-          item.targetTimeStart
-        )}&time_end=${encodeURIComponent(item.targetTimeEnd)}`
-      );
-      const data = await res.json();
-      if (data.success && data.data) {
-        const av = (data.data.available || []).map((r: any) => ({
-          id: r.id || r.name,
-          name: r.name,
-          category: r.category,
-          isOnline: r.isOnline,
-        }));
-        setMultiPlans(prev => ({
-          ...prev,
-          [key]: {
-            ...prev[key],
-            availableRooms: av,
-            loadingRooms: false,
-            targetRoom:
-              av.length > 0 && !av.some((r: any) => r.name === prev[key]?.targetRoom)
-                ? av[0].name
-                : prev[key]?.targetRoom,
-          },
-        }));
+    if (field === 'targetDay' || field === 'targetPeriod' || field === 'durationHours') {
+      const current = multiPlans[key];
+      if (current) {
+        const periodNum = field === 'targetPeriod' ? Number(val) : current.targetPeriod;
+        const duration = field === 'durationHours' ? Number(val) : current.durationHours;
+        const startH = periodNum + 7;
+        const endH = startH + duration;
+        const startStr = `${String(startH).padStart(2, '0')}:00`;
+        const endStr = `${String(endH).padStart(2, '0')}:00`;
+        const dayStr = field === 'targetDay' ? String(val) : current.targetDay;
+        fetchRoomsForMultiItem(key, dayStr, startStr, endStr);
       }
-    } catch {
-      setMultiPlans(prev => ({
-        ...prev,
-        [key]: { ...prev[key], loadingRooms: false },
-      }));
     }
   };
 
@@ -682,6 +722,10 @@ export default function ReplacementPage() {
 
     return collisions;
   }, [selectedMultiKeys, multiPlans, teacher]);
+
+  const totalCollisionsCount = useMemo(() => {
+    return Object.values(multiPlanCollisions).reduce((acc, curr) => acc + curr.length, 0);
+  }, [multiPlanCollisions]);
 
   // Export handlers
   const handlePrintSchedule = () => {
@@ -1529,12 +1573,40 @@ export default function ReplacementPage() {
             <section className="bg-white rounded-3xl p-6 sm:p-8 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.04)] space-y-6">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
                 <div className="space-y-0.5">
-                  <h2 className="text-base font-bold text-slate-950">
-                    Langkah 3: Tetapkan Waktu & Bilik Ganti ({selectedMultiKeys.length} Sesi)
-                  </h2>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <h2 className="text-base font-bold text-slate-950">
+                      Langkah 3: Tetapkan Waktu & Bilik Ganti ({selectedMultiKeys.length} Sesi)
+                    </h2>
+                    {totalCollisionsCount === 0 ? (
+                      <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full inline-flex items-center gap-1">
+                        ✓ Bebas Pertembungan
+                      </span>
+                    ) : (
+                      <span className="text-[11px] font-bold text-rose-700 bg-rose-50 border border-rose-200 px-2.5 py-0.5 rounded-full inline-flex items-center gap-1">
+                        ⚠️ {totalCollisionsCount} Pertembungan Dikesan
+                      </span>
+                    )}
+                  </div>
                   <p className="text-xs text-slate-500">
-                    Pilih hari ganti, waktu mula, dan bilik untuk setiap kelas. Sistem akan memeriksa pertembungan waktu secara automatik.
+                    Sistem secara automatik mencadangkan slot bebas pertembungan dan memadankan jenis makmal/bilik mengikut kelas asal.
                   </p>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const selectedSlots = allTeacherSlots.filter(s => {
+                        const k = `${s.day}-${s.time}-${s.timeEnd}-${s.subject}-${s.class}`;
+                        return selectedMultiKeys.includes(k);
+                      });
+                      applySmartDistribution(selectedSlots);
+                    }}
+                    disabled={autoPlanningLoading}
+                    className="px-3.5 py-2 bg-[#3f8ceb] hover:bg-[#3280e2] text-white rounded-xl text-xs font-semibold shadow-xs hover:scale-[1.02] transition-all flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+                  >
+                    <span>{autoPlanningLoading ? 'Menyusun...' : '✨ Susun Semula Pintar'}</span>
+                  </button>
                 </div>
               </div>
 
@@ -1546,30 +1618,47 @@ export default function ReplacementPage() {
                   const slot = plan.sourceSlot;
                   const collisions = multiPlanCollisions[key] || [];
                   const hasConflict = collisions.length > 0;
+                  const isLab = plan.originalCategory === 'lab';
+                  const isLecture = plan.originalCategory === 'lecture';
+                  const isOnline = plan.originalCategory === 'online';
 
                   return (
                     <div
                       key={key}
-                      className={`p-5 rounded-2xl border transition-all space-y-4 ${
+                      className={`p-5 rounded-3xl border transition-all space-y-4 shadow-[0_2px_12px_-2px_rgba(0,0,0,0.03)] ${
                         hasConflict
-                          ? 'border-rose-200 bg-rose-50/30'
-                          : 'border-slate-200/80 bg-slate-50/50'
+                          ? 'border-rose-200 bg-rose-50/20'
+                          : 'border-slate-200/80 bg-white'
                       }`}
                     >
-                      {/* Card Top: Original Info */}
-                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-200/60">
-                        <div className="flex items-center gap-2.5">
+                      {/* Card Top: Original Info & Badges */}
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-100">
+                        <div className="flex items-center gap-2.5 flex-wrap">
                           <span className="w-6 h-6 rounded-lg bg-slate-900 text-white font-bold text-xs flex items-center justify-center">
                             {idx + 1}
                           </span>
-                          <div>
-                            <span className="text-xs font-bold text-slate-950">
-                              {slot.class} — {slot.subject}
+                          <span className="text-xs font-bold text-slate-950">
+                            {slot.class} — {slot.subject}
+                          </span>
+                          <span className="text-xs text-slate-400">
+                            (Asal: {DAY_LABELS[slot.day] || slot.day}, {formatTime(slot.time)} – {formatTime(slot.timeEnd)})
+                          </span>
+                          {/* Room Category Badge */}
+                          {isLab && (
+                            <span className="text-[10px] font-bold text-sky-800 bg-sky-50 border border-sky-200/80 px-2 py-0.5 rounded-md">
+                              🧪 Makmal: {slot.classroom || 'Makmal Asal'}
                             </span>
-                            <span className="text-xs text-slate-500 ml-2">
-                              (Asal: {DAY_LABELS[slot.day] || slot.day}, {formatTime(slot.time)} – {formatTime(slot.timeEnd)})
+                          )}
+                          {isLecture && (
+                            <span className="text-[10px] font-bold text-purple-800 bg-purple-50 border border-purple-200/80 px-2 py-0.5 rounded-md">
+                              🏛️ Bilik Kuliah: {slot.classroom || 'Bilik Asal'}
                             </span>
-                          </div>
+                          )}
+                          {isOnline && (
+                            <span className="text-[10px] font-bold text-amber-800 bg-amber-50 border border-amber-200/80 px-2 py-0.5 rounded-md">
+                              🌐 Atas Talian
+                            </span>
+                          )}
                         </div>
 
                         {hasConflict ? (
@@ -1582,6 +1671,47 @@ export default function ReplacementPage() {
                           </span>
                         )}
                       </div>
+
+                      {/* Quick Suggestions Chips Across Different Days */}
+                      {plan.suggestions && plan.suggestions.length > 0 && (
+                        <div className="p-3 bg-slate-50/80 rounded-2xl border border-slate-100 space-y-2">
+                          <div className="flex items-center justify-between text-[11px]">
+                            <span className="font-bold text-slate-700 flex items-center gap-1.5">
+                              <span>💡 Cadangan {isLab ? 'Makmal' : 'Bilik'} Lapang Merentas Hari:</span>
+                              <span className="text-[10px] font-medium text-slate-400">
+                                ({plan.suggestions.length} hari alternatif)
+                              </span>
+                            </span>
+                            <span className="text-[10px] text-slate-400 hidden sm:inline">
+                              Klik mana-mana cadangan untuk guna terus
+                            </span>
+                          </div>
+                          <div className="flex flex-wrap gap-1.5">
+                            {plan.suggestions.map((sug) => {
+                              const isSelected = plan.targetDay === sug.day && plan.targetPeriod === sug.period;
+                              return (
+                                <button
+                                  key={`${sug.day}-${sug.period}`}
+                                  type="button"
+                                  onClick={() => applySuggestionToSlot(key, sug)}
+                                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all border cursor-pointer flex items-center gap-1.5 ${
+                                    isSelected
+                                      ? 'bg-slate-900 text-white border-slate-900 shadow-xs scale-[1.01]'
+                                      : 'bg-white hover:bg-sky-50/60 text-slate-800 border-slate-200/80 hover:border-[#3f8ceb]'
+                                  }`}
+                                >
+                                  <span>{DAY_LABELS[sug.day] || sug.day}, {formatTime(sug.timeStart)}</span>
+                                  <span className={`text-[10px] px-1.5 py-0.2 rounded font-bold ${
+                                    isSelected ? 'bg-slate-800 text-sky-300' : 'bg-slate-100 text-slate-600'
+                                  }`}>
+                                    {sug.roomName}
+                                  </span>
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      )}
 
                       {/* Card Inputs: Target Day, Period/Time, Duration, and Room */}
                       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 items-end">
@@ -1634,13 +1764,15 @@ export default function ReplacementPage() {
                         {/* 4. Target Room */}
                         <div className="space-y-1">
                           <div className="flex items-center justify-between">
-                            <label className="text-[11px] font-semibold text-slate-700">Bilik Ganti</label>
+                            <label className="text-[11px] font-semibold text-slate-700">
+                              {isLab ? 'Makmal Komputer' : 'Bilik Ganti'}
+                            </label>
                             <button
                               type="button"
                               onClick={() => fetchRoomsForMultiItem(key)}
                               className="text-[10px] font-bold text-[#3f8ceb] hover:underline"
                             >
-                              {plan.loadingRooms ? 'Menyemak...' : '🔍 Semak Bilik Kosong'}
+                              {plan.loadingRooms ? 'Menyemak...' : '🔍 Semak Bilik'}
                             </button>
                           </div>
                           <select
@@ -1651,20 +1783,20 @@ export default function ReplacementPage() {
                             {plan.availableRooms && plan.availableRooms.length > 0 ? (
                               plan.availableRooms.map(r => (
                                 <option key={r.name} value={r.name}>
-                                  ✓ {r.name} ({r.category === 'lab' ? 'Makmal' : 'Kuliah'})
+                                  ✓ {r.name} {r.category === 'lab' ? '(Makmal)' : r.category === 'lecture' ? '(Bilik Kuliah)' : ''}
                                 </option>
                               ))
                             ) : (
                               <>
-                                <option value={slot.classroom || 'MAKMAL CYBER 1'}>{slot.classroom || 'MAKMAL CYBER 1'}</option>
-                                <option value="MAKMAL CYBER 1">MAKMAL CYBER 1</option>
-                                <option value="MAKMAL CYBER 2">MAKMAL CYBER 2</option>
-                                <option value="MAKMAL IT 1">MAKMAL IT 1</option>
-                                <option value="MAKMAL IT 2">MAKMAL IT 2</option>
-                                <option value="MAKMAL IT 3">MAKMAL IT 3</option>
-                                <option value="BILIK KULIAH 201">BILIK KULIAH 201</option>
-                                <option value="BILIK KULIAH 202">BILIK KULIAH 202</option>
-                                <option value="BILIK KULIAH 301">BILIK KULIAH 301</option>
+                                <option value={slot.classroom || 'MAKMAL KOMPUTER 1-01'}>{slot.classroom || 'MAKMAL KOMPUTER 1-01'}</option>
+                                <option value="MAKMAL KOMPUTER 1-01">MAKMAL KOMPUTER 1-01</option>
+                                <option value="MAKMAL KOMPUTER 1-02">MAKMAL KOMPUTER 1-02</option>
+                                <option value="MAKMAL KOMPUTER 2-03">MAKMAL KOMPUTER 2-03</option>
+                                <option value="MAKMAL KOMPUTER 2-04">MAKMAL KOMPUTER 2-04</option>
+                                <option value="MAKMAL KOMPUTER 3-07">MAKMAL KOMPUTER 3-07</option>
+                                <option value="BILIK KULIAH 1-01">BILIK KULIAH 1-01</option>
+                                <option value="BILIK KULIAH 2-03">BILIK KULIAH 2-03</option>
+                                <option value="BILIK KULIAH 2-04">BILIK KULIAH 2-04</option>
                                 <option value="ONLINE 51">ONLINE 51</option>
                               </>
                             )}
