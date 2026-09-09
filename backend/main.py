@@ -41,6 +41,7 @@ def parse_timetable(raw_data):
     tables = {t["id"]: t.get("data_rows", []) for t in raw_data["r"]["dbiAccessorRes"]["tables"]}
 
     periods = {p["id"]: p for p in tables.get("periods", [])}
+    periods_by_num = {p["period"]: p for p in tables.get("periods", [])}
     days = {d["id"]: d for d in tables.get("days", [])}
     classes = {c["id"]: c for c in tables.get("classes", [])}
     teachers = {t["id"]: t for t in tables.get("teachers", [])}
@@ -85,11 +86,16 @@ def parse_timetable(raw_data):
             if c:
                 class_names.append(c.get("name", "Unknown"))
 
-        period_id = card.get("period", "")
-        period = periods.get(period_id, {})
-        period_num = period.get("period", period_id)
-        time_start = normalize_time(period.get("starttime", ""), period_num)
-        time_end = normalize_time(period.get("endtime", ""), period_num)
+        start_period_num = int(card.get("period", "1"))
+        duration = int(lesson.get("durationperiods", 1))
+        end_period_num = start_period_num + duration - 1
+
+        start_period = periods_by_num.get(str(start_period_num)) or periods.get(card.get("period", ""), {})
+        end_period = periods_by_num.get(str(end_period_num)) or start_period
+
+        time_start = normalize_time(start_period.get("starttime", ""), start_period_num)
+        time_end = normalize_time(end_period.get("endtime", ""), end_period_num)
+        period_label = str(start_period_num) if duration == 1 else f"{start_period_num}-{end_period_num}"
 
         days_mask = card.get("days", "00000")
         for day_idx, bit in enumerate(days_mask):
@@ -99,15 +105,13 @@ def parse_timetable(raw_data):
                 room_ids = card.get("classroomids", [])
                 room_names = []
                 for rid in room_ids:
-                    if rid.startswith("*"):
-                        rid = rid
                     r = classrooms.get(rid, {})
                     if r:
                         room_names.append(r.get("name", "Unknown"))
 
                 slot = {
                     "day": day_name,
-                    "period": period_num,
+                    "period": period_label,
                     "time": time_start,
                     "timeEnd": time_end,
                     "subject": subject_name,
@@ -123,18 +127,28 @@ def parse_timetable(raw_data):
                 for rname in room_names:
                     room_slots.setdefault(rname, []).append(slot)
 
+    day_order = {"Monday": 0, "Tuesday": 1, "Wednesday": 2, "Thursday": 3, "Friday": 4}
+
+    def sort_slot_list(slot_list):
+        return sorted(slot_list, key=lambda s: (day_order.get(s["day"], 99), s["time"]))
+
     teacher_list = [
-        {"id": t["id"], "name": t["short"], "slots": teacher_slots.get(t["short"], [])}
-        for t in teachers.values() if not t.get("cb_hidden", False)
+        {"id": t["id"], "name": t["short"], "slots": sort_slot_list(teacher_slots.get(t["short"], []))}
+        for t in teachers.values() if not t.get("cb_hidden", False) and t["short"] in teacher_slots
     ]
+    teacher_list.sort(key=lambda t: t["name"])
+
     class_list = [
-        {"id": c["id"], "name": c["name"], "short": c.get("short", c["name"]), "slots": class_slots.get(c["name"], [])}
-        for c in classes.values()
+        {"id": c["id"], "name": c["name"], "short": c.get("short", c["name"]), "slots": sort_slot_list(class_slots.get(c["name"], []))}
+        for c in classes.values() if c["name"] in class_slots
     ]
+    class_list.sort(key=lambda c: c["name"])
+
     room_list = [
-        {"id": r["id"], "name": r["name"], "slots": room_slots.get(r["name"], [])}
+        {"id": r["id"], "name": r["name"], "slots": sort_slot_list(room_slots.get(r["name"], []))}
         for r in classrooms.values()
     ]
+    room_list.sort(key=lambda r: r["name"])
 
     return {
         "teachers": teacher_list,
