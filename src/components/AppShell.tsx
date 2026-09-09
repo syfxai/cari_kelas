@@ -125,8 +125,12 @@ export default function AppShell({ children }: AppShellProps) {
       </main>
 
       {/* Minimal Footer */}
-      <footer className="border-t border-slate-200/60 bg-white py-4 px-4 text-center text-xs text-slate-400">
-        CARI KELAS — Kolej Poly-Tech MARA Ipoh
+      <footer className="border-t border-slate-200/60 bg-white py-4 px-4 text-center text-xs text-slate-400 flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2">
+        <span>CARI KELAS</span>
+        <span className="hidden sm:inline">•</span>
+        <span>Kolej Poly-Tech MARA Ipoh</span>
+        <span className="hidden sm:inline">•</span>
+        <span className="text-slate-600 font-medium">by Muhammad Syafiq Haron</span>
       </footer>
     </div>
   );
