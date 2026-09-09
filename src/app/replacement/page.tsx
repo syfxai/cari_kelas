@@ -709,7 +709,7 @@ export default function ReplacementPage() {
                 <table className="w-full text-center border-separate border-spacing-2 text-xs min-w-[920px]">
                   <thead>
                     <tr>
-                      <th className="p-3 w-16 font-extrabold text-xs uppercase tracking-wider text-slate-700 bg-slate-50 rounded-2xl">
+                      <th className="px-4 py-3 w-28 font-extrabold text-center text-xs uppercase tracking-wider text-slate-700 bg-slate-50 rounded-2xl">
                         Hari
                       </th>
                       {PERIODS.map(p => (
@@ -732,8 +732,13 @@ export default function ReplacementPage() {
                       return (
                         <tr key={day}>
                           {/* Day Row Header */}
-                          <td className="p-3 font-black text-slate-900 text-xs bg-slate-50 rounded-2xl whitespace-nowrap align-middle">
-                            {DAY_CODES[day] || day}
+                          <td className="px-4 py-3 bg-slate-50 rounded-2xl align-middle text-center whitespace-nowrap w-28">
+                            <div className="font-black text-slate-950 text-xs uppercase">
+                              {DAY_LABELS[day] || day}
+                            </div>
+                            <div className="text-[10px] text-slate-400 font-medium mt-0.5">
+                              {day}
+                            </div>
                           </td>
 
                           {/* 10 Period Cells */}
