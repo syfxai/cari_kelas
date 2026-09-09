@@ -1,0 +1,53 @@
+# 🎯 DESIGN RESTRICTIONS & UI/UX RULES (Cursor & Agent Guidelines)
+
+You MUST ALWAYS follow these strict design restrictions and rules for all UI, HTML, CSS, Tailwind, and component generation in this project. Never deviate into generic AI clutter, colorful circus UI, or inconsistent font hierarchies.
+
+---
+
+## 🚫 1. Absolute Prohibitions (What NOT To Do)
+
+1. **NO Colorful Circus / Rainbow Badges**:
+   - Do NOT scatter multiple saturated colors across the same screen (e.g. blue badges for lab, purple for lecture, red for occupied, green for available, lime for buttons, yellow for warnings).
+   - Use a **Monochromatic Neutral Base** (95% of UI is slate-50, white, slate-200, slate-500, slate-900).
+   - Badges MUST be neutral: bg-slate-100 text-slate-700 border border-slate-200 or bg-slate-50 text-slate-600.
+   - Status indicators should only be tiny, muted 6px dots (bg-emerald-500 for available, bg-rose-500 for occupied) or subtle text color, NEVER saturated full-width backgrounds.
+
+2. **NO Decorative / Frivolous Icons & Emojis**:
+   - ZERO emojis in UI titles, buttons, tags, or body copy.
+   - Icons must be strictly functional (e.g. search magnifying glass in search input, chevron in dropdown, copy icon).
+   - Icon sizes must be standardized to w-3.5 h-3.5 (14px) or w-4 h-4 (16px) with muted color text-slate-400.
+
+3. **NO Inconsistent / Screaming Font Sizes**:
+   - Do NOT use oversized screaming headers (e.g. text-4xl font-black with thick underlines).
+   - Do NOT mix arbitrary font sizes (text-[10px], text-xl, text-3xl in random combinations).
+   - Follow the Standard Typography Scale strictly.
+
+4. **NO Heavy Drop Shadows or Clunky Borders**:
+   - Avoid shadow-xl, shadow-2xl, or heavy border-2.
+   - Use border border-slate-200/80 and shadow-xs or shadow-sm for crisp precision.
+
+---
+
+## 📐 2. Standard Typography & Sizing Scale
+
+- Page Title: text-2xl font-semibold tracking-tight text-slate-900
+- Page Subtitle: text-sm text-slate-500
+- Section Header: text-sm font-semibold text-slate-900
+- Field / Input Label: text-xs font-medium text-slate-500
+- Input / Select Text: text-sm text-slate-900 (Height: h-9 or h-10)
+- Card / Item Title: text-sm font-medium text-slate-900
+- Card Metadata: text-xs text-slate-500
+- Micro Tag / ID / Code: text-[11px] font-mono text-slate-400
+
+---
+
+## 🎨 3. Palette & Component Standard (Linear / Cursor Minimalist)
+
+- Page Background: bg-slate-50/75
+- Card / Panel Surface: bg-white border border-slate-200/80 shadow-xs rounded-xl
+- Input Surface: bg-white border border-slate-200 rounded-lg text-sm text-slate-900 focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400
+- Primary Action Button: bg-slate-900 hover:bg-slate-800 text-white text-xs font-medium rounded-lg h-9 px-4 transition-colors
+- Secondary / Filter Button: bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium rounded-lg h-8 px-3 transition-colors
+- Active Tab / Pill: bg-slate-900 text-white font-medium shadow-xs
+- Inactive Tab / Pill: bg-transparent text-slate-600 hover:text-slate-900 hover:bg-slate-100
+- Category Badge: bg-slate-100 text-slate-600 border border-slate-200 text-[11px] font-medium px-2 py-0.5 rounded-md
