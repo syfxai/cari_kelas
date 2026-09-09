@@ -18,17 +18,18 @@ export default function AppShell({ children }: AppShellProps) {
       href: '/',
     },
     {
+      name: 'Jadual Pensyarah',
+      href: '/teachers',
+      badge: 'Langkah 1',
+    },
+    {
       name: 'Cari Kelas Ganti',
       href: '/replacement',
-      badge: 'Utama',
+      badge: 'Langkah 2',
     },
     {
       name: 'Cari Bilik Kosong',
       href: '/rooms',
-    },
-    {
-      name: 'Jadual Pensyarah',
-      href: '/teachers',
     },
     {
       name: 'Jadual Kelas',

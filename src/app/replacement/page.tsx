@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState, useRef } from 'react';
+import Link from 'next/link';
 import {
   DAY_LABELS,
   DAYS,
@@ -89,7 +90,7 @@ export default function ReplacementPage() {
   const [selectedRoomName, setSelectedRoomName] = useState<string>('');
   const detailsPanelRef = useRef<HTMLDivElement>(null);
 
-  // 1. Initial Load: Fetch all teacher names and restore from localStorage
+  // 1. Initial Load: Fetch all teacher names and restore from URL query param or localStorage
   useEffect(() => {
     let isMounted = true;
 
@@ -102,13 +103,19 @@ export default function ReplacementPage() {
           setTeacherNames(names);
 
           if (typeof window !== 'undefined') {
+            const urlParams = new URLSearchParams(window.location.search);
+            const queryTeacher = urlParams.get('teacher');
             const savedTeacher = localStorage.getItem(STORAGE_KEYS.TEACHER);
             const savedClass = localStorage.getItem(STORAGE_KEYS.CLASS);
             const savedSlot = localStorage.getItem(STORAGE_KEYS.SLOT);
 
-            if (savedTeacher && names.includes(savedTeacher)) {
-              setTeacherName(savedTeacher);
-              const teacherRes = await fetch(`/api/teachers?name=${encodeURIComponent(savedTeacher)}`);
+            const activeTeacher = (queryTeacher && names.includes(queryTeacher))
+              ? queryTeacher
+              : (savedTeacher && names.includes(savedTeacher) ? savedTeacher : '');
+
+            if (activeTeacher) {
+              setTeacherName(activeTeacher);
+              const teacherRes = await fetch(`/api/teachers?name=${encodeURIComponent(activeTeacher)}`);
               const teacherData = await teacherRes.json();
               if (teacherData.success && isMounted) {
                 const currentTeacher: TeacherData = teacherData.data;
@@ -124,7 +131,7 @@ export default function ReplacementPage() {
                   )
                 ).sort();
 
-                if (savedClass && classesTaught.includes(savedClass)) {
+                if (!queryTeacher && savedClass && classesTaught.includes(savedClass)) {
                   setClassName(savedClass);
                   if (savedSlot) {
                     setSourceKey(savedSlot);
@@ -467,6 +474,32 @@ export default function ReplacementPage() {
         )}
       </div>
 
+      {/* Step Workflow Guide Alert */}
+      <div className="rounded-xl bg-gradient-to-r from-sky-50 via-white to-slate-50 border border-sky-100 p-4 shadow-2xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-lg bg-[#00A3FF] text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-xs">
+            1→2
+          </div>
+          <div className="space-y-0.5">
+            <div className="text-xs font-bold text-slate-900 flex items-center gap-2">
+              <span>Aliran Kerja 2 Langkah:</span>
+              <span className="text-[10px] font-semibold text-[#00A3FF] bg-sky-100/70 px-2 py-0.2 rounded-full">
+                Langkah 1: Jadual Pensyarah → Langkah 2: Cari Kelas Ganti
+              </span>
+            </div>
+            <p className="text-[11px] text-slate-500">
+              Belum pasti slot mana hendak diganti? Semak jadual pensyarah dahulu untuk melihat jadual penuh 10 waktu.
+            </p>
+          </div>
+        </div>
+        <Link
+          href="/teachers"
+          className="h-7 px-3 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 hover:text-[#00A3FF] rounded-lg text-xs font-semibold shadow-2xs inline-flex items-center gap-1.5 transition-all shrink-0 cursor-pointer"
+        >
+          <span>🔍 Buka Jadual Pensyarah</span>
+        </Link>
+      </div>
+
       {/* Step 1-2-3 Selection Form */}
       <section className="bg-white rounded-xl border border-slate-200 p-5 space-y-4 shadow-2xs">
         <div className="flex items-center justify-between">
@@ -482,10 +515,18 @@ export default function ReplacementPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {/* Step 1: Lecturer Select */}
-          <div className="space-y-1">
-            <label htmlFor="select-teacher" className="text-xs font-medium text-slate-500">
-              1. Nama Pensyarah
-            </label>
+          <div className="space-y-1.5">
+            <div className="flex items-center justify-between">
+              <label htmlFor="select-teacher" className="text-xs font-medium text-slate-600">
+                1. Nama Pensyarah
+              </label>
+              <Link
+                href="/teachers"
+                className="text-[11px] text-[#00A3FF] hover:underline font-medium inline-flex items-center gap-0.5"
+              >
+                <span>🔍 Jadual Penuh</span>
+              </Link>
+            </div>
             <select
               id="select-teacher"
               value={teacherName}

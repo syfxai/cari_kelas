@@ -6,10 +6,24 @@ import Link from 'next/link';
 export default function Home() {
   const features = [
     {
+      title: 'Jadual Pensyarah',
+      href: '/teachers',
+      description: 'Cari nama pensyarah untuk melihat jadual mengajar penuh Waktu 1 hingga Waktu 10 (Isnin – Jumaat).',
+      tag: 'Langkah 1 • Semak Jadual',
+      tagColor: 'bg-sky-50 text-sky-700 border-sky-100',
+      highlights: [
+        'Carian pantas 140+ pensyarah KPTM',
+        'Paparan jadual mingguan Waktu 1–10',
+        'Pautan terus ke Langkah 2 (Cari Kelas Ganti)',
+      ],
+      cta: 'Buka Jadual Pensyarah',
+      featured: true,
+    },
+    {
       title: 'Cari Kelas Ganti',
       href: '/replacement',
-      description: 'Pilih nama pensyarah dan kod kelas untuk menyemak jadual matriks mingguan 5 Hari × 10 Waktu secara automatik.',
-      tag: 'Ciri Utama',
+      description: 'Pilih nama pensyarah dan kod kelas untuk menyemak jadual matriks mingguan 5 Hari × 10 Waktu & bilik kosong serentak.',
+      tag: 'Langkah 2 • Penjana Pintar',
       tagColor: 'bg-[#00A3FF]/10 text-[#00A3FF] border-[#00A3FF]/20',
       highlights: [
         'Kesan slot lapang tanpa pertembungan waktu',
@@ -31,20 +45,6 @@ export default function Home() {
         'Salin nama bilik untuk tempahan segera',
       ],
       cta: 'Semak Bilik Kosong',
-      featured: false,
-    },
-    {
-      title: 'Jadual Pensyarah',
-      href: '/teachers',
-      description: 'Lihat jadual mengajar penuh bagi 140+ pensyarah KPTM Ipoh mengikut hari dan waktu pembelajaran.',
-      tag: '140+ Pensyarah',
-      tagColor: 'bg-sky-50 text-sky-700 border-sky-100',
-      highlights: [
-        'Carian pantas nama pensyarah',
-        'Paparan jadual mingguan Waktu 1–10',
-        'Kemas kini terus dari EduPage KPTM',
-      ],
-      cta: 'Lihat Jadual Pensyarah',
       featured: false,
     },
     {
@@ -90,11 +90,17 @@ export default function Home() {
 
           <div className="pt-2 flex flex-wrap items-center gap-3">
             <Link
-              href="/replacement"
+              href="/teachers"
               className="h-10 px-5 bg-gradient-to-r from-[#00A3FF] to-[#0084FF] hover:from-[#0092e6] hover:to-[#0074e6] text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-sky-500/20 flex items-center gap-2 cursor-pointer hover:scale-[1.02]"
             >
-              <span>Mula Cari Kelas Ganti</span>
+              <span>1. Jadual Pensyarah</span>
               <span>→</span>
+            </Link>
+            <Link
+              href="/replacement"
+              className="h-10 px-4 bg-white hover:bg-slate-50 border border-slate-200 text-slate-800 rounded-xl text-xs font-semibold transition-all shadow-2xs flex items-center gap-1.5 cursor-pointer"
+            >
+              <span>2. Cari Kelas Ganti</span>
             </Link>
             <Link
               href="/rooms"

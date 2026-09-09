@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import TimetableGrid from '@/components/TimetableGrid';
 import type { TeacherData } from '@/lib/types';
 
@@ -30,7 +31,7 @@ export default function TeachersPage() {
         await doScrape();
       }
     } catch {
-      setScrapeMsg('Gagal mengambil data. Sila klik butang scrap semula.');
+      setScrapeMsg('Gagal mengambil data. Sila klik butang Cari untuk cuba semula.');
     } finally {
       setLoading(false);
     }
@@ -38,18 +39,18 @@ export default function TeachersPage() {
 
   const doScrape = async () => {
     setScraping(true);
-    setScrapeMsg('Sedang memuat turun senarai pensyarah dari KPTM...');
+    setScrapeMsg('Sedang mencari dan mengemas kini senarai pensyarah...');
     try {
       const res = await fetch('/api/scrape/teachers', { method: 'POST' });
       const data = await res.json();
       if (data.success) {
         setTeachers(data.data);
-        setScrapeMsg(`${data.data.length} pensyarah berjaya dikemas kini.`);
+        setScrapeMsg(`${data.data.length} pensyarah berjaya dimuatkan.`);
       } else {
-        setScrapeMsg(data.message || 'Scraping gagal.');
+        setScrapeMsg(data.message || 'Carian gagal.');
       }
     } catch {
-      setScrapeMsg('Ralat rangkaian semasa scraping.');
+      setScrapeMsg('Ralat semasa mencari senarai pensyarah.');
     } finally {
       setScraping(false);
     }
@@ -160,14 +161,14 @@ export default function TeachersPage() {
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
               </svg>
-              <span>Scraping...</span>
+              <span>Mencari...</span>
             </>
           ) : (
             <>
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
-              <span>Scrap Semula</span>
+              <span>Cari</span>
             </>
           )}
         </button>
@@ -224,15 +225,25 @@ export default function TeachersPage() {
       {/* Selected Teacher Timetable */}
       {selected && !scrapingTeacher && (
         <div className="space-y-4">
-          <button
-            onClick={() => setSelected(null)}
-            className="h-8 px-3 text-xs font-medium text-slate-700 hover:text-slate-900 bg-white border border-slate-200 rounded-lg shadow-2xs hover:bg-slate-50 transition-all inline-flex items-center gap-1.5 cursor-pointer"
-          >
-            <svg className="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-            <span>Kembali ke Senarai Pensyarah</span>
-          </button>
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <button
+              onClick={() => setSelected(null)}
+              className="h-8 px-3 text-xs font-medium text-slate-700 hover:text-slate-900 bg-white border border-slate-200 rounded-lg shadow-2xs hover:bg-slate-50 transition-all inline-flex items-center gap-1.5 cursor-pointer"
+            >
+              <svg className="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+              <span>Kembali ke Senarai Pensyarah</span>
+            </button>
+
+            <Link
+              href={`/replacement?teacher=${encodeURIComponent(selected.name)}`}
+              className="h-8 px-4 bg-gradient-to-r from-[#00A3FF] to-[#0084FF] hover:from-[#0092e6] hover:to-[#0074e6] text-white rounded-lg text-xs font-semibold shadow-xs flex items-center gap-1.5 transition-all hover:scale-[1.02] cursor-pointer"
+            >
+              <span>Langkah 2: Cari Kelas Ganti untuk {selected.name}</span>
+              <span>→</span>
+            </Link>
+          </div>
           <TimetableGrid slots={selected.slots} title={`Jadual Mengajar: ${selected.name}`} />
         </div>
       )}
