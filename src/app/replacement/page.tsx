@@ -534,7 +534,7 @@ export default function ReplacementPage() {
               id="select-teacher"
               value={teacherName}
               onChange={e => handleTeacherChange(e.target.value)}
-              className="w-full h-10 px-3.5 bg-slate-50 rounded-xl text-xs sm:text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#3f8ceb] transition-colors cursor-pointer"
+              className="w-full h-9 px-3 bg-white border border-slate-200 rounded-lg text-xs font-medium text-slate-900 focus:outline-none focus:border-slate-400 transition-colors cursor-pointer"
             >
               <option value="">Pilih Pensyarah</option>
               {teacherNames.map(name => (
@@ -560,7 +560,7 @@ export default function ReplacementPage() {
               value={className}
               onChange={e => handleClassChange(e.target.value)}
               disabled={!teacher || classesTaughtByTeacher.length === 0}
-              className="w-full h-10 px-3.5 bg-slate-50 rounded-xl text-xs sm:text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#3f8ceb] transition-colors disabled:opacity-50 cursor-pointer"
+              className="w-full h-9 px-3 bg-white border border-slate-200 rounded-lg text-xs font-medium text-slate-900 focus:outline-none focus:border-slate-400 transition-colors disabled:opacity-50 cursor-pointer"
             >
               <option value="">
                 {!teacher
@@ -587,7 +587,7 @@ export default function ReplacementPage() {
               value={sourceKey}
               onChange={e => handleSlotChange(e.target.value)}
               disabled={!className || classSlotsForTeacher.length === 0}
-              className="w-full h-10 px-3.5 bg-slate-50 rounded-xl text-xs sm:text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#3f8ceb] transition-colors disabled:opacity-50 cursor-pointer"
+              className="w-full h-9 px-3 bg-white border border-slate-200 rounded-lg text-xs font-medium text-slate-900 focus:outline-none focus:border-slate-400 transition-colors disabled:opacity-50 cursor-pointer"
             >
               <option value="">
                 {!className ? 'Pilih kelas dahulu' : 'Pilih slot waktu'}

@@ -74,23 +74,23 @@ export default function AppShell({ children }: AppShellProps) {
         </div>
 
         {/* Desktop Navigation Links */}
-        <nav className="hidden md:flex items-center gap-1.5 p-1 bg-slate-100/80 rounded-2xl">
+        <nav className="hidden md:flex items-center gap-1">
           {navigation.map((item) => {
             const isActive = pathname === item.href;
             return (
               <Link
                 key={item.name}
                 href={item.href}
-                className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5 ${
+                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors flex items-center gap-1.5 ${
                   isActive
-                    ? 'bg-white text-slate-950 shadow-sm scale-[1.02]'
-                    : 'text-slate-600 hover:text-slate-950 hover:bg-white/50'
+                    ? 'bg-slate-900 text-white font-semibold'
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
                 }`}
               >
                 <span>{item.name}</span>
                 {item.badge && (
-                  <span className={`text-[10px] px-2 py-0.5 rounded-md font-bold tracking-normal ${
-                    isActive ? 'bg-sky-50 text-[#3f8ceb]' : 'bg-slate-200/80 text-slate-700'
+                  <span className={`text-[10px] px-2 py-0.5 rounded-md font-semibold tracking-normal ${
+                    isActive ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-700 border border-slate-200/60'
                   }`}>
                     {item.badge}
                   </span>

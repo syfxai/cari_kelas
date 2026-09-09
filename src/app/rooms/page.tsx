@@ -389,13 +389,13 @@ export default function RoomsPage() {
                 </span>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-4 items-center">
-                <div className="lg:col-span-6 space-y-1.5">
-                  <span className="text-xs font-semibold text-slate-800">Waktu Mula:</span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3 items-center">
+                <div className="lg:col-span-6 space-y-1">
+                  <span className="text-xs font-medium text-slate-700">Waktu Mula:</span>
                   <select
                     value={timeStart}
                     onChange={e => handleTimeStartChange(e.target.value)}
-                    className="w-full h-10 px-3.5 bg-slate-50 rounded-xl text-xs sm:text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#3f8ceb] transition-colors cursor-pointer"
+                    className="w-full h-9 px-3 bg-white border border-slate-200 rounded-lg text-xs font-medium text-slate-900 focus:outline-none focus:border-slate-400 transition-colors cursor-pointer"
                   >
                     {PERIOD_START_OPTIONS.map(opt => (
                       <option key={opt.value} value={opt.value}>
@@ -405,12 +405,12 @@ export default function RoomsPage() {
                   </select>
                 </div>
 
-                <div className="lg:col-span-6 space-y-1.5">
-                  <span className="text-xs font-semibold text-slate-800">Waktu Tamat:</span>
+                <div className="lg:col-span-6 space-y-1">
+                  <span className="text-xs font-medium text-slate-700">Waktu Tamat:</span>
                   <select
                     value={timeEnd}
                     onChange={e => handleTimeEndChange(e.target.value)}
-                    className="w-full h-10 px-3.5 bg-slate-50 rounded-xl text-xs sm:text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#3f8ceb] transition-colors cursor-pointer"
+                    className="w-full h-9 px-3 bg-white border border-slate-200 rounded-lg text-xs font-medium text-slate-900 focus:outline-none focus:border-slate-400 transition-colors cursor-pointer"
                   >
                     {PERIOD_END_OPTIONS.map(opt => {
                       const disabled = timeToMinutes(opt.value) <= timeToMinutes(timeStart);
@@ -558,7 +558,7 @@ export default function RoomsPage() {
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <h2 className="text-base font-bold text-slate-950">
-                    Bilik Kosong & Tersedia ({filteredAvailable.length})
+                    Bilik Kosong ({filteredAvailable.length})
                   </h2>
                   <span className="text-xs text-slate-500">
                     {DAY_LABELS[selectedDay]}, {formatTime(timeStart)} – {formatTime(timeEnd)}
@@ -580,8 +580,8 @@ export default function RoomsPage() {
                               <span className="text-[11px] font-semibold text-slate-600 bg-slate-100 px-3 py-1 rounded-full">
                                 {roomCategoryLabel(room.category)}
                               </span>
-                              <span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full">
-                                ✓ Tersedia
+                              <span className="inline-flex items-center justify-center text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full" title="Tersedia">
+                                ✓
                               </span>
                             </div>
 

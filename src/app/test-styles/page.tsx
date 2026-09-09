@@ -241,7 +241,7 @@ export default function TestStylesPage() {
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-semibold text-slate-500">Makmal Komputer</span>
                   <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full">
-                    ✓ Tersedia
+                    ✓
                   </span>
                 </div>
                 <h4 className="text-base font-extrabold text-slate-950">MAKMAL CYBER 1</h4>
@@ -252,7 +252,7 @@ export default function TestStylesPage() {
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-semibold text-slate-500">Makmal Komputer</span>
                   <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full">
-                    ✓ Tersedia
+                    ✓
                   </span>
                 </div>
                 <h4 className="text-base font-extrabold text-slate-950">MAKMAL IT 3</h4>
@@ -263,7 +263,7 @@ export default function TestStylesPage() {
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-semibold text-slate-500">Bilik Kuliah</span>
                   <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full">
-                    ✓ Tersedia
+                    ✓
                   </span>
                 </div>
                 <h4 className="text-base font-extrabold text-slate-950">BILIK KULIAH 201</h4>
@@ -414,7 +414,7 @@ export default function TestStylesPage() {
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-semibold text-slate-500">Makmal Komputer</span>
                   <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200/60 px-2.5 py-0.5 rounded-full">
-                    ✓ Tersedia
+                    ✓
                   </span>
                 </div>
                 <h4 className="text-base font-extrabold text-slate-900">MAKMAL CYBER 1</h4>
@@ -425,7 +425,7 @@ export default function TestStylesPage() {
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-semibold text-slate-500">Makmal Komputer</span>
                   <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200/60 px-2.5 py-0.5 rounded-full">
-                    ✓ Tersedia
+                    ✓
                   </span>
                 </div>
                 <h4 className="text-base font-extrabold text-slate-900">MAKMAL IT 3</h4>
@@ -436,7 +436,7 @@ export default function TestStylesPage() {
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-semibold text-slate-500">Bilik Kuliah</span>
                   <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200/60 px-2.5 py-0.5 rounded-full">
-                    ✓ Tersedia
+                    ✓
                   </span>
                 </div>
                 <h4 className="text-base font-extrabold text-slate-900">BILIK KULIAH 201</h4>
@@ -587,7 +587,7 @@ export default function TestStylesPage() {
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-semibold text-slate-500">Makmal Komputer</span>
                   <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full">
-                    ✓ Tersedia
+                    ✓
                   </span>
                 </div>
                 <h4 className="text-base font-extrabold text-slate-900">MAKMAL CYBER 1</h4>
@@ -598,7 +598,7 @@ export default function TestStylesPage() {
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-semibold text-slate-500">Makmal Komputer</span>
                   <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full">
-                    ✓ Tersedia
+                    ✓
                   </span>
                 </div>
                 <h4 className="text-base font-extrabold text-slate-900">MAKMAL IT 3</h4>
@@ -609,7 +609,7 @@ export default function TestStylesPage() {
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-semibold text-slate-500">Bilik Kuliah</span>
                   <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full">
-                    ✓ Tersedia
+                    ✓
                   </span>
                 </div>
                 <h4 className="text-base font-extrabold text-slate-900">BILIK KULIAH 201</h4>
@@ -760,7 +760,7 @@ export default function TestStylesPage() {
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-semibold text-slate-500">Makmal Komputer</span>
                   <span className="text-[11px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full">
-                    ✓ Tersedia
+                    ✓
                   </span>
                 </div>
                 <h4 className="text-base font-extrabold text-slate-900">MAKMAL CYBER 1</h4>
@@ -771,7 +771,7 @@ export default function TestStylesPage() {
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-semibold text-slate-500">Makmal Komputer</span>
                   <span className="text-[11px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full">
-                    ✓ Tersedia
+                    ✓
                   </span>
                 </div>
                 <h4 className="text-base font-extrabold text-slate-900">MAKMAL IT 3</h4>
@@ -782,7 +782,7 @@ export default function TestStylesPage() {
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-semibold text-slate-500">Bilik Kuliah</span>
                   <span className="text-[11px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full">
-                    ✓ Tersedia
+                    ✓
                   </span>
                 </div>
                 <h4 className="text-base font-extrabold text-slate-900">BILIK KULIAH 201</h4>
@@ -933,7 +933,7 @@ export default function TestStylesPage() {
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold text-slate-500">Makmal Komputer</span>
                   <span className="text-[11px] font-bold text-emerald-900 bg-emerald-100 px-2.5 py-0.5 rounded-md">
-                    ✓ Tersedia
+                    ✓
                   </span>
                 </div>
                 <h4 className="text-base font-extrabold text-slate-950">MAKMAL CYBER 1</h4>
@@ -944,7 +944,7 @@ export default function TestStylesPage() {
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold text-slate-500">Makmal Komputer</span>
                   <span className="text-[11px] font-bold text-emerald-900 bg-emerald-100 px-2.5 py-0.5 rounded-md">
-                    ✓ Tersedia
+                    ✓
                   </span>
                 </div>
                 <h4 className="text-base font-extrabold text-slate-950">MAKMAL IT 3</h4>
@@ -955,7 +955,7 @@ export default function TestStylesPage() {
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold text-slate-500">Bilik Kuliah</span>
                   <span className="text-[11px] font-bold text-emerald-900 bg-emerald-100 px-2.5 py-0.5 rounded-md">
-                    ✓ Tersedia
+                    ✓
                   </span>
                 </div>
                 <h4 className="text-base font-extrabold text-slate-950">BILIK KULIAH 201</h4>
@@ -1133,7 +1133,7 @@ export default function TestStylesPage() {
           <div className="p-6 sm:p-8 bg-white rounded-3xl shadow-[0_4px_24px_-4px_rgba(0,0,0,0.04)] space-y-4">
             <div className="flex items-center gap-2">
               <span className="px-3 py-1 rounded-full bg-slate-900 text-white text-xs font-bold">3. GAYA APPLE</span>
-              <h3 className="text-lg font-bold text-slate-950">🍎 5 Peraturan Emas Gaya Apple</h3>
+              <h3 className="text-lg font-bold text-slate-950">🍎 Peraturan Emas Gaya Apple & Komponen</h3>
             </div>
             <ul className="space-y-2.5 text-xs sm:text-sm text-slate-600">
               <li className="flex items-start gap-2.5">
@@ -1142,18 +1142,22 @@ export default function TestStylesPage() {
               </li>
               <li className="flex items-start gap-2.5">
                 <span className="w-5 h-5 rounded-full bg-slate-100 text-slate-900 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">2</span>
-                <div><strong>Butang Sekunder Apple:</strong> Background telus dengan outline hitam 1px (`border border-slate-900`), bertukar menjadi fill hitam padat bila dihover.</div>
+                <div><strong>Kotak Dropdown & Input:</strong> Guna border neutral halus `bg-white border border-slate-200 rounded-lg text-xs font-medium focus:outline-none focus:border-slate-400`. <strong>JANGAN</strong> guna focus ring biru tebal (`focus:ring-2 focus:ring-[#3f8ceb]`).</div>
               </li>
               <li className="flex items-start gap-2.5">
                 <span className="w-5 h-5 rounded-full bg-slate-100 text-slate-900 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">3</span>
-                <div><strong>Sel Jadual 1px Outline:</strong> Sel lapang bergaris 1px warna tema tanpa fill, bertukar fill tema penuh bila dipilih atau dihover.</div>
+                <div><strong>Sub Nav / Header Bar:</strong> Kekalkan gaya asal yang bersih dan minimal. <strong>JANGAN</strong> letak kotak kontena kelabu tambahan di luar pautan navigasi.</div>
               </li>
               <li className="flex items-start gap-2.5">
                 <span className="w-5 h-5 rounded-full bg-slate-100 text-slate-900 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">4</span>
-                <div><strong>Lencana Status Kemas:</strong> Gunakan tick badge `✓ Tersedia` dengan warna lembut yang tenang.</div>
+                <div><strong>Sel Jadual 1px Outline:</strong> Sel lapang bergaris 1px warna tema tanpa fill, bertukar fill tema penuh bila dipilih atau dihover.</div>
               </li>
               <li className="flex items-start gap-2.5">
                 <span className="w-5 h-5 rounded-full bg-slate-100 text-slate-900 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">5</span>
+                <div><strong>Lencana Status (Badge):</strong> Hanya gunakan simbol tick <strong>`✓`</strong> sahaja (buang perkataan "Tersedia").</div>
+              </li>
+              <li className="flex items-start gap-2.5">
+                <span className="w-5 h-5 rounded-full bg-slate-100 text-slate-900 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">6</span>
                 <div><strong>Kotak Notis Elegan:</strong> Latar `bg-slate-50` dengan teks gelap, elakkan kotak kuning/oren yang menyilaukan mata.</div>
               </li>
             </ul>

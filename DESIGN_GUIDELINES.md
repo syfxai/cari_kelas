@@ -16,8 +16,10 @@ AI biasa sering menghasilkan reka bentuk yang kaku, berkotak-kotak, dan nampak s
 
 1. ❌ **JANGAN letak border/garisan tebal pada setiap kotak (`border border-slate-200` merata-rata)**. Ini punca utama laman web nampak seperti sistem lama dan kaku.
 2. ❌ **JANGAN campur aduk warna pelangi (Rainbow UI)**. Jangan campur kotak hijau, butang biru gradient dengan glow, lencana kuning, dan teks ungu dalam satu paparan.
-3. ❌ **JANGAN guna font Monospace (`font-mono`) untuk UI umum**, lencana (*badges*), waktu, atau penerangan. Monospace hanya untuk blok kod mentah.
-4. ❌ **JANGAN guna neon glow atau shadow berwarna keterlaluan**. Gunakan bayang neutral lembut (*soft ambient shadow*).
+3. ❌ **JANGAN letak focus ring tebal biru pada kotak input/dropdown (`focus:ring-2 focus:ring-[#3f8ceb]`)**. Ini mencacatkan rupa kemas bila pengguna klik dropdown atau kotak input. Gunakan border kelabu neutral: `border border-slate-200 focus:outline-none focus:border-slate-400`.
+4. ❌ **JANGAN balut sub-navigation (header bar) dalam kotak kelabu tambahan (`bg-slate-100 p-1.5 rounded-2xl`)**. Kekalkan navigasi sub-header yang bersih, terbuka, dan rata (*seamless flat navigation*).
+5. ❌ **JANGAN guna font Monospace (`font-mono`) untuk UI umum**, lencana (*badges*), waktu, atau penerangan. Monospace hanya untuk blok kod mentah.
+6. ❌ **JANGAN guna neon glow atau shadow berwarna keterlaluan**. Gunakan bayang neutral lembut (*soft ambient shadow*).
 
 ---
 
@@ -78,7 +80,18 @@ Gunakan fon **Sans-Serif komersial moden** (Inter, Geist, SF Pro, Plus Jakarta S
 
 ---
 
-### B. Butang Tindakan (*Primary & Apple Outline*)
+### B. Kotak Input & Dropdown Pilihan (*Clean Neutral Input*)
+- Latar putih dengan border kelabu halus neutral `border-slate-200`, tiada warna glow/ring biru tebal:
+```tsx
+<select className="w-full h-9 px-3 bg-white border border-slate-200 rounded-lg text-xs font-medium text-slate-900 focus:outline-none focus:border-slate-400 transition-colors">
+  <option value="1">Pilihan 1</option>
+  <option value="2">Pilihan 2</option>
+</select>
+```
+
+---
+
+### C. Butang Tindakan (*Primary & Apple Outline*)
 
 1. **Butang Utama (Primary Action)**:
    - Warna tema padu dengan bayang mikro:
@@ -105,7 +118,7 @@ Gunakan fon **Sans-Serif komersial moden** (Inter, Geist, SF Pro, Plus Jakarta S
 
 ---
 
-### C. Sel Jadual & Status Pemilihan (Konsep Outline Biru → Fill Biru)
+### D. Sel Jadual & Status Pemilihan (Konsep Outline Biru → Fill Biru)
 
 Apabila membuat jadual matriks, grid waktu, atau kad pemilihan:
 - **Keadaan Lapang / Sedia (Idle Available)**: 
@@ -130,20 +143,17 @@ Apabila membuat jadual matriks, grid waktu, atau kad pemilihan:
 
 ---
 
-### D. Lencana Status (*Badges*)
-- Gunakan ikon semak (*checkmark tick `✓`*) yang bersih dengan latar warna lembut:
+### E. Lencana Status (*Badges*)
+- Gunakan ikon semak ringkas (*checkmark tick `✓`*) tanpa teks tambahan yang panjang:
 ```tsx
-<span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-[#00A3FF] bg-[#00A3FF]/10 px-2.5 py-0.5 rounded-full shadow-2xs">
-  <svg className="w-3 h-3 text-[#00A3FF] stroke-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-  </svg>
-  <span>✓ Tersedia</span>
+<span className="inline-flex items-center justify-center text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full" title="Tersedia">
+  ✓
 </span>
 ```
 
 ---
 
-### E. Kotak Nota & Amaran (*Minimalist Light Grey*)
+### F. Kotak Nota & Amaran (*Minimalist Light Grey*)
 - Elakkan kotak amaran berwarna kuning atau oren menyala. Gunakan **Light Grey & Hitam** yang elegan:
 ```tsx
 <div className="p-4 sm:p-5 bg-slate-50 rounded-2xl border border-slate-200/70 text-slate-700 text-xs sm:text-sm flex items-start gap-3 shadow-2xs">
@@ -166,6 +176,7 @@ Apabila membuat jadual matriks, grid waktu, atau kad pemilihan:
 1. **Lebar Maksimum Kandungan**: `max-w-6xl` (untuk teks/halaman fokus) atau `max-w-7xl` (untuk jadual matriks).
 2. **Jarak Antara Seksyen**: Gunakan `space-y-8` atau `space-y-10` untuk memberi ruang bernafas yang mencukupi (*white space*).
 3. **Responsif Mudah Alih**: Semua grid (`grid-cols-1 md:grid-cols-2 lg:grid-cols-3`) mesti menyusun secara menegak pada peranti mudah alih tanpa teks melimpah keluar (*overflow*).
+4. **Navigasi Sub-Header**: Kekalkan bar pautan terbuka tanpa bekas kotak kelabu tiruan di luar.
 
 ---
 
@@ -174,11 +185,14 @@ Apabila membuat jadual matriks, grid waktu, atau kad pemilihan:
 Sebelum menyiapkan kod antaramuka mana-mana laman web, pastikan:
 - [ ] Tiada `font-mono` digunakan untuk teks umum atau lencana.
 - [ ] Tiada garisan sempadan tebal `border-slate-200` pada kad utama.
+- [ ] Dropdown & input menggunakan border neutral halus `focus:border-slate-400` tanpa focus ring biru tebal.
+- [ ] Sub-navigation kekal bersih tanpa kotak wrapper kelabu berlebihan.
+- [ ] Lencana status ringkas menggunakan `✓` tanpa perkataan "Tersedia".
 - [ ] Warna konsisten mengikut 1 pemboleh ubah warna tema sahaja.
 - [ ] Butang sekunder menggunakan gaya *Outline Hitam → Hover Fill Hitam*.
 - [ ] Sel pemilihan menggunakan *Outline Biru → Hover/Select Fill Biru*.
 - [ ] Kotak nota menggunakan palet *Light Grey & Dark Slate*.
-- [ ] Binaan projek (`npm run build`) lulus 100% tanpa sebarang ralat TypeScript.
+- [ ] Binaan projek (`npm run build` atau `npx tsc --noEmit`) lulus 100% tanpa sebarang ralat TypeScript.
 
 ---
 *Dokumen ini dicipta khas untuk Muhammad Syafiq Haron sebagai panduan reka bentuk standard universal.*
