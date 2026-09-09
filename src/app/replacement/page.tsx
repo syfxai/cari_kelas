@@ -803,7 +803,7 @@ export default function ReplacementPage() {
         )}
       </div>
 
-      {/* Mode Switcher Toggle (Standard vs Advance Multi-Class Planner) */}
+      {/* Mode Switcher Toggle (Standard vs Lanjutan) */}
       <div className="flex flex-wrap items-center justify-between gap-4 bg-white p-3 rounded-2xl shadow-2xs border border-slate-100 print:hidden">
         <div className="flex items-center gap-1.5 p-1 bg-slate-100 rounded-xl">
           <button
@@ -815,28 +815,25 @@ export default function ReplacementPage() {
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
-            🔍 Mod Standard (1 Kelas)
+            Standard
           </button>
           <button
             type="button"
             onClick={() => setPlannerMode('multi')}
-            className={`px-4 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+            className={`px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
               plannerMode === 'multi'
                 ? 'bg-slate-900 text-white shadow-sm scale-[1.01]'
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
-            <span>⚡ Mod Lanjutan (Perancang Berganda)</span>
-            <span className="text-[10px] px-1.5 py-0.5 bg-[#3f8ceb] text-white font-extrabold rounded-md">
-              BARU
-            </span>
+            Lanjutan
           </button>
         </div>
 
         <div className="text-xs text-slate-500 hidden sm:block">
           {plannerMode === 'single'
             ? 'Pilih 1 kelas asal & cari slot ganti terbaik'
-            : 'Rancang 2 atau 3 kelas ganti serentak berserta muat turun jadual'}
+            : 'Rancang beberapa kelas ganti serentak berserta muat turun jadual'}
         </div>
       </div>
 
@@ -1435,50 +1432,94 @@ export default function ReplacementPage() {
                 </div>
               </div>
 
-              {/* Slot Cards Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                {allTeacherSlots.map((slot) => {
-                  const key = `${slot.day}-${slot.time}-${slot.timeEnd}-${slot.subject}-${slot.class}`;
-                  const isChecked = selectedMultiKeys.includes(key);
-                  const diff = (timeToMinutes(slot.timeEnd) - timeToMinutes(slot.time)) / 60;
-                  const duration = Math.max(1, Math.round(diff));
+              {/* Slot Table */}
+              <div className="overflow-x-auto rounded-2xl border border-slate-100">
+                <table className="w-full text-left text-xs border-collapse">
+                  <thead>
+                    <tr className="bg-slate-50 border-b border-slate-100 text-slate-700 font-bold">
+                      <th className="py-3 px-4 w-12 text-center">
+                        <input
+                          type="checkbox"
+                          checked={allTeacherSlots.length > 0 && selectedMultiKeys.length === allTeacherSlots.length}
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              selectAllTeacherSlots();
+                            } else {
+                              clearAllMultiSelections();
+                            }
+                          }}
+                          className="w-4 h-4 rounded text-[#3f8ceb] focus:ring-0 cursor-pointer"
+                          title="Pilih Semua"
+                        />
+                      </th>
+                      <th className="py-3 px-4">Kod Kelas / Seksyen</th>
+                      <th className="py-3 px-4">Subjek</th>
+                      <th className="py-3 px-4">Hari & Waktu Asal</th>
+                      <th className="py-3 px-4 text-center">Durasi</th>
+                      <th className="py-3 px-4">Bilik Asal</th>
+                      <th className="py-3 px-4 text-right">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100">
+                    {allTeacherSlots.map((slot) => {
+                      const key = `${slot.day}-${slot.time}-${slot.timeEnd}-${slot.subject}-${slot.class}`;
+                      const isChecked = selectedMultiKeys.includes(key);
+                      const diff = (timeToMinutes(slot.timeEnd) - timeToMinutes(slot.time)) / 60;
+                      const duration = Math.max(1, Math.round(diff));
 
-                  return (
-                    <div
-                      key={key}
-                      onClick={() => toggleMultiSlotSelection(slot)}
-                      className={`p-4 rounded-2xl border transition-all cursor-pointer flex items-start gap-3 select-none ${
-                        isChecked
-                          ? 'border-[#3f8ceb] bg-sky-50/50 shadow-sm'
-                          : 'border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50/50'
-                      }`}
-                    >
-                      <input
-                        type="checkbox"
-                        checked={isChecked}
-                        onChange={() => {}}
-                        className="w-4 h-4 rounded text-[#3f8ceb] focus:ring-0 mt-0.5 cursor-pointer"
-                      />
-                      <div className="space-y-1 min-w-0 flex-1">
-                        <div className="flex items-center justify-between gap-1">
-                          <span className="text-xs font-extrabold text-slate-900 truncate">
+                      return (
+                        <tr
+                          key={key}
+                          onClick={() => toggleMultiSlotSelection(slot)}
+                          className={`cursor-pointer transition-colors select-none ${
+                            isChecked
+                              ? 'bg-sky-50/50 hover:bg-sky-50/80'
+                              : 'bg-white hover:bg-slate-50'
+                          }`}
+                        >
+                          <td className="py-3.5 px-4 text-center" onClick={(e) => e.stopPropagation()}>
+                            <input
+                              type="checkbox"
+                              checked={isChecked}
+                              onChange={() => toggleMultiSlotSelection(slot)}
+                              className="w-4 h-4 rounded text-[#3f8ceb] focus:ring-0 cursor-pointer"
+                            />
+                          </td>
+                          <td className="py-3.5 px-4 font-bold text-slate-900">
                             {slot.class}
-                          </span>
-                          <span className="text-[10px] font-semibold text-slate-600 bg-white border border-slate-200 px-2 py-0.5 rounded-md">
-                            {duration} Jam
-                          </span>
-                        </div>
-                        <div className="text-xs font-medium text-slate-700 truncate" title={slot.subject}>
-                          {slot.subject}
-                        </div>
-                        <div className="text-[11px] text-slate-500 flex items-center justify-between pt-1 border-t border-slate-100">
-                          <span>{DAY_LABELS[slot.day] || slot.day}, {formatTime(slot.time)}</span>
-                          <span className="text-[#3f8ceb] font-medium">{slot.classroom || 'Bilik Asal'}</span>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
+                          </td>
+                          <td className="py-3.5 px-4 text-slate-700 font-medium">
+                            {slot.subject}
+                          </td>
+                          <td className="py-3.5 px-4 text-slate-600 whitespace-nowrap">
+                            <span className="font-semibold text-slate-800">{DAY_LABELS[slot.day] || slot.day}</span>, {formatTime(slot.time)} – {formatTime(slot.timeEnd)}
+                          </td>
+                          <td className="py-3.5 px-4 text-center">
+                            <span className="inline-block px-2.5 py-0.5 bg-slate-100 text-slate-700 font-semibold rounded-md text-[11px]">
+                              {duration} Jam
+                            </span>
+                          </td>
+                          <td className="py-3.5 px-4">
+                            <span className="text-[#3f8ceb] font-medium">
+                              {slot.classroom || 'Bilik Asal'}
+                            </span>
+                          </td>
+                          <td className="py-3.5 px-4 text-right">
+                            {isChecked ? (
+                              <span className="inline-flex items-center gap-1 text-[11px] font-bold text-[#3f8ceb] bg-sky-100/80 px-2.5 py-0.5 rounded-full">
+                                ✓ Dipilih
+                              </span>
+                            ) : (
+                              <span className="text-[11px] text-slate-400">
+                                Belum dipilih
+                              </span>
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
               </div>
             </section>
           )}
