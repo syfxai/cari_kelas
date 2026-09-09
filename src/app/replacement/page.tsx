@@ -1161,23 +1161,24 @@ export default function ReplacementPage() {
 
                 {/* FORMAT JADUAL MATRIKS MINGGUAN GAYA APPLE (1px Outline to Fill) */}
                 {viewMode === 'matrix' && (
-                  <div className="overflow-x-auto p-1">
-                    <table className="w-full text-center border-separate border-spacing-2 text-xs min-w-[920px]">
+                  <div className="p-1 overflow-x-auto lg:overflow-x-visible">
+                    <table className="w-full table-fixed text-center border-separate border-spacing-1 sm:border-spacing-1.5 text-xs">
                       <thead>
                         <tr>
-                          <th className="px-4 py-3 w-28 font-extrabold text-center text-xs uppercase tracking-wider text-slate-700 bg-slate-50 rounded-2xl">
+                          <th className="w-[54px] sm:w-[76px] p-1 sm:p-2 font-bold text-center text-[10px] sm:text-[11px] uppercase tracking-wider text-slate-600 bg-slate-100/80 rounded-xl">
                             Hari
                           </th>
                           {PERIODS.map(p => (
                             <th
                               key={p.period}
-                              className="p-3 bg-slate-50 rounded-2xl font-medium"
+                              className="p-1 sm:p-2 bg-slate-50 rounded-xl font-medium border border-slate-100/80"
                             >
-                              <div className="font-extrabold text-slate-900 text-xs">
-                                Waktu {p.period}
+                              <div className="font-extrabold text-slate-900 text-[10px] sm:text-[11px]">
+                                <span className="sm:hidden">W{p.period}</span>
+                                <span className="hidden sm:inline">Waktu {p.period}</span>
                               </div>
-                              <div className="text-[10px] text-slate-500 whitespace-nowrap mt-0.5">
-                                {p.start.slice(0, 2)}:00 – {p.end.slice(0, 2)}:00
+                              <div className="text-[9px] text-slate-400 font-medium whitespace-nowrap mt-0.5">
+                                {p.start.slice(0, 2)}–{p.end.slice(0, 2)}
                               </div>
                             </th>
                           ))}
@@ -1188,12 +1189,12 @@ export default function ReplacementPage() {
                           return (
                             <tr key={day}>
                               {/* Day Row Header */}
-                              <td className="px-4 py-3 bg-slate-50 rounded-2xl align-middle text-center whitespace-nowrap w-28">
-                                <div className="font-black text-slate-950 text-xs uppercase">
-                                  {DAY_LABELS[day] || day}
+                              <td className="p-1 sm:p-2 bg-slate-50/90 rounded-xl align-middle text-center border border-slate-100">
+                                <div className="font-black text-slate-900 text-[11px] sm:text-xs">
+                                  {DAY_CODES[day] || day.slice(0, 3).toUpperCase()}
                                 </div>
-                                <div className="text-[10px] text-slate-400 font-medium mt-0.5">
-                                  {day}
+                                <div className="text-[9px] text-slate-400 font-medium hidden sm:block mt-0.5">
+                                  {DAY_LABELS[day] || day}
                                 </div>
                               </td>
 
@@ -1520,11 +1521,11 @@ export default function ReplacementPage() {
               </div>
 
               {/* Slot Table */}
-              <div className="overflow-x-auto rounded-2xl border border-slate-100">
-                <table className="w-full text-left text-xs border-collapse">
+              <div className="overflow-x-auto lg:overflow-x-visible rounded-2xl border border-slate-100">
+                <table className="w-full table-fixed text-left text-xs border-collapse">
                   <thead>
                     <tr className="bg-slate-50 border-b border-slate-100 text-slate-700 font-bold">
-                      <th className="py-3 px-4 w-12 text-center">
+                      <th className="py-3 px-3 w-10 text-center">
                         <input
                           type="checkbox"
                           checked={allTeacherSlots.length > 0 && selectedMultiKeys.length === allTeacherSlots.length}
@@ -1539,12 +1540,12 @@ export default function ReplacementPage() {
                           title="Pilih Semua"
                         />
                       </th>
-                      <th className="py-3 px-4">Kod Kelas / Seksyen</th>
-                      <th className="py-3 px-4">Subjek</th>
-                      <th className="py-3 px-4">Hari & Waktu Asal</th>
-                      <th className="py-3 px-4 text-center">Durasi</th>
-                      <th className="py-3 px-4">Bilik Asal</th>
-                      <th className="py-3 px-4 text-right">Status</th>
+                      <th className="py-3 px-3 w-40 sm:w-48">Kod Kelas / Seksyen</th>
+                      <th className="py-3 px-3 w-40 sm:w-48">Subjek</th>
+                      <th className="py-3 px-3 w-48 sm:w-56">Hari & Waktu Asal</th>
+                      <th className="py-3 px-2 w-16 sm:w-20 text-center">Durasi</th>
+                      <th className="py-3 px-3 w-36 sm:w-44">Bilik Asal</th>
+                      <th className="py-3 px-3 w-24 sm:w-28 text-right">Status</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100">
@@ -1888,90 +1889,120 @@ export default function ReplacementPage() {
               </div>
 
               {/* Multi Matrix Timetable */}
-              <div className="overflow-x-auto p-1">
-                <table className="w-full text-left border-separate border-spacing-2 text-xs min-w-[1250px]">
+              <div className="p-1 overflow-x-auto lg:overflow-x-visible">
+                <table className="w-full table-fixed text-left border-separate border-spacing-1 sm:border-spacing-1.5 text-xs">
                   <thead>
                     <tr>
-                      <th className="px-4 py-3 w-28 font-extrabold text-center text-xs uppercase tracking-wider text-slate-700 bg-slate-50 rounded-2xl">
+                      <th className="w-[54px] sm:w-[76px] p-1 sm:p-2 font-bold text-center text-[10px] sm:text-[11px] uppercase tracking-wider text-slate-600 bg-slate-100/80 rounded-xl">
                         Hari
                       </th>
                       {PERIODS.map(p => (
                         <th
                           key={p.period}
-                          className="px-3 py-3 bg-slate-50 rounded-2xl font-medium text-center min-w-[115px]"
+                          className="p-1 sm:p-2 bg-slate-50 rounded-xl font-medium text-center border border-slate-100/80"
                         >
-                          <div className="font-extrabold text-slate-900 text-xs">
-                            Waktu {p.period}
+                          <div className="font-extrabold text-slate-900 text-[10px] sm:text-[11px]">
+                            <span className="sm:hidden">W{p.period}</span>
+                            <span className="hidden sm:inline">Waktu {p.period}</span>
                           </div>
-                          <div className="text-[10px] text-slate-500 whitespace-nowrap mt-0.5">
-                            {p.start.slice(0, 2)}:00 – {p.end.slice(0, 2)}:00
+                          <div className="text-[9px] text-slate-400 font-medium whitespace-nowrap mt-0.5">
+                            {p.start.slice(0, 2)}–{p.end.slice(0, 2)}
                           </div>
                         </th>
                       ))}
                     </tr>
                   </thead>
                   <tbody>
-                    {DAYS.map(day => (
-                      <tr key={day}>
-                        <td className="px-4 py-3 bg-slate-50 rounded-2xl align-middle text-center whitespace-nowrap w-28">
-                          <div className="font-black text-slate-950 text-xs uppercase">
-                            {DAY_LABELS[day] || day}
-                          </div>
-                          <div className="text-[10px] text-slate-400 font-medium mt-0.5">
-                            {day}
-                          </div>
-                        </td>
+                    {DAYS.map(day => {
+                      let nextAvailableP = 1;
 
-                        {PERIODS.map(p => {
-                          // Check if any planned item falls in this day & period
-                          const matchingPlans = Object.values(multiPlans).filter(item => {
-                            if (item.targetDay !== day) return false;
-                            const itemStartP = item.targetPeriod;
-                            const itemEndP = itemStartP + item.durationHours;
-                            return p.period >= itemStartP && p.period < itemEndP;
-                          });
+                      return (
+                        <tr key={day}>
+                          <td className="p-1 sm:p-2 bg-slate-50/90 rounded-xl align-middle text-center border border-slate-100">
+                            <div className="font-black text-slate-900 text-[11px] sm:text-xs">
+                              {DAY_CODES[day] || day.slice(0, 3).toUpperCase()}
+                            </div>
+                            <div className="text-[9px] text-slate-400 font-medium hidden sm:block mt-0.5">
+                              {DAY_LABELS[day] || day}
+                            </div>
+                          </td>
 
-                          if (matchingPlans.length > 0) {
-                            const mainItem = matchingPlans[0];
-                            const idx = selectedMultiKeys.indexOf(mainItem.key) + 1;
-                            const hasConflict = (multiPlanCollisions[mainItem.key] || []).length > 0;
+                          {PERIODS.map(p => {
+                            if (p.period < nextAvailableP) {
+                              return null; // Covered by previous colSpan
+                            }
+
+                            // Find plan starting at this period
+                            const startingItem = Object.values(multiPlans).find(
+                              item => item.targetDay === day && item.targetPeriod === p.period
+                            );
+
+                            if (!startingItem) {
+                              nextAvailableP = p.period + 1;
+                              return (
+                                <td key={p.period} className="p-0 align-top">
+                                  <div className="min-h-[72px] rounded-xl bg-slate-50/50 border border-dashed border-slate-200/40 hover:bg-slate-50 transition-colors flex items-center justify-center">
+                                    <span className="text-[10px] text-slate-300 font-mono">—</span>
+                                  </div>
+                                </td>
+                              );
+                            }
+
+                            const span = Math.max(1, Math.min(11 - p.period, startingItem.durationHours || 1));
+                            nextAvailableP = p.period + span;
+
+                            const idx = selectedMultiKeys.indexOf(startingItem.key) + 1;
+                            const hasConflict = (multiPlanCollisions[startingItem.key] || []).length > 0;
+                            const roomBadge = parseRoomBadge(startingItem.targetRoom);
 
                             return (
-                              <td key={p.period} className="p-0 align-top min-w-[115px]">
+                              <td key={p.period} colSpan={span} className="p-0 align-top">
                                 <div
-                                  className={`rounded-2xl p-2.5 min-h-[75px] shadow-2xs border flex flex-col justify-between space-y-1 transition-all ${
+                                  className={`rounded-xl p-2 sm:p-2.5 min-h-[72px] h-full shadow-2xs border flex flex-col justify-between transition-all ${
                                     hasConflict
-                                      ? 'bg-rose-50 border-rose-200 text-rose-950'
-                                      : 'bg-sky-50 border-[#3f8ceb]/50 text-slate-900'
+                                      ? 'bg-rose-50 border-rose-300 text-rose-950'
+                                      : 'bg-sky-50/70 border-sky-200/80 text-slate-900 hover:shadow-md'
                                   }`}
                                 >
                                   <div className="flex items-center justify-between gap-1">
-                                    <span className="text-[10px] font-extrabold bg-[#3f8ceb] text-white px-2 py-0.5 rounded-md">
-                                      Ganti #{idx}
+                                    <span className="text-[9.5px] font-extrabold bg-[#3f8ceb] text-white px-1.5 py-0.5 rounded">
+                                      #{idx}
                                     </span>
-                                    <span className="text-[10px] font-semibold text-slate-600 truncate">
-                                      {mainItem.sourceSlot.class}
+                                    <span className="text-[9.5px] font-bold text-slate-700 truncate">
+                                      {startingItem.sourceSlot.class}
                                     </span>
+                                    {span > 1 && (
+                                      <span className="text-[8.5px] font-extrabold px-1 py-0.2 rounded bg-amber-100 text-amber-800">
+                                        {span}J
+                                      </span>
+                                    )}
                                   </div>
-                                  <div className="font-bold text-[11px] truncate" title={mainItem.sourceSlot.subject}>
-                                    {mainItem.sourceSlot.subject}
+
+                                  <div className="font-bold text-[10px] sm:text-[11px] truncate my-0.5" title={startingItem.sourceSlot.subject}>
+                                    {startingItem.sourceSlot.subject}
                                   </div>
-                                  <div className="text-[10px] font-semibold text-[#3f8ceb] truncate">
-                                    📍 {mainItem.targetRoom}
+
+                                  <div className="flex items-center justify-between gap-1">
+                                    <span
+                                      className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-bold border ${roomBadge.bgClass} ${roomBadge.textClass} ${roomBadge.borderClass} truncate`}
+                                    >
+                                      <span>{roomBadge.icon}</span>
+                                      <span className="truncate">{roomBadge.code}</span>
+                                    </span>
+
+                                    {hasConflict && (
+                                      <span className="text-[8.5px] font-bold text-rose-700 bg-rose-100 px-1 rounded shrink-0">
+                                        ⚠️ Konflik
+                                      </span>
+                                    )}
                                   </div>
                                 </div>
                               </td>
                             );
-                          }
-
-                          return (
-                            <td key={p.period} className="p-0 align-middle min-w-[115px]">
-                              <div className="bg-slate-50/50 rounded-2xl min-h-[75px]" />
-                            </td>
-                          );
-                        })}
-                      </tr>
-                    ))}
+                          })}
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
               </div>
@@ -2026,17 +2057,17 @@ export default function ReplacementPage() {
               </div>
 
               {/* Summary Table */}
-              <div className="overflow-x-auto rounded-2xl border border-slate-200/80">
-                <table className="w-full text-left text-xs border-collapse">
+              <div className="overflow-x-auto lg:overflow-x-visible rounded-2xl border border-slate-200/80">
+                <table className="w-full table-fixed text-left text-xs border-collapse">
                   <thead>
                     <tr className="bg-slate-50 text-slate-700 font-bold border-b border-slate-200/80">
                       <th className="p-3 w-10 text-center">No</th>
-                      <th className="p-3">Kumpulan Kelas</th>
-                      <th className="p-3">Subjek</th>
-                      <th className="p-3">Sesi Asal</th>
-                      <th className="p-3">Sesi Ganti Baharu</th>
-                      <th className="p-3">Bilik Ganti</th>
-                      <th className="p-3 text-center">Status</th>
+                      <th className="p-3 w-32 sm:w-40">Kumpulan Kelas</th>
+                      <th className="p-3 w-36 sm:w-44">Subjek</th>
+                      <th className="p-3 w-44 sm:w-52">Sesi Asal</th>
+                      <th className="p-3 w-48 sm:w-56">Sesi Ganti Baharu</th>
+                      <th className="p-3 w-36 sm:w-44">Bilik Ganti</th>
+                      <th className="p-3 w-24 sm:w-28 text-center">Status</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-200/60 bg-white">
@@ -2045,26 +2076,36 @@ export default function ReplacementPage() {
                       if (!plan) return null;
                       const slot = plan.sourceSlot;
                       const hasConflict = (multiPlanCollisions[key] || []).length > 0;
+                      const roomBadge = parseRoomBadge(plan.targetRoom);
 
                       return (
                         <tr key={key} className="hover:bg-slate-50/50 transition-colors">
                           <td className="p-3 font-bold text-center text-slate-900">{idx + 1}</td>
-                          <td className="p-3 font-extrabold text-slate-900">{slot.class}</td>
-                          <td className="p-3 text-slate-700 font-medium">{slot.subject}</td>
-                          <td className="p-3 text-slate-500">
-                            {DAY_LABELS[slot.day] || slot.day}, {formatTime(slot.time)} – {formatTime(slot.timeEnd)} ({slot.classroom || '-'})
+                          <td className="p-3 font-extrabold text-slate-900 truncate">{slot.class}</td>
+                          <td className="p-3 text-slate-700 font-medium truncate" title={slot.subject}>
+                            {slot.subject}
                           </td>
-                          <td className="p-3 font-semibold text-slate-900">
-                            {DAY_LABELS[plan.targetDay] || plan.targetDay}, {formatTime(plan.targetTimeStart)} – {formatTime(plan.targetTimeEnd)} (Waktu {plan.targetPeriod})
+                          <td className="p-3 text-slate-500 truncate">
+                            {DAY_LABELS[slot.day] || slot.day}, {formatTime(slot.time)} – {formatTime(slot.timeEnd)}
                           </td>
-                          <td className="p-3 font-bold text-[#3f8ceb]">{plan.targetRoom}</td>
+                          <td className="p-3 font-semibold text-slate-900 truncate">
+                            {DAY_LABELS[plan.targetDay] || plan.targetDay}, {formatTime(plan.targetTimeStart)} – {formatTime(plan.targetTimeEnd)} (W{plan.targetPeriod})
+                          </td>
+                          <td className="p-3">
+                            <span
+                              className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold border ${roomBadge.bgClass} ${roomBadge.textClass} ${roomBadge.borderClass} truncate`}
+                            >
+                              <span>{roomBadge.icon}</span>
+                              <span className="truncate">{roomBadge.code}</span>
+                            </span>
+                          </td>
                           <td className="p-3 text-center">
                             {hasConflict ? (
-                              <span className="text-[10px] font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded-full">
-                                ⚠️ Pertembungan
+                              <span className="text-[10px] font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded-full whitespace-nowrap">
+                                ⚠️ Konflik
                               </span>
                             ) : (
-                              <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">
+                              <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full whitespace-nowrap">
                                 ✓ Sah
                               </span>
                             )}

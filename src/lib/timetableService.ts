@@ -70,6 +70,7 @@ const DAY_BASE_SLOTS: Record<string, [string, string][]> = {
     ['14:00', '15:00'],
     ['15:00', '16:00'],
     ['16:00', '17:00'],
+    ['17:00', '18:00'],
   ],
   Thursday: [
     ['08:00', '09:00'],
@@ -81,11 +82,19 @@ const DAY_BASE_SLOTS: Record<string, [string, string][]> = {
     ['14:00', '15:00'],
     ['15:00', '16:00'],
     ['16:00', '17:00'],
+    ['17:00', '18:00'],
   ],
   Friday: [
     ['08:00', '09:00'],
     ['09:00', '10:00'],
     ['10:00', '11:00'],
+    ['11:00', '12:00'],
+    ['12:00', '13:00'],
+    ['13:00', '14:00'],
+    ['14:00', '15:00'],
+    ['15:00', '16:00'],
+    ['16:00', '17:00'],
+    ['17:00', '18:00'],
   ],
 };
 
@@ -472,8 +481,8 @@ export function calculateSmartMultiDistribution(
   if (!teacher || selectedSlots.length === 0) return {};
 
   const daysToCheck = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
-  const batchKeys = selectedSlots.map(
-    s => `${s.day}-${s.time}-${s.timeEnd}-${s.subject}-${s.class}`
+  const batchKeys = new Set(
+    selectedSlots.map(s => `${s.day}-${s.time}-${s.timeEnd}-${s.subject}-${s.class}`)
   );
 
   interface SlotCandidatePool {
@@ -489,7 +498,7 @@ export function calculateSmartMultiDistribution(
   selectedSlots.forEach(s => {
     const key = `${s.day}-${s.time}-${s.timeEnd}-${s.subject}-${s.class}`;
     let origCat = roomCategory(s.classroom || '');
-    if (origCat === 'other' && (s.subject.toUpperCase().includes('LAB') || s.subject.toUpperCase().includes('KOMPUTER'))) {
+    if (origCat === 'other' && (s.subject.toUpperCase().includes('LAB') || s.subject.toUpperCase().includes('KOMPUTER') || s.subject.toUpperCase().includes('MG') || s.subject.toUpperCase().includes('SB'))) {
       origCat = 'lab';
     }
     const diff = (timeToMinutes(s.timeEnd || s.time) - timeToMinutes(s.time)) / 60;
@@ -503,35 +512,63 @@ export function calculateSmartMultiDistribution(
     const candidates: SmartSuggestionOption[] = [];
 
     daysToCheck.forEach(d => {
-      const daySlots = DAY_BASE_SLOTS[d] || [];
+      const daySlots = [
+        ['08:00', '09:00'],
+        ['09:00', '10:00'],
+        ['10:00', '11:00'],
+        ['11:00', '12:00'],
+        ['12:00', '13:00'],
+        ['13:00', '14:00'],
+        ['14:00', '15:00'],
+        ['15:00', '16:00'],
+        ['16:00', '17:00'],
+        ['17:00', '18:00'],
+      ];
+
       for (let i = 0; i <= daySlots.length - duration; i++) {
         const start = daySlots[i][0];
         const end = daySlots[i + duration - 1][1];
         const cand = { time: start, timeEnd: end };
 
-        // 1. Check teacher conflict with other slots outside the replacement batch
+        // Exclude Friday Mentor Mentee 10:00-12:00
+        if (d === 'Friday' && timeToMinutes(start) < 720 && timeToMinutes(end) > 600) {
+          continue;
+        }
+
+        // 1. Teacher conflict check (excluding any slots in the replacement batch)
         const tConf = teacher.slots.some(ts => {
           const k = `${ts.day}-${ts.time}-${ts.timeEnd}-${ts.subject}-${ts.class}`;
-          return !batchKeys.includes(k) && ts.day === d && slotsOverlap(ts, cand);
+          if (batchKeys.has(k)) return false;
+          return ts.day === d && slotsOverlap(ts, cand);
         });
         if (tConf) continue;
 
-        // 2. Check student class conflict
+        // 2. Student class conflict check (excluding any slots in the replacement batch)
         let cConf = false;
         for (const co of classObjs) {
-          if (co.slots.some(cs => cs.day === d && slotsOverlap(cs, cand))) {
+          const hasClash = co.slots.some(cs => {
+            const k = `${cs.day}-${cs.time}-${cs.timeEnd}-${cs.subject}-${cs.class}`;
+            if (batchKeys.has(k)) return false;
+            if (cs.day === s.day && cs.time === s.time && cs.subject === s.subject) return false;
+            return cs.day === d && slotsOverlap(cs, cand);
+          });
+          if (hasClash) {
             cConf = true;
             break;
           }
         }
         if (cConf) continue;
 
-        // 3. Find available matching rooms
+        // 3. Find matching rooms of the same category
         const freeMatchingRooms = db.rooms.filter(r => {
           const cat = roomCategory(r.name);
           const match = origCat === 'online' ? cat === 'online' : cat === origCat;
           if (!match) return false;
-          return !r.slots.some(rs => rs.day === d && slotsOverlap(rs, cand));
+          return !r.slots.some(rs => {
+            const k = `${rs.day}-${rs.time}-${rs.timeEnd}-${rs.subject}-${rs.class}`;
+            if (batchKeys.has(k)) return false;
+            return rs.day === d && slotsOverlap(rs, cand);
+          });
         });
 
         if (freeMatchingRooms.length > 0) {
@@ -571,11 +608,10 @@ export function calculateSmartMultiDistribution(
 
   // Assign optimal non-overlapping distribution
   const usedAssignments: { day: string; timeStart: string; timeEnd: string; roomName: string }[] = [];
-  const usedDays = new Set<string>();
   const resultMap: Record<string, MultiPlannedSlotItem> = {};
 
   poolList.forEach(pool => {
-    // Top suggestions: up to 1 best per day
+    // Generate up to 1 best suggestion per available day for quick suggestion chips
     const daySuggestionMap: Record<string, SmartSuggestionOption> = {};
     pool.candidates.forEach(c => {
       if (!daySuggestionMap[c.day]) {
@@ -584,50 +620,80 @@ export function calculateSmartMultiDistribution(
     });
     const suggestions = Object.values(daySuggestionMap);
 
-    // Sort candidates for optimal conflict-free assignment:
-    // Prioritize days not yet used by another slot in this batch (spread across days!)
+    // Sort candidates:
+    // 1. Give bonus to days NOT yet used in this batch (spread across different days!)
+    // 2. Prefer days other than the source slot's original day
+    // 3. Prefer mid-morning / afternoon (period 2 to 7)
+    // 4. Prefer slots with higher room availability
     const sortedCandidates = [...pool.candidates].sort((a, b) => {
-      const aDayUsed = usedDays.has(a.day) ? 1 : 0;
-      const bDayUsed = usedDays.has(b.day) ? 1 : 0;
-      if (aDayUsed !== bDayUsed) return aDayUsed - bDayUsed;
-      // Prefer mid-morning / afternoon (period 2 to 7)
-      const aPeriodScore = Math.abs(a.period - 3);
-      const bPeriodScore = Math.abs(b.period - 3);
-      if (aPeriodScore !== bPeriodScore) return aPeriodScore - bPeriodScore;
+      const aDayCount = usedAssignments.filter(u => u.day === a.day).length;
+      const bDayCount = usedAssignments.filter(u => u.day === b.day).length;
+      if (aDayCount !== bDayCount) return aDayCount - bDayCount;
+
+      const aIsSourceDay = a.day === pool.sourceSlot.day ? 1 : 0;
+      const bIsSourceDay = b.day === pool.sourceSlot.day ? 1 : 0;
+      if (aIsSourceDay !== bIsSourceDay) return aIsSourceDay - bIsSourceDay;
+
+      const aPeriodDiff = Math.abs(a.period - 3);
+      const bPeriodDiff = Math.abs(b.period - 3);
+      if (aPeriodDiff !== bPeriodDiff) return aPeriodDiff - bPeriodDiff;
+
       return b.availableMatchingRoomsCount - a.availableMatchingRoomsCount;
     });
 
-    // Find first candidate that doesn't collide with already assigned slots in this batch
+    // Find first candidate that has 0 collision with previously assigned slots in this batch
     let chosen = sortedCandidates.find(cand => {
-      return !usedAssignments.some(ua => {
+      const clash = usedAssignments.some(ua => {
+        if (ua.day !== cand.day) return false;
+        return slotsOverlap(
+          { time: ua.timeStart, timeEnd: ua.timeEnd },
+          { time: cand.timeStart, timeEnd: cand.timeEnd }
+        );
+      });
+      if (clash) return false;
+
+      // Ensure room is not occupied by another slot in batch at the same time
+      const roomClash = usedAssignments.some(ua => {
         if (ua.day !== cand.day) return false;
         const timeOverlap = slotsOverlap(
           { time: ua.timeStart, timeEnd: ua.timeEnd },
           { time: cand.timeStart, timeEnd: cand.timeEnd }
         );
-        if (timeOverlap) return true;
-        if (ua.roomName === cand.roomName && timeOverlap) return true;
-        return false;
+        return timeOverlap && ua.roomName === cand.roomName;
       });
+
+      if (roomClash) {
+        const altRoom = (cand.availableRooms || []).find(r => !usedAssignments.some(ua => {
+          if (ua.day !== cand.day) return false;
+          const timeOverlap = slotsOverlap(
+            { time: ua.timeStart, timeEnd: ua.timeEnd },
+            { time: cand.timeStart, timeEnd: cand.timeEnd }
+          );
+          return timeOverlap && ua.roomName === r.name;
+        }));
+        if (altRoom) {
+          cand.roomName = altRoom.name;
+          return true;
+        }
+        return false;
+      }
+
+      return true;
     });
 
-    // Fallback if strict conflict-free candidate was not found in pool
     if (!chosen && pool.candidates.length > 0) {
       chosen = pool.candidates[0];
     }
 
     if (!chosen) {
-      // Complete fallback
-      const defaultDay = 'Monday';
-      const defaultStart = '10:00';
-      const defaultEnd = `${String(10 + pool.durationHours).padStart(2, '0')}:00`;
+      // Fallback
       chosen = {
-        day: defaultDay,
-        period: 3,
-        timeStart: defaultStart,
-        timeEnd: defaultEnd,
+        day: pool.sourceSlot.day === 'Wednesday' ? 'Tuesday' : 'Wednesday',
+        period: 2,
+        timeStart: '09:00',
+        timeEnd: pool.durationHours === 2 ? '11:00' : '10:00',
         durationHours: pool.durationHours,
-        periodLabel: `Waktu 3`,
+        periodLabel: `Waktu 2`,
         roomName: pool.sourceSlot.classroom || 'MAKMAL KOMPUTER 1-01',
         roomCategory: pool.origCat,
         availableMatchingRoomsCount: 1,
@@ -641,7 +707,6 @@ export function calculateSmartMultiDistribution(
       timeEnd: chosen.timeEnd,
       roomName: chosen.roomName,
     });
-    usedDays.add(chosen.day);
 
     resultMap[pool.key] = {
       key: pool.key,
@@ -649,7 +714,7 @@ export function calculateSmartMultiDistribution(
       originalCategory: pool.origCat,
       targetDay: chosen.day,
       targetPeriod: chosen.period,
-      durationHours: pool.durationHours,
+      durationHours: chosen.durationHours,
       targetTimeStart: chosen.timeStart,
       targetTimeEnd: chosen.timeEnd,
       targetRoom: chosen.roomName,
