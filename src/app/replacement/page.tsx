@@ -1941,7 +1941,7 @@ export default function ReplacementPage() {
                               nextAvailableP = p.period + 1;
                               return (
                                 <td key={p.period} className="p-0 align-top">
-                                  <div className="min-h-[72px] rounded-xl bg-slate-50/50 border border-dashed border-slate-200/40 hover:bg-slate-50 transition-colors flex items-center justify-center">
+                                  <div className="min-h-[86px] sm:min-h-[92px] rounded-xl bg-slate-50/50 border border-dashed border-slate-200/40 hover:bg-slate-50 transition-colors flex items-center justify-center">
                                     <span className="text-[10px] text-slate-300 font-mono">—</span>
                                   </div>
                                 </td>
@@ -1958,35 +1958,35 @@ export default function ReplacementPage() {
                             return (
                               <td key={p.period} colSpan={span} className="p-0 align-top">
                                 <div
-                                  className={`rounded-xl p-2 sm:p-2.5 min-h-[72px] h-full shadow-2xs border flex flex-col justify-between transition-all ${
+                                  className={`rounded-xl p-2 sm:p-2.5 min-h-[86px] sm:min-h-[92px] h-full shadow-2xs border flex flex-col justify-between transition-all ${
                                     hasConflict
                                       ? 'bg-rose-50 border-rose-300 text-rose-950'
                                       : 'bg-sky-50/70 border-sky-200/80 text-slate-900 hover:shadow-md'
                                   }`}
                                 >
                                   <div className="flex items-center justify-between gap-1">
-                                    <span className="text-[9.5px] font-extrabold bg-[#3f8ceb] text-white px-1.5 py-0.5 rounded">
+                                    <span className="text-[9.5px] font-extrabold bg-[#3f8ceb] text-white px-1.5 py-0.5 rounded leading-none">
                                       #{idx}
                                     </span>
-                                    <span className="text-[9.5px] font-bold text-slate-700 truncate">
+                                    <span className="text-[9.5px] font-bold text-slate-700 truncate" title={startingItem.sourceSlot.class}>
                                       {startingItem.sourceSlot.class}
                                     </span>
                                     {span > 1 && (
-                                      <span className="text-[8.5px] font-extrabold px-1 py-0.2 rounded bg-amber-100 text-amber-800">
+                                      <span className="text-[8.5px] font-extrabold px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 leading-none">
                                         {span}J
                                       </span>
                                     )}
                                   </div>
 
-                                  <div className="font-bold text-[10px] sm:text-[11px] truncate my-0.5" title={startingItem.sourceSlot.subject}>
+                                  <div className="font-bold text-[10px] sm:text-[11px] leading-snug line-clamp-2 break-words my-0.5" title={startingItem.sourceSlot.subject}>
                                     {startingItem.sourceSlot.subject}
                                   </div>
 
                                   <div className="flex items-center justify-between gap-1">
                                     <span
-                                      className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-bold border ${roomBadge.bgClass} ${roomBadge.textClass} ${roomBadge.borderClass} truncate`}
+                                      className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] sm:text-[9.5px] font-bold border ${roomBadge.bgClass} ${roomBadge.textClass} ${roomBadge.borderClass} max-w-full leading-tight`}
                                     >
-                                      <span>{roomBadge.icon}</span>
+                                      <span className="shrink-0 text-[9.5px]">{roomBadge.icon}</span>
                                       <span className="truncate">{roomBadge.code}</span>
                                     </span>
 

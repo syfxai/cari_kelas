@@ -38,7 +38,7 @@ export default function Home() {
       href: '/rooms',
       description: 'Semak ketersediaan makmal komputer dan bilik kuliah fizikal mengikut Waktu 1 hingga Waktu 10 (Isnin – Jumaat).',
       tag: 'Waktu 1–10',
-      tagColor: 'bg-emerald-50 text-emerald-700',
+      tagColor: 'bg-slate-100 text-slate-800',
       highlights: [
         'Pilih tempoh masa (1 Jam, 2 Jam, Sesi Pagi/Petang)',
         'Tapis bilik fizikal & abaikan pautan online',

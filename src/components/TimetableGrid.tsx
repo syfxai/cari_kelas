@@ -107,12 +107,12 @@ export default function TimetableGrid({
       </div>
 
       {/* Main Grid: Compact Table Layout to eliminate horizontal scroll */}
-      <div className="p-2 sm:p-4 overflow-x-auto lg:overflow-x-visible">
+      <div className="p-2 sm:p-3 overflow-x-auto lg:overflow-x-visible">
         <table className="w-full table-fixed border-separate border-spacing-1 sm:border-spacing-1.5 text-left">
           <thead>
             <tr>
               {/* Day Header Column */}
-              <th className="w-[54px] sm:w-[76px] p-1 sm:p-2 font-bold text-center text-[10px] sm:text-[11px] uppercase tracking-wider text-slate-600 bg-slate-100/80 rounded-xl">
+              <th className="w-[48px] sm:w-[68px] p-1 sm:p-2 font-bold text-center text-[10px] sm:text-[11px] uppercase tracking-wider text-slate-600 bg-slate-100/80 rounded-xl">
                 Hari
               </th>
 
@@ -120,13 +120,13 @@ export default function TimetableGrid({
               {STANDARD_PERIODS.map(p => (
                 <th
                   key={p.period}
-                  className="p-1 sm:p-2 text-center bg-slate-50 rounded-xl border border-slate-100/80"
+                  className="p-1 sm:p-1.5 text-center bg-slate-50 rounded-xl border border-slate-100/80"
                 >
                   <div className="font-extrabold text-slate-900 text-[10px] sm:text-[11px]">
                     <span className="sm:hidden">W{p.period}</span>
                     <span className="hidden sm:inline">Waktu {p.period}</span>
                   </div>
-                  <div className="text-[9px] text-slate-400 font-medium whitespace-nowrap mt-0.5">
+                  <div className="text-[8.5px] sm:text-[9px] text-slate-400 font-medium whitespace-nowrap mt-0.5">
                     {p.timeRange}
                   </div>
                 </th>
@@ -162,7 +162,7 @@ export default function TimetableGrid({
                       nextAvailableIdx = periodIdx + 1;
                       return (
                         <td key={p.period} className="p-0 align-top">
-                          <div className="min-h-[72px] rounded-xl bg-slate-50/50 border border-dashed border-slate-200/40 hover:bg-slate-50 transition-colors flex items-center justify-center">
+                          <div className="min-h-[86px] sm:min-h-[92px] rounded-xl bg-slate-50/50 border border-dashed border-slate-200/40 hover:bg-slate-50 transition-colors flex items-center justify-center">
                             <span className="text-[10px] text-slate-300 font-mono">—</span>
                           </div>
                         </td>
@@ -183,7 +183,7 @@ export default function TimetableGrid({
                       >
                         <div
                           onClick={() => setActiveSlot(slot)}
-                          className={`min-h-[72px] h-full p-2 sm:p-2.5 rounded-xl border bg-white transition-all duration-200 flex flex-col justify-between cursor-pointer hover:shadow-md hover:scale-[1.01] ${
+                          className={`min-h-[86px] sm:min-h-[92px] h-full p-2 sm:p-2.5 rounded-xl border bg-white transition-all duration-200 flex flex-col justify-between cursor-pointer hover:shadow-md hover:scale-[1.01] ${
                             roomBadge.category === 'lab'
                               ? 'border-emerald-200/70 hover:border-emerald-300 shadow-2xs'
                               : roomBadge.category === 'online'
@@ -196,13 +196,13 @@ export default function TimetableGrid({
                           {/* Top Row: Subject Title + Duration Pill */}
                           <div className="flex items-start justify-between gap-1">
                             <div
-                              className="font-bold text-slate-950 text-[10px] sm:text-[11px] leading-tight truncate"
+                              className="font-bold text-slate-950 text-[10px] sm:text-[11px] leading-snug line-clamp-2 break-words"
                               title={slot.subject}
                             >
                               {slot.subject}
                             </div>
                             {spanHours > 1 && (
-                              <span className="shrink-0 text-[8.5px] font-extrabold px-1 py-0.2 rounded bg-amber-50 text-amber-700 border border-amber-200/60">
+                              <span className="shrink-0 text-[8.5px] font-extrabold px-1.5 py-0.5 rounded bg-amber-50 text-amber-700 border border-amber-200/60 leading-none">
                                 {spanHours}J
                               </span>
                             )}
@@ -211,26 +211,26 @@ export default function TimetableGrid({
                           {/* Middle: Clear Location Badge (MK / BK / Online / BT) */}
                           <div className="my-1">
                             <span
-                              className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[9.5px] sm:text-[10px] font-bold border ${roomBadge.bgClass} ${roomBadge.textClass} ${roomBadge.borderClass} max-w-full truncate`}
+                              className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[9px] sm:text-[9.5px] font-bold border ${roomBadge.bgClass} ${roomBadge.textClass} ${roomBadge.borderClass} max-w-full leading-tight`}
                               title={roomBadge.fullName}
                             >
-                              <span className="shrink-0 text-[10px]">{roomBadge.icon}</span>
+                              <span className="shrink-0 text-[9.5px]">{roomBadge.icon}</span>
                               <span className="truncate">{roomBadge.code}</span>
                             </span>
                           </div>
 
                           {/* Bottom Row: Context details */}
-                          <div className="text-[9.5px] sm:text-[10px] text-slate-600 font-medium truncate flex items-center gap-1">
+                          <div className="text-[9px] sm:text-[9.5px] text-slate-600 font-medium flex items-center gap-1 min-w-0">
                             {viewType === 'teacher' ? (
                               slot.class ? (
                                 <>
                                   <svg className="w-3 h-3 shrink-0 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                                   </svg>
-                                  <span className="truncate">{slot.class}</span>
+                                  <span className="truncate font-semibold text-slate-700" title={slot.class}>{slot.class}</span>
                                 </>
                               ) : (
-                                <span className="text-slate-400 italic text-[9px]">Sesi Khas</span>
+                                <span className="text-slate-400 italic text-[8.5px]">Sesi Khas</span>
                               )
                             ) : (
                               slot.teacher && (
@@ -238,7 +238,7 @@ export default function TimetableGrid({
                                   <svg className="w-3 h-3 shrink-0 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                   </svg>
-                                  <span className="truncate">{slot.teacher}</span>
+                                  <span className="truncate font-semibold text-slate-700" title={slot.teacher}>{slot.teacher}</span>
                                 </>
                               )
                             )}
