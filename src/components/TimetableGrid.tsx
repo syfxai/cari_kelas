@@ -75,30 +75,35 @@ export default function TimetableGrid({
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="text-xs font-semibold text-[#3f8ceb] bg-sky-50 px-3 py-1 rounded-full border border-sky-100">
+          <span className="text-xs font-semibold text-[#3f8ceb] bg-sky-50 px-3 py-1 rounded-full shadow-2xs">
             {slots.length} sesi berjadual
           </span>
         </div>
       </div>
 
-      {/* Legend Bar: Makmal Komputer (MK), Bilik Kuliah (BK), Online, Bilik Tutorial (BT) */}
+      {/* Legend Bar: Makmal Komputer (MK), Bilik Kuliah (BK), Online, Bilik Tutorial (BT), Studio */}
       <div className="px-4 sm:px-6 py-2.5 bg-slate-50/70 border-b border-slate-100 flex flex-wrap items-center justify-between gap-2 text-[11px]">
         <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-slate-600 font-medium">
           <span className="text-slate-400 text-[10px] font-bold uppercase tracking-wider">Lokasi:</span>
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 font-bold border border-emerald-200/80 text-[10px]">
-            🧪 MK <span className="font-normal text-emerald-600 hidden sm:inline">(Makmal Komputer)</span>
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-700 font-bold shadow-2xs text-[10.5px]">
+            <img src="/icons/makmal-komputer.png" alt="MK" className="w-3.5 h-3.5 object-contain shrink-0 inline-block" />
+            <span>MK</span> <span className="font-normal text-emerald-600 hidden sm:inline">(Makmal Komputer)</span>
           </span>
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-indigo-50 text-indigo-700 font-bold border border-indigo-200/80 text-[10px]">
-            🏛️ BK <span className="font-normal text-indigo-600 hidden sm:inline">(Bilik Kuliah)</span>
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-indigo-50 text-indigo-700 font-bold shadow-2xs text-[10.5px]">
+            <img src="/icons/bilik-kuliah.png" alt="BK" className="w-3.5 h-3.5 object-contain shrink-0 inline-block" />
+            <span>BK</span> <span className="font-normal text-indigo-600 hidden sm:inline">(Bilik Kuliah)</span>
           </span>
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-sky-50 text-sky-700 font-bold border border-sky-200/80 text-[10px]">
-            🌐 Online <span className="font-normal text-sky-600 hidden sm:inline">(Kelas Maya)</span>
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-sky-50 text-sky-700 font-bold shadow-2xs text-[10.5px]">
+            <img src="/icons/online.png" alt="Online" className="w-3.5 h-3.5 object-contain shrink-0 inline-block" />
+            <span>Online</span> <span className="font-normal text-sky-600 hidden sm:inline">(Kelas Maya)</span>
           </span>
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-amber-50 text-amber-700 font-bold border border-amber-200/80 text-[10px]">
-            📝 BT <span className="font-normal text-amber-600 hidden sm:inline">(Bilik Tutorial)</span>
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-50 text-amber-700 font-bold shadow-2xs text-[10.5px]">
+            <img src="/icons/bilik-tutorial.png" alt="BT" className="w-3.5 h-3.5 object-contain shrink-0 inline-block" />
+            <span>BT</span> <span className="font-normal text-amber-600 hidden sm:inline">(Bilik Tutorial)</span>
           </span>
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-purple-50 text-purple-700 font-bold border border-purple-200/80 text-[10px]">
-            🎨 Studio
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-purple-50 text-purple-700 font-bold shadow-2xs text-[10.5px]">
+            <img src="/icons/studio.png" alt="Studio" className="w-3.5 h-3.5 object-contain shrink-0 inline-block" />
+            <span>Studio</span>
           </span>
         </div>
         <span className="text-[10px] text-slate-400 hidden md:inline">
@@ -202,19 +207,19 @@ export default function TimetableGrid({
                               {slot.subject}
                             </div>
                             {spanHours > 1 && (
-                              <span className="shrink-0 text-[8.5px] font-extrabold px-1.5 py-0.5 rounded bg-amber-50 text-amber-700 border border-amber-200/60 leading-none">
+                              <span className="shrink-0 text-[8.5px] font-extrabold px-1.5 py-0.5 rounded bg-amber-50 text-amber-700 shadow-2xs leading-none">
                                 {spanHours}J
                               </span>
                             )}
                           </div>
 
-                          {/* Middle: Clear Location Badge (MK / BK / Online / BT) */}
+                          {/* Middle: Clear Location Badge (MK / BK / Online / BT / Studio) */}
                           <div className="my-1">
                             <span
-                              className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[9px] sm:text-[9.5px] font-bold border ${roomBadge.bgClass} ${roomBadge.textClass} ${roomBadge.borderClass} max-w-full leading-tight`}
+                              className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[9px] sm:text-[9.5px] font-bold shadow-2xs ${roomBadge.bgClass} ${roomBadge.textClass} max-w-full leading-tight`}
                               title={roomBadge.fullName}
                             >
-                              <span className="shrink-0 text-[9.5px]">{roomBadge.icon}</span>
+                              <img src={roomBadge.iconUrl} alt="" className="w-3 h-3 object-contain shrink-0 inline-block" />
                               <span className="truncate">{roomBadge.code}</span>
                             </span>
                           </div>
@@ -260,7 +265,7 @@ export default function TimetableGrid({
           <div className="bg-white rounded-3xl p-6 max-w-md w-full shadow-2xl border border-slate-100 space-y-4">
             <div className="flex items-start justify-between gap-3">
               <div>
-                <span className="text-[10px] font-bold uppercase tracking-wider text-[#3f8ceb] bg-sky-50 px-2.5 py-1 rounded-full border border-sky-100">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[#3f8ceb] bg-sky-50 px-2.5 py-1 rounded-full shadow-2xs">
                   {DAY_LABELS[activeSlot.day] || activeSlot.day} • {activeSlot.time} – {activeSlot.timeEnd}
                 </span>
                 <h3 className="text-base font-extrabold text-slate-950 mt-2">
@@ -276,10 +281,14 @@ export default function TimetableGrid({
             </div>
 
             <div className="grid grid-cols-2 gap-2.5 pt-2 text-xs">
-              <div className="p-3 bg-slate-50 rounded-2xl border border-slate-100 space-y-1">
+              <div className="p-3 bg-slate-50 rounded-2xl space-y-1 shadow-2xs">
                 <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Lokasi / Bilik</div>
                 <div className="font-bold text-slate-900 flex items-center gap-1.5">
-                  <span>{parseRoomBadge(activeSlot.classroom).icon}</span>
+                  <img
+                    src={parseRoomBadge(activeSlot.classroom).iconUrl}
+                    alt=""
+                    className="w-4 h-4 object-contain shrink-0"
+                  />
                   <span>{activeSlot.classroom || 'Tiada Bilik Ditetapkan'}</span>
                 </div>
                 <div className="text-[10px] text-slate-500 font-medium">
@@ -287,7 +296,7 @@ export default function TimetableGrid({
                 </div>
               </div>
 
-              <div className="p-3 bg-slate-50 rounded-2xl border border-slate-100 space-y-1">
+              <div className="p-3 bg-slate-50 rounded-2xl space-y-1 shadow-2xs">
                 <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Kelas / Seksyen</div>
                 <div className="font-bold text-slate-900 truncate">
                   {activeSlot.class || '—'}
@@ -297,7 +306,7 @@ export default function TimetableGrid({
                 </div>
               </div>
 
-              <div className="p-3 bg-slate-50 rounded-2xl border border-slate-100 space-y-1 col-span-2">
+              <div className="p-3 bg-slate-50 rounded-2xl space-y-1 col-span-2 shadow-2xs">
                 <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Pensyarah</div>
                 <div className="font-bold text-slate-900">
                   {activeSlot.teacher || '—'}

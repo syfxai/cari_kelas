@@ -94,7 +94,7 @@ export default function TeachersPage() {
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2">
         <div className="space-y-1">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 text-slate-800 text-xs font-semibold">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 text-slate-800 text-xs font-semibold shadow-2xs">
             <span className="w-2 h-2 rounded-full bg-[#3f8ceb] animate-pulse" />
             <span>{teachers.length} Pensyarah KPTM Ipoh</span>
           </div>
@@ -182,7 +182,7 @@ export default function TeachersPage() {
             <h2 className="text-base font-bold text-slate-950">
               Senarai Semua Pensyarah
             </h2>
-            <span className="text-xs font-semibold text-[#3f8ceb] bg-sky-50 px-3 py-1 rounded-full">
+            <span className="text-xs font-semibold text-[#3f8ceb] bg-sky-50 px-3 py-1 rounded-full shadow-2xs">
               {filteredTeachers.length} rekod
             </span>
           </div>
@@ -234,7 +234,7 @@ export default function TeachersPage() {
               <svg className="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
-              <span>← Kembali ke Senarai Pensyarah</span>
+              <span>Kembali ke Senarai Pensyarah</span>
             </button>
 
             <Link

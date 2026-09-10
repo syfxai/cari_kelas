@@ -8,6 +8,7 @@ export interface RoomBadgeInfo {
   borderClass: string;
   dotColor: string;
   icon: string;
+  iconUrl: string;
 }
 
 export function parseRoomBadge(roomName?: string): RoomBadgeInfo {
@@ -20,9 +21,10 @@ export function parseRoomBadge(roomName?: string): RoomBadgeInfo {
       categoryLabel: 'Tiada Bilik',
       bgClass: 'bg-slate-100',
       textClass: 'text-slate-600',
-      borderClass: 'border-slate-200/60',
+      borderClass: 'shadow-2xs',
       dotColor: 'bg-slate-400',
       icon: '👥',
+      iconUrl: '/icons/bilik-tutorial.png',
     };
   }
 
@@ -38,9 +40,10 @@ export function parseRoomBadge(roomName?: string): RoomBadgeInfo {
       categoryLabel: 'Makmal Komputer',
       bgClass: 'bg-emerald-50',
       textClass: 'text-emerald-700',
-      borderClass: 'border-emerald-200/80',
+      borderClass: 'shadow-2xs',
       dotColor: 'bg-emerald-500',
       icon: '🧪',
+      iconUrl: '/icons/makmal-komputer.png',
     };
   }
 
@@ -54,9 +57,10 @@ export function parseRoomBadge(roomName?: string): RoomBadgeInfo {
       categoryLabel: 'Bilik Kuliah',
       bgClass: 'bg-indigo-50',
       textClass: 'text-indigo-700',
-      borderClass: 'border-indigo-200/80',
+      borderClass: 'shadow-2xs',
       dotColor: 'bg-indigo-500',
       icon: '🏛️',
+      iconUrl: '/icons/bilik-kuliah.png',
     };
   }
 
@@ -70,9 +74,10 @@ export function parseRoomBadge(roomName?: string): RoomBadgeInfo {
       categoryLabel: 'Bilik Tutorial',
       bgClass: 'bg-amber-50',
       textClass: 'text-amber-700',
-      borderClass: 'border-amber-200/80',
+      borderClass: 'shadow-2xs',
       dotColor: 'bg-amber-500',
       icon: '📝',
+      iconUrl: '/icons/bilik-tutorial.png',
     };
   }
 
@@ -85,9 +90,10 @@ export function parseRoomBadge(roomName?: string): RoomBadgeInfo {
       categoryLabel: 'Atas Talian',
       bgClass: 'bg-sky-50',
       textClass: 'text-sky-700',
-      borderClass: 'border-sky-200/80',
+      borderClass: 'shadow-2xs',
       dotColor: 'bg-sky-500',
       icon: '🌐',
+      iconUrl: '/icons/online.png',
     };
   }
 
@@ -101,9 +107,10 @@ export function parseRoomBadge(roomName?: string): RoomBadgeInfo {
       categoryLabel: 'Studio Rekabentuk',
       bgClass: 'bg-purple-50',
       textClass: 'text-purple-700',
-      borderClass: 'border-purple-200/80',
+      borderClass: 'shadow-2xs',
       dotColor: 'bg-purple-500',
       icon: '🎨',
+      iconUrl: '/icons/studio.png',
     };
   }
 
@@ -116,9 +123,10 @@ export function parseRoomBadge(roomName?: string): RoomBadgeInfo {
       categoryLabel: 'Auditorium',
       bgClass: 'bg-violet-50',
       textClass: 'text-violet-700',
-      borderClass: 'border-violet-200/80',
+      borderClass: 'shadow-2xs',
       dotColor: 'bg-violet-500',
       icon: '🎭',
+      iconUrl: '/icons/bilik-kuliah.png',
     };
   }
 
@@ -132,9 +140,10 @@ export function parseRoomBadge(roomName?: string): RoomBadgeInfo {
       categoryLabel: 'Bilik Bincang',
       bgClass: 'bg-rose-50',
       textClass: 'text-rose-700',
-      borderClass: 'border-rose-200/80',
+      borderClass: 'shadow-2xs',
       dotColor: 'bg-rose-500',
       icon: '💬',
+      iconUrl: '/icons/bilik-tutorial.png',
     };
   }
 
@@ -145,8 +154,9 @@ export function parseRoomBadge(roomName?: string): RoomBadgeInfo {
     categoryLabel: 'Bilik Khas',
     bgClass: 'bg-slate-100',
     textClass: 'text-slate-700',
-    borderClass: 'border-slate-200/80',
+    borderClass: 'shadow-2xs',
     dotColor: 'bg-slate-500',
     icon: '📍',
+    iconUrl: '/icons/bilik-tutorial.png',
   };
 }

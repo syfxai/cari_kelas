@@ -61,7 +61,7 @@ export default function ClassesPage() {
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2">
         <div className="space-y-1">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 text-slate-800 text-xs font-semibold">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 text-slate-800 text-xs font-semibold shadow-2xs">
             <span className="w-2 h-2 rounded-full bg-[#3f8ceb] animate-pulse" />
             <span>{classes.length} Kumpulan Kelas Diploma</span>
           </div>

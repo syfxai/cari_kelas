@@ -72,7 +72,7 @@ export default function Home() {
         <div className="absolute -bottom-24 -left-24 w-80 h-80 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative z-10 max-w-3xl space-y-4">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-slate-200 text-slate-800 text-xs font-semibold shadow-2xs">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white text-slate-800 text-xs font-semibold shadow-2xs">
             <span className="w-2 h-2 rounded-full bg-[#3f8ceb] animate-pulse" />
             <span>Sistem Cari Kelas Pintar • KPTM Ipoh</span>
           </div>
@@ -98,13 +98,13 @@ export default function Home() {
             </Link>
             <Link
               href="/replacement"
-              className="h-10 px-4 bg-white hover:bg-slate-50 border border-slate-200 text-slate-800 rounded-xl text-xs font-semibold transition-all shadow-2xs flex items-center gap-1.5 cursor-pointer"
+              className="h-10 px-4 bg-white hover:bg-slate-50 text-slate-800 rounded-xl text-xs font-semibold transition-all shadow-2xs flex items-center gap-1.5 cursor-pointer"
             >
               <span>2. Cari Kelas Ganti</span>
             </Link>
             <Link
               href="/rooms"
-              className="h-10 px-4 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 rounded-xl text-xs font-semibold transition-all shadow-2xs flex items-center gap-1.5 cursor-pointer"
+              className="h-10 px-4 bg-white hover:bg-slate-50 text-slate-700 rounded-xl text-xs font-semibold transition-all shadow-2xs flex items-center gap-1.5 cursor-pointer"
             >
               <span>Semak Bilik Kosong</span>
             </Link>
@@ -142,7 +142,7 @@ export default function Home() {
           >
             <div className="space-y-3.5">
               <div className="flex items-center justify-between gap-2">
-                <span className={`text-[11px] font-bold px-3 py-1 rounded-full ${item.tagColor}`}>
+                <span className={`text-[11px] font-bold px-3 py-1 rounded-full shadow-2xs ${item.tagColor}`}>
                   {item.tag}
                 </span>
                 <span className="text-xs font-bold text-slate-400 group-hover:text-[#3f8ceb] group-hover:translate-x-1 transition-all">

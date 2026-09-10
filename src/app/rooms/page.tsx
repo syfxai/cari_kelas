@@ -73,6 +73,13 @@ const roomCategoryLabel = (category?: string): string => {
   return 'Bilik Khas';
 };
 
+const roomCategoryIcon = (category?: string): string => {
+  if (category === 'lab') return '/icons/makmal-komputer.png';
+  if (category === 'lecture') return '/icons/bilik-kuliah.png';
+  if (category === 'online') return '/icons/online.png';
+  return '/icons/bilik-tutorial.png';
+};
+
 export default function RoomsPage() {
   const [selectedDay, setSelectedDay] = useState<string>('Monday');
   const [timeStart, setTimeStart] = useState<string>('08:00');
@@ -384,7 +391,7 @@ export default function RoomsPage() {
                 <label className="text-xs font-bold text-slate-900">
                   Waktu Dari – Hingga
                 </label>
-                <span className="text-xs font-semibold text-[#3f8ceb] bg-sky-50 px-3 py-1 rounded-full">
+                <span className="text-xs font-semibold text-[#3f8ceb] bg-sky-50 px-3 py-1 rounded-full shadow-2xs">
                   Tempoh: {durationInfo.hours} Jam ({durationInfo.periodStr})
                 </span>
               </div>
@@ -477,22 +484,25 @@ export default function RoomsPage() {
               <div className="flex flex-wrap items-center gap-1.5 p-1 bg-slate-100 rounded-2xl">
                 {[
                   { id: 'all', label: 'Semua' },
-                  { id: 'lab', label: 'Makmal Komputer' },
-                  { id: 'lecture', label: 'Bilik Kuliah' },
-                  { id: 'other', label: 'Bilik Khas' },
-                  ...(!excludeOnline ? [{ id: 'online', label: 'Online' }] : []),
+                  { id: 'lab', label: 'Makmal Komputer', icon: '/icons/makmal-komputer.png' },
+                  { id: 'lecture', label: 'Bilik Kuliah', icon: '/icons/bilik-kuliah.png' },
+                  { id: 'other', label: 'Bilik Khas', icon: '/icons/bilik-tutorial.png' },
+                  ...(!excludeOnline ? [{ id: 'online', label: 'Online', icon: '/icons/online.png' }] : []),
                 ].map(cat => (
                   <button
                     key={cat.id}
                     type="button"
                     onClick={() => handleCategoryFilterChange(cat.id)}
-                    className={`h-8 px-3.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                    className={`h-8 px-3.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
                       categoryFilter === cat.id
                         ? 'bg-slate-900 text-white shadow-xs scale-[1.02]'
                         : 'text-slate-700 hover:text-slate-900 hover:bg-white/60'
                     }`}
                   >
-                    {cat.label}
+                    {cat.icon && (
+                      <img src={cat.icon} alt="" className="w-3.5 h-3.5 object-contain shrink-0" />
+                    )}
+                    <span>{cat.label}</span>
                   </button>
                 ))}
               </div>
@@ -577,10 +587,15 @@ export default function RoomsPage() {
                         >
                           <div className="space-y-2">
                             <div className="flex items-center justify-between">
-                              <span className="text-[11px] font-semibold text-slate-600 bg-slate-100 px-3 py-1 rounded-full">
-                                {roomCategoryLabel(room.category)}
+                              <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-slate-700 bg-slate-100 px-2.5 py-1 rounded-full">
+                                <img
+                                  src={roomCategoryIcon(room.category)}
+                                  alt=""
+                                  className="w-3.5 h-3.5 object-contain shrink-0"
+                                />
+                                <span>{roomCategoryLabel(room.category)}</span>
                               </span>
-                              <span className="inline-flex items-center justify-center text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full" title="Tersedia">
+                              <span className="inline-flex items-center justify-center text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full shadow-2xs" title="Tersedia">
                                 ✓
                               </span>
                             </div>
@@ -642,10 +657,15 @@ export default function RoomsPage() {
                       >
                         <div className="space-y-2">
                           <div className="flex items-center justify-between">
-                            <span className="text-[11px] font-semibold text-slate-600 bg-slate-100 px-3 py-1 rounded-full">
-                              {roomCategoryLabel(room.category)}
+                            <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-slate-700 bg-slate-100 px-2.5 py-1 rounded-full">
+                              <img
+                                src={roomCategoryIcon(room.category)}
+                                alt=""
+                                className="w-3.5 h-3.5 object-contain shrink-0"
+                              />
+                              <span>{roomCategoryLabel(room.category)}</span>
                             </span>
-                            <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-rose-700 bg-rose-50 px-3 py-1 rounded-full">
+                            <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-rose-700 bg-rose-50 px-3 py-1 rounded-full shadow-2xs">
                               <span className="w-1.5 h-1.5 rounded-full bg-rose-500" />
                               Ditempah
                             </span>
