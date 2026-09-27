@@ -1164,8 +1164,8 @@ export default function ReplacementPage() {
 
                 {/* FORMAT JADUAL MATRIKS MINGGUAN GAYA APPLE (1px Outline to Fill) */}
                 {viewMode === 'matrix' && (
-                  <div className="p-1 overflow-x-auto lg:overflow-x-visible">
-                    <table className="w-full table-fixed text-center border-separate border-spacing-1 sm:border-spacing-1.5 text-xs">
+                  <div className="p-1 overflow-x-auto lg:overflow-x-visible timetable-scroll-container">
+                    <table className="w-full min-w-[760px] lg:min-w-0 table-fixed text-center border-separate border-spacing-1 sm:border-spacing-1.5 text-xs">
                       <thead>
                         <tr>
                           <th className="w-[54px] sm:w-[76px] p-1 sm:p-2 font-bold text-center text-[10px] sm:text-[11px] uppercase tracking-wider text-slate-600 bg-slate-100/80 rounded-xl">
@@ -1916,8 +1916,8 @@ export default function ReplacementPage() {
               </div>
 
               {/* Multi Matrix Timetable */}
-              <div className="p-1 overflow-x-auto lg:overflow-x-visible">
-                <table className="w-full table-fixed text-left border-separate border-spacing-1 sm:border-spacing-1.5 text-xs">
+              <div className="p-1 overflow-x-auto lg:overflow-x-visible timetable-scroll-container">
+                <table className="w-full min-w-[760px] lg:min-w-0 table-fixed text-left border-separate border-spacing-1 sm:border-spacing-1.5 text-xs">
                   <thead>
                     <tr>
                       <th className="w-[54px] sm:w-[76px] p-1 sm:p-2 font-bold text-center text-[10px] sm:text-[11px] uppercase tracking-wider text-slate-600 bg-slate-100/80 rounded-xl">

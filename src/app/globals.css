@@ -27,3 +27,32 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #9ca3af;
 }
+
+/* 3D Depth & Hardware Accelerated Smooth Transforms */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.transform-style-3d {
+  transform-style: preserve-3d;
+}
+
+.timetable-scroll-container {
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x pan-y pinch-zoom;
+}
+
+/* Calm, readable Marquee animation with pauses at start and end */
+@keyframes marquee-glide {
+  0%, 15% {
+    transform: translateX(0);
+  }
+  50%, 72% {
+    transform: translateX(calc(-1 * var(--marquee-dist, 0px)));
+  }
+  92%, 100% {
+    transform: translateX(0);
+  }
+}
+
+
