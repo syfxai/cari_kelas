@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
-import { getTeachersList, getTimetableDb } from '@/lib/timetableService';
+import { getTeachersList, getTimetableDb, setTimetableDb } from '@/lib/timetableService';
+import { fetchLiveEdupageTimetable } from '@/lib/edupageScraper';
 
-const PYTHON_API = process.env.PYTHON_API_URL || 'http://localhost:8000';
+export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {
@@ -14,7 +15,10 @@ export async function GET() {
     });
   } catch (error) {
     return NextResponse.json(
-      { success: false, message: error instanceof Error ? error.message : 'Ralat pangkalan data pensyarah.' },
+      {
+        success: false,
+        message: error instanceof Error ? error.message : 'Ralat pangkalan data pensyarah.',
+      },
       { status: 500 }
     );
   }
@@ -22,26 +26,26 @@ export async function GET() {
 
 export async function POST() {
   try {
-    const res = await fetch(`${PYTHON_API}/api/scrape`, { method: 'POST' });
-    const data = await res.json();
-    if (data.success) {
-      const teacherRes = await fetch(`${PYTHON_API}/api/teachers`);
-      const teacherData = await teacherRes.json();
-      if (teacherData.success) {
-        return NextResponse.json({
-          success: true,
-          message: data.message,
-          data: teacherData.data.map((t: { name: string }) => t.name),
-        });
-      }
-    }
-    return NextResponse.json(data);
-  } catch {
+    const freshDb = await fetchLiveEdupageTimetable();
+    setTimetableDb(freshDb);
     const teachers = getTeachersList();
+
     return NextResponse.json({
       success: true,
-      message: `${teachers.length} pensyarah dimuatkan dari pangkalan data aktif.`,
+      message: `${teachers.length} pensyarah berjaya dikemas kini dari EduPage.`,
       data: teachers,
+      scrapedAt: freshDb.scrapedAt,
+    });
+  } catch (error) {
+    console.error('Ralat kemas kini pensyarah:', error);
+    const teachers = getTeachersList();
+    const db = getTimetableDb();
+
+    return NextResponse.json({
+      success: true,
+      message: `${teachers.length} pensyarah dimuatkan dari data sedia ada.`,
+      data: teachers,
+      scrapedAt: db.scrapedAt,
     });
   }
 }

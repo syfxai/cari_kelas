@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAvailableRooms, getRoomsList } from '@/lib/timetableService';
 
+export const dynamic = 'force-dynamic';
+
 const PYTHON_API = process.env.PYTHON_API_URL;
 
 export async function GET(request: NextRequest) {

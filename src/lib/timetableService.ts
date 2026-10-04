@@ -189,6 +189,39 @@ export function getTimetableDb(): RawTimetableDatabase {
   return cachedDb;
 }
 
+export function setTimetableDb(data: RawTimetableDatabase): RawTimetableDatabase {
+  const normalizeSlots = (slots: TimetableSlot[]) =>
+    (slots || []).map(slot => ({
+      ...slot,
+      time: normalizeTimeStr(slot.time),
+      timeEnd: normalizeTimeStr(slot.timeEnd || slot.time),
+    }));
+
+  const teachers = (data.teachers || []).map(t => ({
+    ...t,
+    slots: normalizeSlots(t.slots),
+  }));
+
+  const classes = (data.classes || []).map(c => ({
+    ...c,
+    slots: normalizeSlots(c.slots),
+  }));
+
+  const rooms = (data.rooms || []).map(r => ({
+    ...r,
+    slots: normalizeSlots(r.slots),
+  }));
+
+  cachedDb = {
+    ...data,
+    teachers,
+    classes,
+    rooms,
+  };
+
+  return cachedDb;
+}
+
 // 1. Get Teacher List & Single Teacher
 export function getTeachersList(): string[] {
   const db = getTimetableDb();

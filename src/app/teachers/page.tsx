@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import TimetableGrid from '@/components/TimetableGrid';
 import type { TeacherData } from '@/lib/types';
@@ -13,48 +13,64 @@ export default function TeachersPage() {
   const [scrapeMsg, setScrapeMsg] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [scrapingTeacher, setScrapingTeacher] = useState('');
+  const [scrapedAt, setScrapedAt] = useState<string>('');
 
-  // Auto-fetch teacher list on load
-  useEffect(() => {
-    fetchTeachers();
+  const doScrape = useCallback(async () => {
+    setScraping(true);
+    setScrapeMsg('Sedang menyegerak data jadual terkini daripada EduPage KPTM...');
+    try {
+      const res = await fetch('/api/scrape', { method: 'POST' });
+      const data = await res.json();
+      if (data.success) {
+        const tRes = await fetch('/api/scrape/teachers');
+        const tData = await tRes.json();
+        if (tData.success && tData.data) {
+          setTeachers(tData.data);
+        }
+        if (data.data?.scrapedAt) {
+          setScrapedAt(data.data.scrapedAt);
+        }
+        setScrapeMsg(data.message || 'Jadual EduPage berjaya dikemas kini!');
+        window.dispatchEvent(new CustomEvent('timetable-updated'));
+      } else {
+        setScrapeMsg(data.message || 'Kemaskini gagal.');
+      }
+    } catch {
+      setScrapeMsg('Ralat semasa menyegerak dengan pelayan EduPage.');
+    } finally {
+      setScraping(false);
+    }
   }, []);
 
-  const fetchTeachers = async () => {
+  const fetchTeachers = useCallback(async () => {
     setLoading(true);
     try {
       const res = await fetch('/api/scrape/teachers');
       const data = await res.json();
       if (data.success && data.data.length > 0) {
         setTeachers(data.data);
+        if (data.scrapedAt) setScrapedAt(data.scrapedAt);
         setScrapeMsg('');
       } else {
         await doScrape();
       }
     } catch {
-      setScrapeMsg('Gagal mengambil data. Sila klik butang Cari untuk cuba semula.');
+      setScrapeMsg('Gagal mengambil data. Sila klik butang Kemaskini EduPage untuk cuba semula.');
     } finally {
       setLoading(false);
     }
-  };
+  }, [doScrape]);
 
-  const doScrape = async () => {
-    setScraping(true);
-    setScrapeMsg('Sedang mencari dan mengemas kini senarai pensyarah...');
-    try {
-      const res = await fetch('/api/scrape/teachers', { method: 'POST' });
-      const data = await res.json();
-      if (data.success) {
-        setTeachers(data.data);
-        setScrapeMsg(`${data.data.length} pensyarah berjaya dimuatkan.`);
-      } else {
-        setScrapeMsg(data.message || 'Carian gagal.');
-      }
-    } catch {
-      setScrapeMsg('Ralat semasa mencari senarai pensyarah.');
-    } finally {
-      setScraping(false);
-    }
-  };
+  // Auto-fetch teacher list on load & listen for global updates
+  useEffect(() => {
+    fetchTeachers();
+
+    const handleGlobalUpdate = () => {
+      fetchTeachers();
+    };
+    window.addEventListener('timetable-updated', handleGlobalUpdate);
+    return () => window.removeEventListener('timetable-updated', handleGlobalUpdate);
+  }, [fetchTeachers]);
 
   const handleSelectTeacher = async (name: string) => {
     setSearchQuery('');
@@ -94,9 +110,25 @@ export default function TeachersPage() {
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2">
         <div className="space-y-1">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 text-slate-800 text-xs font-semibold shadow-2xs">
-            <span className="w-2 h-2 rounded-full bg-[#3f8ceb] animate-pulse" />
-            <span>{teachers.length} Pensyarah KPTM Ipoh</span>
+          <div className="flex flex-wrap items-center gap-2">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 text-slate-800 text-xs font-semibold shadow-2xs">
+              <span className="w-2 h-2 rounded-full bg-[#3f8ceb] animate-pulse" />
+              <span>{teachers.length} Pensyarah KPTM Ipoh</span>
+            </div>
+            {scrapedAt && (
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 text-xs font-medium shadow-2xs">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                <span>
+                  Disegerak:{' '}
+                  {new Date(scrapedAt).toLocaleString('ms-MY', {
+                    day: 'numeric',
+                    month: 'short',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  })}
+                </span>
+              </div>
+            )}
           </div>
           <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-950">
             Jadual Pensyarah
@@ -154,7 +186,8 @@ export default function TeachersPage() {
         <button
           onClick={doScrape}
           disabled={scraping}
-          className="h-10 px-5 bg-[#3f8ceb] hover:bg-[#3280e2] text-white rounded-xl font-semibold text-xs disabled:opacity-50 transition-all flex items-center gap-2 shrink-0 shadow-sm hover:scale-[1.02] cursor-pointer"
+          className="h-10 px-4 bg-[#3f8ceb] hover:bg-[#3280e2] text-white rounded-xl font-semibold text-xs disabled:opacity-50 transition-all flex items-center gap-2 shrink-0 shadow-sm hover:scale-[1.02] cursor-pointer"
+          title="Kemas kini jadual waktu daripada EduPage KPTM Ipoh secara langsung"
         >
           {scraping ? (
             <>
@@ -162,14 +195,14 @@ export default function TeachersPage() {
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
               </svg>
-              <span>Mencari...</span>
+              <span>Mengemas kini...</span>
             </>
           ) : (
             <>
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
               </svg>
-              <span>Cari Pensyarah</span>
+              <span>Kemaskini EduPage</span>
             </>
           )}
         </button>
