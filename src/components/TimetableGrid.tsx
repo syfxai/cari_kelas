@@ -56,6 +56,15 @@ export function formatCleanClassCodes(raw?: string): string {
   return `${codes.slice(0, -1).join(', ')} & ${codes[codes.length - 1]}`;
 }
 
+export function getClassCodesList(raw?: string): string[] {
+  if (!raw) return [];
+  const parts = raw.split(',').map(s => s.trim()).filter(Boolean);
+  return parts.map(p => {
+    const match = p.match(/^([A-Z0-9]+)/i);
+    return match ? match[1] : p;
+  });
+}
+
 // Reusable Cell Card with Apple-grade 3D depth and Marquee Hover
 function SlotCard({
   slot,
@@ -74,6 +83,7 @@ function SlotCard({
   const classList = (slot.class || '').split(',').map(s => s.trim()).filter(Boolean);
   const isMultiClass = classList.length > 1;
   const cleanClassCodes = formatCleanClassCodes(slot.class);
+  const classCodes = getClassCodesList(slot.class);
 
   // Directly display clean class codes (e.g. "DIM0301, DIM0302") for multi-class slots or 1-hour slots.
   // Full details (section & intake) are revealed on hover marquee and interactive modal.
@@ -104,7 +114,7 @@ function SlotCard({
         transformOrigin: 'center bottom',
       }}
     >
-      {/* Top Row: Subject Title with Marquee Effect + Duration Pill & Combined Class Pill */}
+      {/* Top Row: Subject Title with Marquee Effect + Duration Pill (for >1 hour) */}
       <div className="flex items-start justify-between gap-1 min-w-0">
         <div className="min-w-0 flex-1">
           <MarqueeText
@@ -113,25 +123,15 @@ function SlotCard({
             className="font-bold text-slate-950 text-[10px] sm:text-[11px] leading-snug"
           />
         </div>
-        <div className="flex items-center gap-1 shrink-0">
-          {isMultiClass && (
-            <span
-              className="text-[8.5px] font-extrabold px-1.5 py-0.5 rounded bg-purple-50 text-purple-700 shadow-2xs leading-none"
-              title={`${classList.length} Kelas Gabungan: ${cleanClassCodes}`}
-            >
-              {classList.length}K
-            </span>
-          )}
-          {spanHours > 1 && (
-            <span className="text-[8.5px] font-extrabold px-1.5 py-0.5 rounded bg-amber-50 text-amber-700 shadow-2xs leading-none">
-              {spanHours}J
-            </span>
-          )}
-        </div>
+        {spanHours > 1 && (
+          <span className="shrink-0 text-[8.5px] font-extrabold px-1.5 py-0.5 rounded bg-amber-50 text-amber-700 shadow-2xs leading-none">
+            {spanHours}J
+          </span>
+        )}
       </div>
 
-      {/* Middle Row: Room / Location Badge */}
-      <div className="my-1 min-w-0">
+      {/* Middle Row: Room / Location Badge + Combined Class Pill */}
+      <div className="my-1 min-w-0 flex items-center justify-between gap-1">
         <span
           className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[9px] sm:text-[9.5px] font-bold shadow-2xs max-w-full leading-tight ${roomBadge.bgClass} ${roomBadge.textClass}`}
           title={roomBadge.fullName}
@@ -147,60 +147,92 @@ function SlotCard({
             className="text-[9px] sm:text-[9.5px] font-bold"
           />
         </span>
+        {isMultiClass && (
+          <span
+            className="text-[8.5px] font-extrabold px-1.5 py-0.5 rounded bg-purple-50 text-purple-700 shadow-2xs leading-none shrink-0"
+            title={`${classList.length} Kelas Gabungan: ${cleanClassCodes}`}
+          >
+            {classList.length}K
+          </span>
+        )}
       </div>
 
-      {/* Bottom Row: Context details with Marquee on Hover */}
-      <div className="text-[9px] sm:text-[9.5px] text-slate-600 font-medium flex items-center gap-1 min-w-0">
+      {/* Bottom Row: Context details - stacked clean codes for multi-classes */}
+      <div className="text-[9px] sm:text-[9.5px] text-slate-600 font-medium min-w-0">
         {viewType === 'teacher' ? (
           slot.class ? (
-            <MarqueeText
-              text={staticClassDisplay}
-              hoverText={slot.class}
-              isParentHovered={isHovered}
-              prefixIcon={
-                <svg
-                  className="w-3 h-3 shrink-0 text-slate-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-                  />
-                </svg>
-              }
-              className={`${
-                classList.length >= 3 ? 'text-[8.5px] sm:text-[9px]' : 'text-[9px] sm:text-[9.5px]'
-              } font-semibold text-slate-700`}
-            />
+            isMultiClass ? (
+              <div
+                className="w-full flex flex-col gap-0.5 text-slate-700 font-semibold"
+                title={slot.class}
+              >
+                {classCodes.slice(0, 3).map((code, idx) => (
+                  <div
+                    key={idx}
+                    className="flex items-center gap-1 text-[8.5px] sm:text-[9px] leading-tight"
+                  >
+                    <span className="w-1.5 h-1.5 rounded-full bg-purple-400 shrink-0" />
+                    <span className="truncate">{code}</span>
+                  </div>
+                ))}
+                {classCodes.length > 3 && (
+                  <span className="text-[7.5px] text-purple-600 font-bold leading-none pl-2.5">
+                    +{classCodes.length - 3} lagi
+                  </span>
+                )}
+              </div>
+            ) : (
+              <div className="flex items-center gap-1 min-w-0">
+                <MarqueeText
+                  text={spanHours === 1 ? cleanClassCodes : slot.class}
+                  hoverText={slot.class}
+                  isParentHovered={isHovered}
+                  prefixIcon={
+                    <svg
+                      className="w-3 h-3 shrink-0 text-slate-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                      />
+                    </svg>
+                  }
+                  className="text-[9px] sm:text-[9.5px] font-semibold text-slate-700"
+                />
+              </div>
+            )
           ) : (
             <span className="text-slate-400 italic text-[8.5px]">Sesi Khas</span>
           )
         ) : (
           slot.teacher && (
-            <MarqueeText
-              text={slot.teacher}
-              isParentHovered={isHovered}
-              prefixIcon={
-                <svg
-                  className="w-3 h-3 shrink-0 text-slate-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                  />
-                </svg>
-              }
-              className="text-[9px] sm:text-[9.5px] font-semibold text-slate-700"
-            />
+            <div className="flex items-center gap-1 min-w-0">
+              <MarqueeText
+                text={slot.teacher}
+                isParentHovered={isHovered}
+                prefixIcon={
+                  <svg
+                    className="w-3 h-3 shrink-0 text-slate-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                    />
+                  </svg>
+                }
+                className="text-[9px] sm:text-[9.5px] font-semibold text-slate-700"
+              />
+            </div>
           )
         )}
       </div>
