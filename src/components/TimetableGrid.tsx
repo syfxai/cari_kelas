@@ -43,6 +43,19 @@ const timeToMinutes = (timeStr: string): number => {
   return hour * 60 + (m || 0);
 };
 
+export function formatCleanClassCodes(raw?: string): string {
+  if (!raw) return '';
+  const parts = raw.split(',').map(s => s.trim()).filter(Boolean);
+  const codes = parts.map(p => {
+    const match = p.match(/^([A-Z0-9]+)/i);
+    return match ? match[1] : p;
+  });
+
+  if (codes.length <= 1) return codes[0] || '';
+  if (codes.length === 2) return `${codes[0]} & ${codes[1]}`;
+  return `${codes.slice(0, -1).join(', ')} & ${codes[codes.length - 1]}`;
+}
+
 // Reusable Cell Card with Apple-grade 3D depth and Marquee Hover
 function SlotCard({
   slot,
@@ -57,6 +70,18 @@ function SlotCard({
 }) {
   const [isHovered, setIsHovered] = useState(false);
   const roomBadge = parseRoomBadge(slot.classroom);
+
+  const classList = (slot.class || '').split(',').map(s => s.trim()).filter(Boolean);
+  const isMultiClass = classList.length > 1;
+  const cleanClassCodes = formatCleanClassCodes(slot.class);
+
+  // Directly display clean class codes (e.g. "DIM0301, DIM0302") for multi-class slots or 1-hour slots.
+  // Full details (section & intake) are revealed on hover marquee and interactive modal.
+  const staticClassDisplay = isMultiClass
+    ? cleanClassCodes
+    : spanHours === 1
+    ? cleanClassCodes
+    : slot.class;
 
   return (
     <div
@@ -79,7 +104,7 @@ function SlotCard({
         transformOrigin: 'center bottom',
       }}
     >
-      {/* Top Row: Subject Title with Marquee Effect + Duration Pill */}
+      {/* Top Row: Subject Title with Marquee Effect + Duration Pill & Combined Class Pill */}
       <div className="flex items-start justify-between gap-1 min-w-0">
         <div className="min-w-0 flex-1">
           <MarqueeText
@@ -88,11 +113,21 @@ function SlotCard({
             className="font-bold text-slate-950 text-[10px] sm:text-[11px] leading-snug"
           />
         </div>
-        {spanHours > 1 && (
-          <span className="shrink-0 text-[8.5px] font-extrabold px-1.5 py-0.5 rounded bg-amber-50 text-amber-700 shadow-2xs leading-none">
-            {spanHours}J
-          </span>
-        )}
+        <div className="flex items-center gap-1 shrink-0">
+          {isMultiClass && (
+            <span
+              className="text-[8.5px] font-extrabold px-1.5 py-0.5 rounded bg-purple-50 text-purple-700 shadow-2xs leading-none"
+              title={`${classList.length} Kelas Gabungan: ${cleanClassCodes}`}
+            >
+              {classList.length}K
+            </span>
+          )}
+          {spanHours > 1 && (
+            <span className="text-[8.5px] font-extrabold px-1.5 py-0.5 rounded bg-amber-50 text-amber-700 shadow-2xs leading-none">
+              {spanHours}J
+            </span>
+          )}
+        </div>
       </div>
 
       {/* Middle Row: Room / Location Badge */}
@@ -119,7 +154,8 @@ function SlotCard({
         {viewType === 'teacher' ? (
           slot.class ? (
             <MarqueeText
-              text={slot.class}
+              text={staticClassDisplay}
+              hoverText={slot.class}
               isParentHovered={isHovered}
               prefixIcon={
                 <svg
@@ -136,7 +172,9 @@ function SlotCard({
                   />
                 </svg>
               }
-              className="text-[9px] sm:text-[9.5px] font-semibold text-slate-700"
+              className={`${
+                classList.length >= 3 ? 'text-[8.5px] sm:text-[9px]' : 'text-[9px] sm:text-[9.5px]'
+              } font-semibold text-slate-700`}
             />
           ) : (
             <span className="text-slate-400 italic text-[8.5px]">Sesi Khas</span>
@@ -509,19 +547,43 @@ export default function TimetableGrid({
                     alt=""
                     className="w-4 h-4 object-contain shrink-0"
                   />
-                  <span>{activeSlot.classroom || 'Tiada Bilik Ditetapkan'}</span>
+                  <span>
+                    {activeSlot.classroom?.toUpperCase().includes('ONLINE')
+                      ? 'Online (Kelas Maya)'
+                      : activeSlot.classroom || 'Tiada Bilik Ditetapkan'}
+                  </span>
                 </div>
                 <div className="text-[10px] text-slate-500 font-medium">
                   {parseRoomBadge(activeSlot.classroom).categoryLabel}
                 </div>
               </div>
 
-              <div className="p-3 bg-slate-50 rounded-2xl space-y-1 shadow-2xs">
-                <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                  Kelas / Seksyen
+              <div className="p-3 bg-slate-50 rounded-2xl space-y-1.5 shadow-2xs">
+                <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center justify-between">
+                  <span>Kelas / Seksyen</span>
+                  {activeSlot.class && activeSlot.class.includes(',') && (
+                    <span className="text-[9px] font-bold text-purple-600 bg-purple-50 px-1.5 py-0.5 rounded">
+                      Kelas Gabungan
+                    </span>
+                  )}
                 </div>
-                <div className="font-bold text-slate-900 truncate">
-                  {activeSlot.class || '—'}
+                <div className="font-bold text-slate-900 text-xs">
+                  {activeSlot.class ? (
+                    activeSlot.class.includes(',') ? (
+                      <div className="space-y-1 pt-0.5">
+                        {activeSlot.class.split(',').map((cls, idx) => (
+                          <div key={idx} className="flex items-center gap-1.5">
+                            <span className="w-1.5 h-1.5 rounded-full bg-purple-500 shrink-0" />
+                            <span className="break-words">{cls.trim()}</span>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="break-words">{activeSlot.class}</div>
+                    )
+                  ) : (
+                    '—'
+                  )}
                 </div>
                 <div className="text-[10px] text-slate-500 font-medium">
                   Kumpulan Pelajar

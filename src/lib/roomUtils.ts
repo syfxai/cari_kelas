@@ -84,10 +84,10 @@ export function parseRoomBadge(roomName?: string): RoomBadgeInfo {
   // 4. Online
   if (upper.includes('ONLINE')) {
     return {
-      code: name,
-      fullName: `Atas Talian (${name})`,
+      code: 'Online',
+      fullName: 'Kelas Maya (Online)',
       category: 'online',
-      categoryLabel: 'Atas Talian',
+      categoryLabel: 'Kelas Maya (Online)',
       bgClass: 'bg-sky-50',
       textClass: 'text-sky-700',
       borderClass: 'shadow-2xs',

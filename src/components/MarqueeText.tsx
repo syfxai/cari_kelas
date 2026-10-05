@@ -4,6 +4,7 @@ import React, { useRef, useState, useEffect, useCallback } from 'react';
 
 interface MarqueeTextProps {
   text: string;
+  hoverText?: string;
   className?: string;
   isParentHovered?: boolean;
   prefixIcon?: React.ReactNode;
@@ -11,21 +12,26 @@ interface MarqueeTextProps {
 
 export default function MarqueeText({
   text,
+  hoverText,
   className = '',
   isParentHovered = false,
   prefixIcon,
 }: MarqueeTextProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLSpanElement>(null);
+  const hoverMeasureRef = useRef<HTMLSpanElement>(null);
   const [overflowDistance, setOverflowDistance] = useState(0);
   const [isSelfHovered, setIsSelfHovered] = useState(false);
 
   const measure = useCallback(() => {
-    if (containerRef.current && contentRef.current) {
+    if (containerRef.current) {
       const containerWidth = containerRef.current.clientWidth;
-      const contentWidth = contentRef.current.scrollWidth;
-      const diff = contentWidth - containerWidth;
-      setOverflowDistance(diff > 3 ? diff : 0);
+      const targetElement = hoverMeasureRef.current || contentRef.current;
+      if (targetElement) {
+        const contentWidth = targetElement.scrollWidth;
+        const diff = contentWidth - containerWidth;
+        setOverflowDistance(diff > 3 ? diff : 0);
+      }
     }
   }, []);
 
@@ -44,9 +50,11 @@ export default function MarqueeText({
       window.removeEventListener('resize', handleResize);
       observer?.disconnect();
     };
-  }, [text, measure]);
+  }, [text, hoverText, measure]);
 
-  const isActive = (isParentHovered || isSelfHovered) && overflowDistance > 0;
+  const isHovered = isParentHovered || isSelfHovered;
+  const isActive = isHovered && overflowDistance > 0;
+  const currentText = isHovered && hoverText ? hoverText : text;
 
   // Calm, steady reading duration: minimum 4.5s, scalable for longer text
   const duration = Math.max(4.5, Math.min(8.5, 3.5 + overflowDistance * 0.05));
@@ -67,7 +75,7 @@ export default function MarqueeText({
         setTimeout(() => setIsSelfHovered(false), Math.round(duration * 1000));
       }}
       className={`overflow-hidden whitespace-nowrap relative max-w-full flex items-center ${className}`}
-      title={text}
+      title={hoverText || text}
     >
       {prefixIcon && <span className="shrink-0 mr-1">{prefixIcon}</span>}
       <div className="overflow-hidden w-full relative">
@@ -85,8 +93,17 @@ export default function MarqueeText({
             } as React.CSSProperties
           }
         >
-          {text}
+          {currentText}
         </span>
+        {hoverText && hoverText !== text && (
+          <span
+            ref={hoverMeasureRef}
+            aria-hidden="true"
+            className="invisible absolute top-0 left-0 whitespace-nowrap pointer-events-none select-none"
+          >
+            {hoverText}
+          </span>
+        )}
       </div>
     </div>
   );
