@@ -72,60 +72,54 @@ export default function Home() {
         <div className="absolute -top-24 -right-24 w-80 h-80 bg-[#3f8ceb]/10 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute -bottom-24 -left-24 w-80 h-80 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
 
-        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-8">
-          <div className="max-w-2xl space-y-4">
-            <div className="flex flex-wrap items-center gap-2.5">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white text-slate-800 text-xs font-semibold shadow-2xs">
-                <span className="w-2 h-2 rounded-full bg-[#3f8ceb] animate-pulse" />
-                <span>Sistem Cari Kelas Pintar • KPTM Ipoh</span>
-              </div>
-
-              <Link
-                href="/changelog"
-                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 hover:bg-white text-slate-600 hover:text-slate-950 text-xs font-medium border border-slate-200/80 shadow-2xs transition-all group cursor-pointer"
-              >
-                <span className="px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700 text-[10px] font-bold">v1.4.0</span>
-                <span>Apa yang baharu?</span>
-                <span className="group-hover:translate-x-0.5 transition-transform text-slate-400">→</span>
-              </Link>
+        <div className="relative z-10 max-w-3xl space-y-4">
+          <div className="flex flex-wrap items-center gap-2.5">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white text-slate-800 text-xs font-semibold shadow-2xs">
+              <span className="w-2 h-2 rounded-full bg-[#3f8ceb] animate-pulse" />
+              <span>Sistem Cari Kelas Pintar • KPTM Ipoh</span>
             </div>
 
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 leading-tight">
-              Cari Kelas Ganti & Bilik Kosong{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#3f8ceb] via-sky-500 to-blue-600">
-                Pantas & Tepat
-              </span>
-            </h1>
-
-            <p className="text-sm sm:text-base text-slate-500 leading-relaxed max-w-xl">
-              Semak slot waktu lapang pensyarah dan pelajar secara serentak dalam jadual matriks mingguan 5 Hari × 10 Waktu, lengkap dengan ketersediaan bilik fizikal.
-            </p>
-
-            <div className="pt-2 flex flex-wrap items-center gap-3">
-              <Link
-                href="/teachers"
-                className="h-10 px-5 bg-gradient-to-r from-[#3f8ceb] to-[#2575dc] hover:from-[#3280e2] hover:to-[#1e66c6] text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-sky-500/20 flex items-center gap-2 cursor-pointer hover:scale-[1.02]"
-              >
-                <span>1. Jadual Pensyarah</span>
-                <span>→</span>
-              </Link>
-              <Link
-                href="/replacement"
-                className="h-10 px-4 bg-white hover:bg-slate-50 text-slate-800 rounded-xl text-xs font-semibold transition-all shadow-2xs flex items-center gap-1.5 cursor-pointer"
-              >
-                <span>2. Cari Kelas Ganti</span>
-              </Link>
-              <Link
-                href="/rooms"
-                className="h-10 px-4 bg-white hover:bg-slate-50 text-slate-700 rounded-xl text-xs font-semibold transition-all shadow-2xs flex items-center gap-1.5 cursor-pointer"
-              >
-                <span>Semak Bilik Kosong</span>
-              </Link>
-            </div>
+            <Link
+              href="/changelog"
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 hover:bg-white text-slate-600 hover:text-slate-950 text-xs font-medium border border-slate-200/80 shadow-2xs transition-all group cursor-pointer"
+            >
+              <span className="px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700 text-[10px] font-bold">v1.4.0</span>
+              <span>Apa yang baharu?</span>
+              <span className="group-hover:translate-x-0.5 transition-transform text-slate-400">→</span>
+            </Link>
           </div>
 
-          {/* Right Side: Attractive CTA Card */}
-          <div className="shrink-0 flex justify-start lg:justify-end">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 leading-tight">
+            Cari Kelas Ganti & Bilik Kosong{' '}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#3f8ceb] via-sky-500 to-blue-600">
+              Pantas & Tepat
+            </span>
+          </h1>
+
+          <p className="text-sm sm:text-base text-slate-500 leading-relaxed max-w-2xl">
+            Semak slot waktu lapang pensyarah dan pelajar secara serentak dalam jadual matriks mingguan 5 Hari × 10 Waktu, lengkap dengan ketersediaan bilik fizikal.
+          </p>
+
+          <div className="pt-2 flex flex-wrap items-center gap-3">
+            <Link
+              href="/teachers"
+              className="h-10 px-5 bg-gradient-to-r from-[#3f8ceb] to-[#2575dc] hover:from-[#3280e2] hover:to-[#1e66c6] text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-sky-500/20 flex items-center gap-2 cursor-pointer hover:scale-[1.02]"
+            >
+              <span>1. Jadual Pensyarah</span>
+              <span>→</span>
+            </Link>
+            <Link
+              href="/replacement"
+              className="h-10 px-4 bg-white hover:bg-slate-50 text-slate-800 rounded-xl text-xs font-semibold transition-all shadow-2xs flex items-center gap-1.5 cursor-pointer"
+            >
+              <span>2. Cari Kelas Ganti</span>
+            </Link>
+            <Link
+              href="/rooms"
+              className="h-10 px-4 bg-white hover:bg-slate-50 text-slate-700 rounded-xl text-xs font-semibold transition-all shadow-2xs flex items-center gap-1.5 cursor-pointer"
+            >
+              <span>Semak Bilik Kosong</span>
+            </Link>
             <PwaInstallButton />
           </div>
         </div>

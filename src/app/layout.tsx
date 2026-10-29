@@ -46,6 +46,20 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ms" className={`${inter.variable} h-full antialiased`}>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.__deferredPwaPrompt = null;
+              window.addEventListener('beforeinstallprompt', function(e) {
+                e.preventDefault();
+                window.__deferredPwaPrompt = e;
+                window.dispatchEvent(new Event('pwa-prompt-ready'));
+              });
+            `,
+          }}
+        />
+      </head>
       <body className="min-h-full flex flex-col font-[family-name:var(--font-inter)] bg-[#F4F6F9]">
         <PwaRegister />
         <AppShell>{children}</AppShell>
