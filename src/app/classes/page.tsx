@@ -7,12 +7,12 @@ import ScrapeButton from '@/components/ScrapeButton';
 import type { ClassData } from '@/lib/types';
 
 const SAMPLE_POPULAR_CLASSES = [
-  'DIA0301 (SEC 40)',
-  'DDM0601 (SEC 19)',
-  'DDM0602 (SEC 20)',
-  'DIM0301 (SEC 34)',
-  'DCW0401 (SEC 3)',
-  'DIT0401 (SEC 46)',
+  'DTE0101 - Oct (SEC 1)',
+  'DIM0301 - Jul (SEC 52)',
+  'DDB0101 - Oct (SEC 1)',
+  'DDM0101 - Oct (SEC 1)',
+  'DIA0301 - Jul (SEC 40)',
+  'DGD0101 - Oct (SEC 1)',
 ];
 
 export default function ClassesPage() {
@@ -120,7 +120,7 @@ export default function ClassesPage() {
             <div className="space-y-1.5">
               <label className="text-xs font-semibold text-slate-800">Cari Kod Kelas</label>
               <SearchBar
-                placeholder="Taip kod kelas (cth: DIA0301, DDM0601, DIT0401)..."
+                placeholder="Taip kod kelas (cth: DTE0101, DIM0301, DDB0101)..."
                 suggestions={classes.map(c => c.name)}
                 onSearch={handleSearch}
                 loading={loading}

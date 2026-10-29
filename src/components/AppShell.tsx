@@ -4,8 +4,6 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import SemesterSelector from './SemesterSelector';
-import SemesterArchiveBanner from './SemesterArchiveBanner';
 import SurveyToast from './SurveyToast';
 
 interface AppShellProps {
@@ -112,19 +110,7 @@ export default function AppShell({ children }: AppShellProps) {
             );
           })}
         </nav>
-
-        {/* Semester Selector & Status Pill */}
-        <div className="flex items-center gap-2">
-          <SemesterSelector />
-          <div className="hidden lg:flex items-center gap-2 text-xs font-semibold text-slate-600 bg-white px-3 py-1.5 rounded-full shadow-2xs border border-slate-100">
-            <span className="w-2 h-2 rounded-full bg-emerald-500" />
-            <span>KPTM Ipoh</span>
-          </div>
-        </div>
       </header>
-
-      {/* Archive Warning Banner */}
-      <SemesterArchiveBanner />
 
       {/* Mobile Drawer Overlay & Pinned Navigation (Fixed on viewport right below header) */}
       {mobileMenuOpen && (
@@ -133,11 +119,7 @@ export default function AppShell({ children }: AppShellProps) {
             className="fixed inset-0 top-[57px] bg-slate-900/40 backdrop-blur-xs z-30 md:hidden animate-in fade-in duration-200"
             onClick={() => setMobileMenuOpen(false)}
           />
-          <div className="fixed inset-x-0 top-[57px] z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/90 px-4 py-3.5 space-y-2.5 shadow-2xl md:hidden animate-in slide-in-from-top-2 duration-200 max-h-[calc(100vh-65px)] overflow-y-auto">
-            <div className="pb-2.5 border-b border-slate-100 flex items-center justify-between">
-              <span className="text-xs font-bold text-slate-500">Pilih Semester:</span>
-              <SemesterSelector />
-            </div>
+          <div className="fixed inset-x-0 top-[57px] z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/90 px-4 py-3.5 space-y-2 shadow-2xl md:hidden animate-in slide-in-from-top-2 duration-200 max-h-[calc(100vh-65px)] overflow-y-auto">
             <div className="space-y-1">
               {navigation.map((item) => {
                 const isActive = pathname === item.href;

@@ -3,6 +3,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import TimetableGrid from '@/components/TimetableGrid';
+import SemesterSelector from '@/components/SemesterSelector';
+import SemesterArchiveBanner from '@/components/SemesterArchiveBanner';
 import type { TeacherData } from '@/lib/types';
 
 export default function TeachersPage() {
@@ -209,6 +211,20 @@ export default function TeachersPage() {
             </>
           )}
         </button>
+
+        {/* 2 Butang Pilihan: Pemilih Semester & Status KPTM Ipoh */}
+        <div className="flex items-center gap-2 shrink-0">
+          <SemesterSelector />
+          <div className="flex items-center gap-2 text-xs font-semibold text-slate-600 bg-white px-3 py-2 rounded-full shadow-2xs border border-slate-200/90">
+            <span className="w-2 h-2 rounded-full bg-emerald-500" />
+            <span>KPTM Ipoh</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Makluman Mod Arkib Semester Lepas */}
+      <div className="rounded-2xl overflow-hidden">
+        <SemesterArchiveBanner />
       </div>
 
       {/* Teacher List Grid - Gaya Apple Minimal */}

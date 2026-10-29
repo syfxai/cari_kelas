@@ -51,10 +51,10 @@ export default function Home() {
       title: 'Jadual Kelas',
       href: '/classes',
       description: 'Semak jadual waktu subjek, kod pensyarah, dan lokasi bilik untuk setiap kumpulan kelas diploma.',
-      tag: '80+ Kumpulan Kelas',
+      tag: '115 Kumpulan Kelas',
       tagColor: 'bg-slate-100 text-slate-800',
       highlights: [
-        'Sokongan kelas DIA, DDM, DIM, DIT, DCW',
+        'Sokongan kelas DTE, DIM, DDB, DDM, DIA, DGD',
         'Paparan grid 10 waktu yang seragam',
         'Pintasan pantas kod kelas aktif',
       ],
