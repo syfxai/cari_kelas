@@ -46,70 +46,72 @@ export default function AppShell({ children }: AppShellProps) {
   return (
     <div className="min-h-screen bg-[#F8FAFC] text-slate-900 flex flex-col">
       {/* Minimal Top Header - Gaya Apple Minimal */}
-      <header className="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-slate-100 px-4 sm:px-8 py-3.5 flex items-center justify-between print:hidden">
-        <div className="flex items-center gap-4">
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2 -ml-2 rounded-xl text-slate-600 hover:text-slate-950 hover:bg-slate-100 md:hidden transition-colors"
-            aria-label="Toggle Menu"
-          >
-            {mobileMenuOpen ? (
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            ) : (
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
-            )}
-          </button>
+      <header className="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-slate-100 print:hidden">
+        <div className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="p-2 -ml-2 rounded-xl text-slate-600 hover:text-slate-950 hover:bg-slate-100 md:hidden transition-colors"
+              aria-label="Toggle Menu"
+            >
+              {mobileMenuOpen ? (
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              ) : (
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              )}
+            </button>
 
-          <Link href="/" className="flex items-center gap-2.5 group">
-            <Image
-              src="/icon.png"
-              alt="Logo Cari Kelas"
-              width={34}
-              height={34}
-              className="w-8 h-8 rounded-xl shadow-xs object-cover hover:scale-105 transition-transform duration-200"
-              priority
-            />
-            <div className="flex items-baseline gap-2">
-              <span className="text-base font-extrabold tracking-tight text-slate-950">
-                CARI KELAS
-              </span>
-              <span className="hidden sm:inline text-xs text-slate-400 font-normal">
-                • Cari kelas ganti dengan mudah
-              </span>
-            </div>
-          </Link>
+            <Link href="/" className="flex items-center gap-2.5 group">
+              <Image
+                src="/icon.png"
+                alt="Logo Cari Kelas"
+                width={34}
+                height={34}
+                className="w-8 h-8 rounded-xl shadow-xs object-cover hover:scale-105 transition-transform duration-200"
+                priority
+              />
+              <div className="flex items-baseline gap-2">
+                <span className="text-base font-extrabold tracking-tight text-slate-950">
+                  CARI KELAS
+                </span>
+                <span className="hidden sm:inline text-xs text-slate-400 font-normal">
+                  • Cari kelas ganti dengan mudah
+                </span>
+              </div>
+            </Link>
+          </div>
+
+          {/* Desktop Navigation Links */}
+          <nav className="hidden md:flex items-center gap-1">
+            {navigation.map((item) => {
+              const isActive = pathname === item.href;
+              return (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors flex items-center gap-1.5 ${
+                    isActive
+                      ? 'bg-slate-900 text-white font-semibold'
+                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                  }`}
+                >
+                  <span>{item.name}</span>
+                  {item.badge && (
+                    <span className={`text-[10px] px-2 py-0.5 rounded-md font-semibold tracking-normal ${
+                      isActive ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-700 border border-slate-200/60'
+                    }`}>
+                      {item.badge}
+                    </span>
+                  )}
+                </Link>
+              );
+            })}
+          </nav>
         </div>
-
-        {/* Desktop Navigation Links */}
-        <nav className="hidden md:flex items-center gap-1">
-          {navigation.map((item) => {
-            const isActive = pathname === item.href;
-            return (
-              <Link
-                key={item.name}
-                href={item.href}
-                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors flex items-center gap-1.5 ${
-                  isActive
-                    ? 'bg-slate-900 text-white font-semibold'
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
-                }`}
-              >
-                <span>{item.name}</span>
-                {item.badge && (
-                  <span className={`text-[10px] px-2 py-0.5 rounded-md font-semibold tracking-normal ${
-                    isActive ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-700 border border-slate-200/60'
-                  }`}>
-                    {item.badge}
-                  </span>
-                )}
-              </Link>
-            );
-          })}
-        </nav>
       </header>
 
       {/* Mobile Drawer Overlay & Pinned Navigation (Fixed on viewport right below header) */}
