@@ -74,12 +74,12 @@ export default function AppShell({ children }: AppShellProps) {
                 className="w-8 h-8 rounded-xl shadow-xs object-cover hover:scale-105 transition-transform duration-200"
                 priority
               />
-              <div className="flex items-baseline gap-2">
-                <span className="text-base font-extrabold tracking-tight text-slate-950">
+              <div className="flex flex-col justify-center">
+                <span className="text-sm sm:text-base font-extrabold tracking-tight text-slate-950 leading-none">
                   CARI KELAS
                 </span>
-                <span className="hidden sm:inline text-xs text-slate-400 font-normal">
-                  • Cari kelas ganti dengan mudah
+                <span className="hidden sm:inline text-[10px] text-slate-400 font-medium tracking-tight mt-1 leading-none">
+                  Cari kelas ganti dengan mudah
                 </span>
               </div>
             </Link>
