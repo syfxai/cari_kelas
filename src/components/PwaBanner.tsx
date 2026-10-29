@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
+import Image from 'next/image';
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -13,7 +14,7 @@ declare global {
   }
 }
 
-export default function PwaInstallButton(): React.ReactElement | null {
+export default function PwaBanner(): React.ReactElement | null {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [isInstalled, setIsInstalled] = useState(false);
   const [isIos, setIsIos] = useState(false);
@@ -61,7 +62,9 @@ export default function PwaInstallButton(): React.ReactElement | null {
     const handleAppInstalled = () => {
       setIsInstalled(true);
       setDeferredPrompt(null);
-      window.__deferredPwaPrompt = null;
+      if (typeof window !== 'undefined') {
+        window.__deferredPwaPrompt = null;
+      }
     };
 
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
@@ -102,36 +105,81 @@ export default function PwaInstallButton(): React.ReactElement | null {
       return;
     }
 
-    // C. If already installed or browser handled it
+    // C. If already installed
     if (isInstalled) {
       alert('Aplikasi CARI KELAS sedia terpasang pada peranti anda!');
     }
   };
 
-  if (isInstalled) {
-    return (
-      <div className="h-10 px-3.5 bg-emerald-50 text-emerald-800 border border-emerald-200/80 rounded-xl text-xs font-semibold flex items-center gap-2 shadow-2xs">
-        <span className="w-2 h-2 rounded-full bg-emerald-500" />
-        <span>Aplikasi Terpasang ✓</span>
-      </div>
-    );
-  }
-
   return (
     <>
-      <button
-        type="button"
-        onClick={handleInstallClick}
-        className="h-10 px-4 bg-slate-900 hover:bg-slate-800 active:scale-95 text-white rounded-xl text-xs font-bold transition-all shadow-md flex items-center gap-2 cursor-pointer group border border-slate-800 hover:border-slate-700"
-      >
-        <span className="w-6 h-6 rounded-lg bg-white/10 flex items-center justify-center shrink-0 group-hover:bg-[#3f8ceb]/20 transition-colors">
-          <svg className="w-3.5 h-3.5 text-[#3f8ceb]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
-          </svg>
-        </span>
-        <span>Pasang ke Telefon & PC</span>
-        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-      </button>
+      <div className="relative rounded-3xl bg-white border border-slate-200/90 p-6 sm:p-8 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_30px_-4px_rgba(0,0,0,0.07)] transition-all duration-300 overflow-hidden group">
+        {/* Decorative Ambient Background Glow */}
+        <div className="absolute -right-20 -top-20 w-64 h-64 bg-[#3f8ceb]/5 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -left-20 -bottom-20 w-64 h-64 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+          {/* Left Content */}
+          <div className="flex items-start sm:items-center gap-4 sm:gap-5">
+            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-slate-900 p-2 flex items-center justify-center shadow-md shadow-slate-900/10 shrink-0 group-hover:scale-105 transition-transform duration-200">
+              <Image
+                src="/icon.png"
+                alt="Logo CARI KELAS"
+                width={52}
+                height={52}
+                className="rounded-xl object-cover"
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-sky-50 text-[#3f8ceb] text-[10px] sm:text-[11px] font-bold border border-sky-100">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#3f8ceb]" />
+                  <span>Sesuai untuk iPhone, Android & PC</span>
+                </span>
+                {isInstalled && (
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 text-[10px] font-bold border border-emerald-200/70">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                    <span>Terpasang</span>
+                  </span>
+                )}
+              </div>
+
+              <h2 className="text-base sm:text-lg lg:text-xl font-extrabold text-slate-950 tracking-tight">
+                Gunakan CARI KELAS Seperti Aplikasi Sebenar
+              </h2>
+
+              <p className="text-xs sm:text-sm text-slate-500 max-w-xl leading-relaxed">
+                Akses serta-merta dengan 1-ketukan dari skrin utama telefon atau desktop anda tanpa perlu membuka pelayar web setiap kali.
+              </p>
+            </div>
+          </div>
+
+          {/* Right Action Button */}
+          <div className="shrink-0 w-full sm:w-auto">
+            {isInstalled ? (
+              <div className="h-12 px-6 bg-emerald-50 text-emerald-800 border border-emerald-200/80 rounded-2xl text-xs sm:text-sm font-bold flex items-center justify-center gap-2.5 shadow-2xs">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                <span>Aplikasi Sedia Terpasang ✓</span>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={handleInstallClick}
+                className="w-full sm:w-auto h-12 px-7 bg-slate-900 hover:bg-slate-800 active:scale-95 text-white rounded-2xl text-xs sm:text-sm font-extrabold transition-all shadow-md shadow-slate-900/15 flex items-center justify-center gap-3 cursor-pointer group/btn border border-slate-800 hover:border-slate-700"
+              >
+                <span className="w-7 h-7 rounded-xl bg-white/10 flex items-center justify-center shrink-0 group-hover/btn:bg-[#3f8ceb]/20 transition-colors">
+                  <svg className="w-4 h-4 text-[#3f8ceb]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                  </svg>
+                </span>
+                <span>Pasang Aplikasi Sekarang</span>
+                <span className="font-extrabold text-sm group-hover/btn:translate-x-1 transition-transform">→</span>
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
 
       {/* iOS Safari Install Guide Modal */}
       {showIosModal && (

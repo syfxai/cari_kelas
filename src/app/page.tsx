@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import PwaInstallButton from '@/components/PwaInstallButton';
+import PwaBanner from '@/components/PwaBanner';
 
 export default function Home() {
   const features = [
@@ -120,7 +120,6 @@ export default function Home() {
             >
               <span>Semak Bilik Kosong</span>
             </Link>
-            <PwaInstallButton />
           </div>
         </div>
 
@@ -145,7 +144,10 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Feature Navigation Cards Grid - Gaya Apple Minimal */}
+      {/* Prominent App Installation Banner */}
+      <PwaBanner />
+
+      {/* Feature Navigation Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         {features.map(item => (
           <Link
