@@ -23,10 +23,12 @@ export async function POST(request: NextRequest) {
     }
 
     // 2. Native TypeScript execution (Works 100% on Netlify, Vercel & Node.js)
-    const result = calculateReplacementOptions(body);
+    const semester = request.nextUrl.searchParams.get('semester') || request.cookies.get('kptm_semester')?.value || 'current';
+    const result = calculateReplacementOptions(body, semester);
     return NextResponse.json({
       success: true,
       data: result,
+      semester,
     });
   } catch (error) {
     return NextResponse.json(

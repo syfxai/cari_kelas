@@ -8,6 +8,7 @@ const PYTHON_API = process.env.PYTHON_API_URL;
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const name = searchParams.get('name');
+  const semester = searchParams.get('semester') || request.cookies.get('kptm_semester')?.value || 'current';
 
   // 1. If explicit external Python API is configured, try proxying first
   if (PYTHON_API) {
@@ -34,9 +35,9 @@ export async function GET(request: NextRequest) {
   // 2. Native TypeScript execution (Works 100% on Netlify, Vercel & Node.js)
   try {
     if (name) {
-      const cls = getClassByName(name);
+      const cls = getClassByName(name, semester);
       if (cls) {
-        return NextResponse.json({ success: true, data: cls });
+        return NextResponse.json({ success: true, data: cls, semester });
       }
       return NextResponse.json(
         { success: false, message: `Kelas '${name}' tidak dijumpai.` },
@@ -44,8 +45,8 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const classes = getClassesList();
-    return NextResponse.json({ success: true, data: classes });
+    const classes = getClassesList(semester);
+    return NextResponse.json({ success: true, data: classes, semester });
   } catch (error) {
     return NextResponse.json(
       { success: false, message: error instanceof Error ? error.message : 'Ralat memproses data kelas.' },

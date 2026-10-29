@@ -10,6 +10,7 @@ export async function GET(request: NextRequest) {
   const day = searchParams.get('day');
   const time = searchParams.get('time');
   const timeEnd = searchParams.get('time_end') || searchParams.get('timeEnd') || '';
+  const semester = searchParams.get('semester') || request.cookies.get('kptm_semester')?.value || 'current';
 
   // 1. If explicit external Python API is configured, try proxying first
   if (PYTHON_API) {
@@ -43,15 +44,16 @@ export async function GET(request: NextRequest) {
   // 2. Native TypeScript execution (Works 100% on Netlify, Vercel & Node.js)
   try {
     if (day && time) {
-      const data = getAvailableRooms(day, time, timeEnd);
+      const data = getAvailableRooms(day, time, timeEnd, semester);
       return NextResponse.json({
         success: true,
         data,
+        semester,
       });
     }
 
-    const rooms = getRoomsList();
-    return NextResponse.json({ success: true, data: rooms });
+    const rooms = getRoomsList(semester);
+    return NextResponse.json({ success: true, data: rooms, semester });
   } catch (error) {
     return NextResponse.json(
       { success: false, message: error instanceof Error ? error.message : 'Ralat memproses ketersediaan bilik.' },

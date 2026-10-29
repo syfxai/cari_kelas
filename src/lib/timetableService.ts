@@ -1,4 +1,6 @@
 import rawTimetableData from '@/data/timetable.json';
+import rawPreviousTimetableData from '@/data/timetable_previous.json';
+import semestersConfigData from '@/data/semesters.json';
 import type {
   ClassData,
   MultiPlannedSlotItem,
@@ -8,6 +10,8 @@ import type {
   RoomAvailabilityResponse,
   RoomOption,
   RoomStatusItem,
+  SemesterInfo,
+  SemestersConfig,
   SmartSuggestionOption,
   TeacherData,
   TimetableSlot,
@@ -149,13 +153,23 @@ export function roomCategory(name: string): string {
   return 'other';
 }
 
-// Cached normalized database in memory
-let cachedDb: RawTimetableDatabase | null = null;
+// Cached normalized database in memory for each semester
+const cachedDbs: Record<string, RawTimetableDatabase> = {};
 
-export function getTimetableDb(): RawTimetableDatabase {
-  if (cachedDb) return cachedDb;
+export function getSemestersConfig(): SemestersConfig {
+  return semestersConfigData as SemestersConfig;
+}
 
-  const raw = rawTimetableData as unknown as RawTimetableDatabase;
+export function getSemesterMetadata(semesterId: string = 'current'): SemesterInfo | undefined {
+  const config = getSemestersConfig();
+  return config.semesters.find(s => s.id === semesterId);
+}
+
+export function getTimetableDb(semesterId: string = 'current'): RawTimetableDatabase {
+  const semKey = semesterId === 'previous' ? 'previous' : 'current';
+  if (cachedDbs[semKey]) return cachedDbs[semKey];
+
+  const raw = (semKey === 'previous' ? rawPreviousTimetableData : rawTimetableData) as unknown as RawTimetableDatabase;
 
   const normalizeSlots = (slots: TimetableSlot[]) =>
     (slots || []).map(slot => ({
@@ -179,17 +193,21 @@ export function getTimetableDb(): RawTimetableDatabase {
     slots: normalizeSlots(r.slots),
   }));
 
-  cachedDb = {
+  cachedDbs[semKey] = {
     ...raw,
     teachers,
     classes,
     rooms,
   };
 
-  return cachedDb;
+  return cachedDbs[semKey];
 }
 
-export function setTimetableDb(data: RawTimetableDatabase): RawTimetableDatabase {
+export function setTimetableDb(
+  data: RawTimetableDatabase,
+  semesterId: string = 'current'
+): RawTimetableDatabase {
+  const semKey = semesterId === 'previous' ? 'previous' : 'current';
   const normalizeSlots = (slots: TimetableSlot[]) =>
     (slots || []).map(slot => ({
       ...slot,
@@ -212,24 +230,24 @@ export function setTimetableDb(data: RawTimetableDatabase): RawTimetableDatabase
     slots: normalizeSlots(r.slots),
   }));
 
-  cachedDb = {
+  cachedDbs[semKey] = {
     ...data,
     teachers,
     classes,
     rooms,
   };
 
-  return cachedDb;
+  return cachedDbs[semKey];
 }
 
 // 1. Get Teacher List & Single Teacher
-export function getTeachersList(): string[] {
-  const db = getTimetableDb();
+export function getTeachersList(semesterId: string = 'current'): string[] {
+  const db = getTimetableDb(semesterId);
   return db.teachers.map(t => t.name).sort();
 }
 
-export function getTeacherByName(name: string): TeacherData | null {
-  const db = getTimetableDb();
+export function getTeacherByName(name: string, semesterId: string = 'current'): TeacherData | null {
+  const db = getTimetableDb(semesterId);
   const lower = name.toLowerCase().trim();
   const exact = db.teachers.find(t => t.name.toLowerCase() === lower);
   if (exact) return exact;
@@ -237,13 +255,13 @@ export function getTeacherByName(name: string): TeacherData | null {
 }
 
 // 2. Get Class List & Single Class
-export function getClassesList(): { id: string; name: string }[] {
-  const db = getTimetableDb();
+export function getClassesList(semesterId: string = 'current'): { id: string; name: string }[] {
+  const db = getTimetableDb(semesterId);
   return db.classes.map(c => ({ id: c.name, name: c.name })).sort((a, b) => a.name.localeCompare(b.name));
 }
 
-export function getClassByName(name: string): ClassData | null {
-  const db = getTimetableDb();
+export function getClassByName(name: string, semesterId: string = 'current'): ClassData | null {
+  const db = getTimetableDb(semesterId);
   const lower = name.toLowerCase().trim();
   const exact = db.classes.find(c => c.name.toLowerCase() === lower);
   if (exact) return exact;
@@ -251,17 +269,18 @@ export function getClassByName(name: string): ClassData | null {
 }
 
 // 3. Get Room List & Available Rooms for Time Slot
-export function getRoomsList(): { id: string; name: string }[] {
-  const db = getTimetableDb();
+export function getRoomsList(semesterId: string = 'current'): { id: string; name: string }[] {
+  const db = getTimetableDb(semesterId);
   return db.rooms.map(r => ({ id: r.name, name: r.name })).sort((a, b) => a.name.localeCompare(b.name));
 }
 
 export function getAvailableRooms(
   day: string,
   time: string,
-  timeEnd?: string
+  timeEnd?: string,
+  semesterId: string = 'current'
 ): RoomAvailabilityResponse {
-  const db = getTimetableDb();
+  const db = getTimetableDb(semesterId);
 
   const normTime = normalizeTimeStr(time);
   let normTimeEnd = normalizeTimeStr(timeEnd || '');
@@ -335,8 +354,11 @@ export interface ReplacementQueryRequest {
   classroom?: string;
 }
 
-export function calculateReplacementOptions(req: ReplacementQueryRequest): ReplacementResult {
-  const db = getTimetableDb();
+export function calculateReplacementOptions(
+  req: ReplacementQueryRequest,
+  semesterId: string = 'current'
+): ReplacementResult {
+  const db = getTimetableDb(semesterId);
 
   const teacher = db.teachers.find(t => t.name.toLowerCase() === req.teacher.toLowerCase());
   const selectedClass = db.classes.find(c => c.name.toLowerCase() === req.class_name.toLowerCase());
@@ -507,9 +529,10 @@ export function calculateReplacementOptions(req: ReplacementQueryRequest): Repla
 // 5. Calculate Smart Multi-Class Replacement Distribution
 export function calculateSmartMultiDistribution(
   teacherName: string,
-  selectedSlots: TimetableSlot[]
+  selectedSlots: TimetableSlot[],
+  semesterId: string = 'current'
 ): Record<string, MultiPlannedSlotItem> {
-  const db = getTimetableDb();
+  const db = getTimetableDb(semesterId);
   const teacher = db.teachers.find(t => t.name.toLowerCase() === teacherName.toLowerCase().trim());
   if (!teacher || selectedSlots.length === 0) return {};
 

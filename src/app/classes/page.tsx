@@ -36,7 +36,19 @@ export default function ClassesPage() {
     }
   };
 
-  useEffect(() => { fetchClasses(); }, []);
+  useEffect(() => {
+    fetchClasses();
+
+    const handleGlobalUpdate = () => {
+      fetchClasses();
+    };
+    window.addEventListener('timetable-updated', handleGlobalUpdate);
+    window.addEventListener('semester-changed', handleGlobalUpdate);
+    return () => {
+      window.removeEventListener('timetable-updated', handleGlobalUpdate);
+      window.removeEventListener('semester-changed', handleGlobalUpdate);
+    };
+  }, []);
 
   const handleSearch = async (name: string) => {
     setLoading(true);
@@ -45,6 +57,9 @@ export default function ClassesPage() {
       const data = await res.json();
       if (data.success) {
         setSelected(data.data);
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(new CustomEvent('kptm-user-interacted', { detail: { action: 'class_selected' } }));
+        }
       } else {
         setSelected(null);
         alert(data.message || 'Kelas tidak dijumpai');

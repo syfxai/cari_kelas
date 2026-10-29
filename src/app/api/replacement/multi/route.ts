@@ -1,4 +1,4 @@
-﻿import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { calculateSmartMultiDistribution } from '@/lib/timetableService';
 import type { TimetableSlot } from '@/lib/types';
 
@@ -14,11 +14,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const distribution = calculateSmartMultiDistribution(teacher, slots);
+    const semester = request.nextUrl.searchParams.get('semester') || request.cookies.get('kptm_semester')?.value || 'current';
+    const distribution = calculateSmartMultiDistribution(teacher, slots, semester);
 
     return NextResponse.json({
       success: true,
       data: distribution,
+      semester,
     });
   } catch (error) {
     return NextResponse.json(

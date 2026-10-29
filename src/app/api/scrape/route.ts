@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { getTimetableDb, setTimetableDb } from '@/lib/timetableService';
 import { fetchLiveEdupageTimetable } from '@/lib/edupageScraper';
 
@@ -8,7 +8,7 @@ export async function POST() {
   try {
     // 1. Ambil data jadual langsung dari EduPage (mengambil masa ~1-2 saat)
     const freshDb = await fetchLiveEdupageTimetable();
-    setTimetableDb(freshDb);
+    setTimetableDb(freshDb, 'current');
 
     return NextResponse.json({
       success: true,
@@ -19,13 +19,14 @@ export async function POST() {
         rooms: freshDb.rooms.length,
         totalSlots: freshDb.totalSlots,
         scrapedAt: freshDb.scrapedAt,
+        semester: 'current',
       },
     });
   } catch (error) {
     console.error('Ralat semasa kemas kini live EduPage:', error);
 
     // 2. Fallback kepada pangkalan data sedia ada jika internet/EduPage terputus
-    const currentDb = getTimetableDb();
+    const currentDb = getTimetableDb('current');
     return NextResponse.json({
       success: false,
       message: error instanceof Error
@@ -37,14 +38,16 @@ export async function POST() {
         rooms: currentDb.rooms.length,
         totalSlots: currentDb.totalSlots,
         scrapedAt: currentDb.scrapedAt,
+        semester: 'current',
       },
     });
   }
 }
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    const db = getTimetableDb();
+    const semester = request.nextUrl.searchParams.get('semester') || request.cookies.get('kptm_semester')?.value || 'current';
+    const db = getTimetableDb(semester);
     return NextResponse.json({
       success: true,
       data: {
@@ -53,6 +56,7 @@ export async function GET() {
         rooms: db.rooms.length,
         totalSlots: db.totalSlots,
         scrapedAt: db.scrapedAt,
+        semester,
       },
     });
   } catch (error) {

@@ -123,6 +123,23 @@ export interface SmartSuggestionOption {
   availableRooms: RoomOption[];
 }
 
+export interface SemesterInfo {
+  id: string;
+  name: string;
+  shortName: string;
+  academicYear: string;
+  session: string;
+  version: string;
+  isCurrent: boolean;
+  updatedAt: string;
+  description?: string;
+}
+
+export interface SemestersConfig {
+  activeSemester: string;
+  semesters: SemesterInfo[];
+}
+
 export interface MultiPlannedSlotItem {
   key: string;
   sourceSlot: TimetableSlot;

@@ -1,0 +1,27 @@
+{
+  "activeSemester": "current",
+  "semesters": [
+    {
+      "id": "current",
+      "name": "Semester Semasa (Sesi 2 2025/2026)",
+      "shortName": "Sem Semasa",
+      "academicYear": "2025/2026",
+      "session": "Sesi 2",
+      "version": "Rev 1 (Aktif)",
+      "isCurrent": true,
+      "updatedAt": "2026-10-04T23:19:27.697805",
+      "description": "Jadual waktu pengkuliahan aktif bagi sesi semasa."
+    },
+    {
+      "id": "previous",
+      "name": "Semester Lepas (Sesi 1 2025/2026)",
+      "shortName": "Sem Lepas",
+      "academicYear": "2025/2026",
+      "session": "Sesi 1",
+      "version": "Arkib Selesai",
+      "isCurrent": false,
+      "updatedAt": "2026-05-15T10:00:00.000000",
+      "description": "Salinan arkib jadual waktu semester terdahulu untuk semakan rujukan."
+    }
+  ]
+}

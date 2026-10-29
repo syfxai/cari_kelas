@@ -4,6 +4,9 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
+import SemesterSelector from './SemesterSelector';
+import SemesterArchiveBanner from './SemesterArchiveBanner';
+import SurveyToast from './SurveyToast';
 
 interface AppShellProps {
   children: React.ReactNode;
@@ -36,6 +39,10 @@ export default function AppShell({ children }: AppShellProps) {
       name: 'Jadual Kelas',
       href: '/classes',
     },
+    {
+      name: 'Changelog',
+      href: '/changelog',
+    },
   ];
 
   return (
@@ -45,12 +52,18 @@ export default function AppShell({ children }: AppShellProps) {
         <div className="flex items-center gap-4">
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2 -ml-2 rounded-xl text-slate-600 hover:text-slate-950 hover:bg-slate-100 md:hidden"
+            className="p-2 -ml-2 rounded-xl text-slate-600 hover:text-slate-950 hover:bg-slate-100 md:hidden transition-colors"
             aria-label="Toggle Menu"
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
+            {mobileMenuOpen ? (
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            ) : (
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            )}
           </button>
 
           <Link href="/" className="flex items-center gap-2.5 group">
@@ -100,34 +113,59 @@ export default function AppShell({ children }: AppShellProps) {
           })}
         </nav>
 
-        {/* Status Pill */}
-        <div className="flex items-center gap-2 text-xs font-semibold text-slate-600 bg-white px-3 py-1 rounded-full shadow-2xs">
-          <span className="w-2 h-2 rounded-full bg-emerald-500" />
-          <span className="hidden sm:inline">KPTM Ipoh</span>
+        {/* Semester Selector & Status Pill */}
+        <div className="flex items-center gap-2">
+          <SemesterSelector />
+          <div className="hidden lg:flex items-center gap-2 text-xs font-semibold text-slate-600 bg-white px-3 py-1.5 rounded-full shadow-2xs border border-slate-100">
+            <span className="w-2 h-2 rounded-full bg-emerald-500" />
+            <span>KPTM Ipoh</span>
+          </div>
         </div>
       </header>
 
-      {/* Mobile Drawer */}
+      {/* Archive Warning Banner */}
+      <SemesterArchiveBanner />
+
+      {/* Mobile Drawer Overlay & Pinned Navigation (Fixed on viewport right below header) */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-white border-b border-slate-100 px-4 py-3 space-y-1 shadow-md">
-          {navigation.map((item) => {
-            const isActive = pathname === item.href;
-            return (
-              <Link
-                key={item.name}
-                href={item.href}
-                onClick={() => setMobileMenuOpen(false)}
-                className={`block px-3.5 py-2 rounded-xl text-xs font-semibold ${
-                  isActive
-                    ? 'bg-slate-900 text-white'
-                    : 'text-slate-700 hover:bg-slate-100'
-                }`}
-              >
-                {item.name}
-              </Link>
-            );
-          })}
-        </div>
+        <>
+          <div
+            className="fixed inset-0 top-[57px] bg-slate-900/40 backdrop-blur-xs z-30 md:hidden animate-in fade-in duration-200"
+            onClick={() => setMobileMenuOpen(false)}
+          />
+          <div className="fixed inset-x-0 top-[57px] z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/90 px-4 py-3.5 space-y-2.5 shadow-2xl md:hidden animate-in slide-in-from-top-2 duration-200 max-h-[calc(100vh-65px)] overflow-y-auto">
+            <div className="pb-2.5 border-b border-slate-100 flex items-center justify-between">
+              <span className="text-xs font-bold text-slate-500">Pilih Semester:</span>
+              <SemesterSelector />
+            </div>
+            <div className="space-y-1">
+              {navigation.map((item) => {
+                const isActive = pathname === item.href;
+                return (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-colors ${
+                      isActive
+                        ? 'bg-slate-900 text-white font-bold'
+                        : 'text-slate-700 hover:bg-slate-100'
+                    }`}
+                  >
+                    <span>{item.name}</span>
+                    {item.badge && (
+                      <span className={`text-[10px] px-2 py-0.5 rounded-md font-semibold ${
+                        isActive ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-700 border border-slate-200/60'
+                      }`}>
+                        {item.badge}
+                      </span>
+                    )}
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        </>
       )}
 
       {/* Main Content Area */}
@@ -137,19 +175,27 @@ export default function AppShell({ children }: AppShellProps) {
 
       {/* Minimal Footer */}
       <footer className="border-t border-slate-100 bg-white py-6 px-4 text-center text-xs text-slate-400 flex flex-col sm:flex-row items-center justify-center gap-2 print:hidden">
-        <Image
-          src="/icon.png"
-          alt="Logo Cari Kelas"
-          width={20}
-          height={20}
-          className="w-5 h-5 rounded-lg object-cover shadow-2xs"
-        />
-        <span className="font-bold text-slate-900">CARI KELAS</span>
+        <div className="flex items-center gap-2">
+          <Image
+            src="/icon.png"
+            alt="Logo Cari Kelas"
+            width={20}
+            height={20}
+            className="w-5 h-5 rounded-lg object-cover shadow-2xs"
+          />
+          <span className="font-bold text-slate-900">CARI KELAS</span>
+        </div>
         <span className="hidden sm:inline">•</span>
         <span>Kolej Poly-Tech MARA Ipoh</span>
         <span className="hidden sm:inline">•</span>
         <span className="text-slate-600 font-medium">by Muhammad Syafiq Haron</span>
+        <span className="hidden sm:inline">•</span>
+        <Link href="/changelog" className="text-slate-500 hover:text-slate-900 font-semibold underline underline-offset-4 transition-colors">
+          Changelog
+        </Link>
       </footer>
+      {/* Feedback Survey Floating Toast */}
+      <SurveyToast />
     </div>
   );
 }

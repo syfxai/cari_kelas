@@ -163,11 +163,22 @@ export default function RoomsPage() {
     [selectedDay, timeStart, timeEnd]
   );
 
-  // Auto-fetch once initialized
+  // Auto-fetch once initialized & listen for global semester/timetable updates
   useEffect(() => {
     if (initialized) {
       fetchAvailability();
     }
+
+    const handleGlobalUpdate = () => {
+      fetchAvailability();
+    };
+    window.addEventListener('timetable-updated', handleGlobalUpdate);
+    window.addEventListener('semester-changed', handleGlobalUpdate);
+
+    return () => {
+      window.removeEventListener('timetable-updated', handleGlobalUpdate);
+      window.removeEventListener('semester-changed', handleGlobalUpdate);
+    };
   }, [initialized, fetchAvailability]);
 
   // Handle Day Change

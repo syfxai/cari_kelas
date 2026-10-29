@@ -202,8 +202,17 @@ export default function ReplacementPage() {
 
     initializeData();
 
+    const handleGlobalUpdate = () => {
+      initializeData();
+    };
+
+    window.addEventListener('timetable-updated', handleGlobalUpdate);
+    window.addEventListener('semester-changed', handleGlobalUpdate);
+
     return () => {
       isMounted = false;
+      window.removeEventListener('timetable-updated', handleGlobalUpdate);
+      window.removeEventListener('semester-changed', handleGlobalUpdate);
     };
   }, []);
 
@@ -515,6 +524,9 @@ export default function ReplacementPage() {
 
     navigator.clipboard.writeText(text);
     setCopiedSuccess(true);
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('kptm-usage-success', { detail: { type: 'single_memo_copied' } }));
+    }
     setTimeout(() => {
       setCopiedSuccess(false);
     }, 2000);
@@ -567,16 +579,21 @@ export default function ReplacementPage() {
         return copy;
       });
     } else {
+      const nextKeys = [...selectedMultiKeys, key];
+      setSelectedMultiKeys(nextKeys);
       const currentSelectedSlots = allTeacherSlots.filter(s => {
         const k = `${s.day}-${s.time}-${s.timeEnd}-${s.subject}-${s.class}`;
-        return selectedMultiKeys.includes(k);
+        return nextKeys.includes(k);
       });
-      const newSelectedSlots = [...currentSelectedSlots, slot];
-      applySmartDistribution(newSelectedSlots);
+      applySmartDistribution(currentSelectedSlots);
     }
   };
 
   const selectAllTeacherSlots = () => {
+    const allKeys = allTeacherSlots.map(
+      s => `${s.day}-${s.time}-${s.timeEnd}-${s.subject}-${s.class}`
+    );
+    setSelectedMultiKeys(allKeys);
     applySmartDistribution(allTeacherSlots);
   };
 
@@ -858,6 +875,9 @@ export default function ReplacementPage() {
 
     navigator.clipboard.writeText(lines.filter(Boolean).join('\n'));
     setCopiedSuccess(true);
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('kptm-usage-success', { detail: { type: 'multi_memo_copied' } }));
+    }
     setTimeout(() => setCopiedSuccess(false), 2500);
   };
 
@@ -1530,7 +1550,7 @@ export default function ReplacementPage() {
                 <table className="w-full table-fixed text-left text-xs border-collapse">
                   <thead>
                     <tr className="bg-slate-50 border-b border-slate-100 text-slate-700 font-bold">
-                      <th className="py-3 px-3 w-10 text-center">
+                      <th className="py-3 px-3 w-12 text-center">
                         <input
                           type="checkbox"
                           checked={allTeacherSlots.length > 0 && selectedMultiKeys.length === allTeacherSlots.length}
@@ -1541,7 +1561,7 @@ export default function ReplacementPage() {
                               clearAllMultiSelections();
                             }
                           }}
-                          className="w-4 h-4 rounded text-[#3f8ceb] focus:ring-0 cursor-pointer"
+                          className="w-5 h-5 rounded-md text-[#3f8ceb] focus:ring-0 cursor-pointer"
                           title="Pilih Semua"
                         />
                       </th>
@@ -1564,18 +1584,18 @@ export default function ReplacementPage() {
                         <tr
                           key={key}
                           onClick={() => toggleMultiSlotSelection(slot)}
-                          className={`cursor-pointer transition-colors select-none ${
+                          className={`cursor-pointer transition-colors select-none active:bg-sky-100/60 ${
                             isChecked
-                              ? 'bg-sky-50/50 hover:bg-sky-50/80'
+                              ? 'bg-sky-50/70 hover:bg-sky-50/90'
                               : 'bg-white hover:bg-slate-50'
                           }`}
                         >
-                          <td className="py-3.5 px-4 text-center" onClick={(e) => e.stopPropagation()}>
+                          <td className="py-3.5 px-3 text-center pointer-events-none">
                             <input
                               type="checkbox"
                               checked={isChecked}
-                              onChange={() => toggleMultiSlotSelection(slot)}
-                              className="w-4 h-4 rounded text-[#3f8ceb] focus:ring-0 cursor-pointer"
+                              readOnly
+                              className="w-5 h-5 rounded-md text-[#3f8ceb] focus:ring-0 cursor-pointer"
                             />
                           </td>
                           <td className="py-3.5 px-4 font-bold text-slate-900">

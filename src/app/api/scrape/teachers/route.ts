@@ -1,17 +1,19 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { getTeachersList, getTimetableDb, setTimetableDb } from '@/lib/timetableService';
 import { fetchLiveEdupageTimetable } from '@/lib/edupageScraper';
 
 export const dynamic = 'force-dynamic';
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    const db = getTimetableDb();
-    const teachers = getTeachersList();
+    const semester = request.nextUrl.searchParams.get('semester') || request.cookies.get('kptm_semester')?.value || 'current';
+    const db = getTimetableDb(semester);
+    const teachers = getTeachersList(semester);
     return NextResponse.json({
       success: true,
       data: teachers,
       scrapedAt: db.scrapedAt,
+      semester,
     });
   } catch (error) {
     return NextResponse.json(

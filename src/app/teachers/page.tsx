@@ -82,6 +82,9 @@ export default function TeachersPage() {
       const data = await res.json();
       if (data.success) {
         setSelected(data.data);
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(new CustomEvent('kptm-user-interacted', { detail: { action: 'teacher_selected' } }));
+        }
       } else {
         alert(data.message || 'Jadual tidak dijumpai');
       }
