@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -78,27 +79,55 @@ export default function PwaInstallButton(): React.ReactElement | null {
     setShowGenericModal(true);
   };
 
-  if (isInstalled) {
-    return (
-      <div className="inline-flex items-center gap-2 px-3.5 py-2 bg-emerald-50 text-emerald-800 border border-emerald-200/80 rounded-2xl text-xs font-semibold shadow-2xs">
-        <span className="w-2 h-2 rounded-full bg-emerald-500" />
-        <span>Aplikasi Sedia Terpasang ✓</span>
-      </div>
-    );
-  }
-
   return (
     <>
-      <button
-        type="button"
-        onClick={handleInstallClick}
-        className="inline-flex items-center gap-2 px-4 py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-2xl text-xs font-bold transition-all shadow-md hover:scale-[1.02] active:scale-95 cursor-pointer group"
-      >
-        <svg className="w-4 h-4 text-[#3f8ceb] group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-        </svg>
-        <span>Pasang Aplikasi (PWA)</span>
-      </button>
+      <div className="rounded-3xl bg-white/95 backdrop-blur-md border border-slate-200/90 p-5 shadow-sm hover:shadow-md transition-all max-w-sm w-full space-y-3.5 group">
+        <div className="flex items-center gap-3.5">
+          <div className="w-11 h-11 rounded-2xl bg-slate-900 p-1 flex items-center justify-center shadow-xs shrink-0 group-hover:scale-105 transition-transform">
+            <Image
+              src="/icon.png"
+              alt="Logo Cari Kelas"
+              width={36}
+              height={36}
+              className="rounded-xl object-cover"
+            />
+          </div>
+          <div className="min-w-0">
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-extrabold text-slate-950 tracking-tight">
+                Pasang ke Skrin Utama
+              </span>
+              <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
+            </div>
+            <p className="text-[11px] text-slate-500 leading-snug truncate">
+              {isInstalled
+                ? 'Aplikasi siap digunakan pada peranti anda'
+                : 'Akses 1-ketukan tanpa perlu buka pelayar'}
+            </p>
+          </div>
+        </div>
+
+        {isInstalled ? (
+          <div className="w-full py-2 px-3 bg-emerald-50 text-emerald-800 border border-emerald-200/80 rounded-2xl text-xs font-bold text-center flex items-center justify-center gap-1.5 shadow-2xs">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+            <span>Aplikasi Sedia Terpasang ✓</span>
+          </div>
+        ) : (
+          <button
+            type="button"
+            onClick={handleInstallClick}
+            className="w-full h-10 px-4 bg-gradient-to-r from-[#3f8ceb] to-[#2575dc] hover:from-[#3280e2] hover:to-[#1e66c6] active:scale-[0.98] text-white rounded-2xl text-xs font-bold transition-all shadow-md shadow-sky-500/20 flex items-center justify-between cursor-pointer"
+          >
+            <span className="flex items-center gap-2">
+              <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+              </svg>
+              <span>Pasang Aplikasi Sekarang</span>
+            </span>
+            <span className="font-extrabold text-sm leading-none">→</span>
+          </button>
+        )}
+      </div>
 
       {/* iOS Safari Install Guide Modal */}
       {showIosModal && (
@@ -120,16 +149,17 @@ export default function PwaInstallButton(): React.ReactElement | null {
                   <span>Apple iOS Safari</span>
                 </div>
                 <h3 className="text-base font-extrabold text-slate-950">
-                  Pasang Pada iPhone / iPad
+                  Pasang Pada iPhone & iPad
                 </h3>
-                <p className="text-xs text-slate-500">
-                  Sistem Apple iOS memerlukan langkah manual di bawah untuk menambah ikon ke skrin utama:
+                <p className="text-xs text-slate-500 leading-relaxed">
+                  Sistem Apple iOS memerlukan langkah mudah di bawah untuk menambah ikon terus ke skrin utama:
                 </p>
               </div>
               <button
                 type="button"
                 onClick={() => setShowIosModal(false)}
-                className="p-1.5 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
+                className="p-1.5 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
+                aria-label="Tutup"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -170,7 +200,7 @@ export default function PwaInstallButton(): React.ReactElement | null {
                 <div className="text-xs space-y-0.5">
                   <span className="font-bold text-slate-900 block">Tekan &ldquo;Tambah&rdquo; (Add)</span>
                   <p className="text-slate-600 leading-relaxed">
-                    Tekan <strong>&ldquo;Add&rdquo;</strong> di sudut kanan atas. Ikon CARI KELAS kini siap sedia di skrin utama telefon anda!
+                    Tekan <strong>&ldquo;Add&rdquo;</strong> di sudut kanan atas. Selesai! CARI KELAS kini terpasang sebagai aplikasi di skrin telefon anda.
                   </p>
                 </div>
               </div>
@@ -207,13 +237,14 @@ export default function PwaInstallButton(): React.ReactElement | null {
                   Pemasangan Aplikasi Desktop / Android
                 </h3>
                 <p className="text-xs text-slate-500">
-                  Panduan pemasangan PWA pada pelayar Chrome & Edge
+                  Panduan pemasangan aplikasi pada pelayar Chrome & Edge
                 </p>
               </div>
               <button
                 type="button"
                 onClick={() => setShowGenericModal(false)}
-                className="p-1.5 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
+                className="p-1.5 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
+                aria-label="Tutup"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -223,7 +254,7 @@ export default function PwaInstallButton(): React.ReactElement | null {
 
             <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 text-xs text-slate-700 leading-relaxed space-y-2">
               <p>
-                Untuk pelayar komputer (Chrome / Edge), anda boleh terus klik ikon <strong>Pasang (Install App / 🖥️)</strong> yang terletak di bahagian kanan bar alamat URL pelayar anda.
+                Untuk pelayar komputer (Chrome / Edge), anda boleh terus klik ikon <strong>Pasang Aplikasi (🖥️)</strong> yang terletak di bahagian kanan bar alamat URL pelayar anda.
               </p>
               <p className="text-slate-500 text-[11px]">
                 Di telefon pintar Android, anda juga boleh menekan menu <strong>Tiga Titik (⋮)</strong> di sudut atas pelayar dan memilih <strong>&ldquo;Install App&rdquo; / &ldquo;Add to Home Screen&rdquo;</strong>.
