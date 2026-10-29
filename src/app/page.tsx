@@ -72,9 +72,20 @@ export default function Home() {
         <div className="absolute -bottom-24 -left-24 w-80 h-80 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative z-10 max-w-3xl space-y-4">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white text-slate-800 text-xs font-semibold shadow-2xs">
-            <span className="w-2 h-2 rounded-full bg-[#3f8ceb] animate-pulse" />
-            <span>Sistem Cari Kelas Pintar • KPTM Ipoh</span>
+          <div className="flex flex-wrap items-center gap-2.5">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white text-slate-800 text-xs font-semibold shadow-2xs">
+              <span className="w-2 h-2 rounded-full bg-[#3f8ceb] animate-pulse" />
+              <span>Sistem Cari Kelas Pintar • KPTM Ipoh</span>
+            </div>
+
+            <Link
+              href="/changelog"
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 hover:bg-white text-slate-600 hover:text-slate-950 text-xs font-medium border border-slate-200/80 shadow-2xs transition-all group cursor-pointer"
+            >
+              <span className="px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700 text-[10px] font-bold">v1.4.0</span>
+              <span>Apa yang baharu?</span>
+              <span className="group-hover:translate-x-0.5 transition-transform text-slate-400">→</span>
+            </Link>
           </div>
 
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 leading-tight">
@@ -176,7 +187,7 @@ export default function Home() {
         ))}
       </div>
 
-      {/* System Status Footnote - Gaya Apple Minimal */}
+      {/* System Status Footnote */}
       <div className="bg-white rounded-3xl p-5 sm:p-6 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.04)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-slate-500">
         <div className="flex items-center gap-2.5">
           <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
@@ -184,12 +195,21 @@ export default function Home() {
             <strong className="text-slate-900 font-semibold">EduPage KPTM Ipoh:</strong> Data jadual waktu semester semasa diselaraskan secara langsung.
           </span>
         </div>
-        <Link
-          href="/replacement"
-          className="text-xs font-bold text-[#3f8ceb] hover:underline shrink-0"
-        >
-          Terus ke Carian Kelas Ganti →
-        </Link>
+        <div className="flex items-center gap-4 shrink-0">
+          <Link
+            href="/changelog"
+            className="text-xs font-semibold text-slate-500 hover:text-slate-900 flex items-center gap-1 transition-colors"
+          >
+            <span>Log Versi (v1.4.0)</span>
+            <span>→</span>
+          </Link>
+          <Link
+            href="/replacement"
+            className="text-xs font-bold text-[#3f8ceb] hover:underline"
+          >
+            Terus ke Carian Kelas Ganti →
+          </Link>
+        </div>
       </div>
     </div>
   );

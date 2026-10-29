@@ -6,14 +6,22 @@ interface SearchBarProps {
   placeholder: string;
   suggestions: string[];
   onSearch: (value: string) => void;
+  onClear?: () => void;
   loading?: boolean;
 }
 
-export default function SearchBar({ placeholder, suggestions, onSearch, loading }: SearchBarProps) {
+export default function SearchBar({
+  placeholder,
+  suggestions,
+  onSearch,
+  onClear,
+  loading,
+}: SearchBarProps) {
   const [query, setQuery] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [filteredSuggestions, setFilteredSuggestions] = useState<string[]>([]);
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (query.length > 0) {
@@ -50,6 +58,17 @@ export default function SearchBar({ placeholder, suggestions, onSearch, loading 
     setShowSuggestions(false);
   };
 
+  const handleClear = () => {
+    setQuery('');
+    setShowSuggestions(false);
+    if (onClear) {
+      onClear();
+    }
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  };
+
   return (
     <div ref={wrapperRef} className="relative w-full max-w-md">
       <form onSubmit={handleSubmit} className="flex gap-2">
@@ -60,13 +79,29 @@ export default function SearchBar({ placeholder, suggestions, onSearch, loading 
             </svg>
           </div>
           <input
+            ref={inputRef}
             type="text"
             value={query}
             onChange={e => { setQuery(e.target.value); setShowSuggestions(true); }}
             onFocus={() => setShowSuggestions(true)}
             placeholder={placeholder}
-            className="w-full h-9 pl-9 pr-3 text-xs bg-white border border-slate-200 rounded-lg text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-[#00A3FF] focus:border-[#00A3FF] transition-all"
+            className="w-full h-9 pl-9 pr-8 text-xs bg-white border border-slate-200 rounded-lg text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-[#00A3FF] focus:border-[#00A3FF] transition-all"
           />
+          {query.length > 0 && (
+            <button
+              type="button"
+              onClick={handleClear}
+              className="absolute inset-y-0 right-0 pr-2 flex items-center text-slate-400 hover:text-slate-700 transition-colors cursor-pointer"
+              aria-label="Kosongkan carian"
+              title="Kosongkan carian"
+            >
+              <span className="p-0.5 rounded-full hover:bg-slate-100 flex items-center justify-center">
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </span>
+            </button>
+          )}
           {showSuggestions && filteredSuggestions.length > 0 && (
             <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-slate-200 rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto p-1">
               {filteredSuggestions.map((s, i) => (

@@ -172,8 +172,23 @@ export default function TeachersPage() {
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
             placeholder="Cari nama pensyarah..."
-            className="w-full h-10 pl-10 pr-3.5 text-xs sm:text-sm bg-white rounded-xl text-slate-900 placeholder:text-slate-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#3f8ceb] transition-all"
+            className="w-full h-10 pl-10 pr-9 text-xs sm:text-sm bg-white rounded-xl text-slate-900 placeholder:text-slate-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#3f8ceb] transition-all"
           />
+          {searchQuery.length > 0 && (
+            <button
+              type="button"
+              onClick={() => setSearchQuery('')}
+              className="absolute inset-y-0 right-0 pr-2.5 flex items-center text-slate-400 hover:text-slate-700 transition-colors cursor-pointer"
+              aria-label="Kosongkan carian"
+              title="Kosongkan carian"
+            >
+              <span className="p-1 rounded-full hover:bg-slate-100 flex items-center justify-center">
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </span>
+            </button>
+          )}
           {searchQuery && filteredTeachers.length > 0 && !selected && (
             <div className="absolute top-full left-0 right-0 mt-1.5 bg-white rounded-2xl shadow-xl z-50 max-h-60 overflow-y-auto p-1.5 border border-slate-100">
               {filteredTeachers.map((name, i) => (

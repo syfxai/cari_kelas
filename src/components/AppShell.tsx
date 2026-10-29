@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import SurveyToast from './SurveyToast';
+import LegalModal, { type LegalTab } from './LegalModal';
 
 interface AppShellProps {
   children: React.ReactNode;
@@ -13,6 +14,13 @@ interface AppShellProps {
 export default function AppShell({ children }: AppShellProps) {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [legalModalOpen, setLegalModalOpen] = useState(false);
+  const [legalActiveTab, setLegalActiveTab] = useState<LegalTab>('disclaimer');
+
+  const openLegalModal = (tab: LegalTab) => {
+    setLegalActiveTab(tab);
+    setLegalModalOpen(true);
+  };
 
   const navigation = [
     {
@@ -36,10 +44,6 @@ export default function AppShell({ children }: AppShellProps) {
     {
       name: 'Jadual Kelas',
       href: '/classes',
-    },
-    {
-      name: 'Changelog',
-      href: '/changelog',
     },
   ];
 
@@ -157,27 +161,74 @@ export default function AppShell({ children }: AppShellProps) {
         {children}
       </main>
 
-      {/* Minimal Footer */}
-      <footer className="border-t border-slate-100 bg-white py-6 px-4 text-center text-xs text-slate-400 flex flex-col sm:flex-row items-center justify-center gap-2 print:hidden">
-        <div className="flex items-center gap-2">
-          <Image
-            src="/icon.png"
-            alt="Logo Cari Kelas"
-            width={20}
-            height={20}
-            className="w-5 h-5 rounded-lg object-cover shadow-2xs"
-          />
-          <span className="font-bold text-slate-900">CARI KELAS</span>
+      {/* Greyish Structured Footer with Legal Disclaimer & Terms */}
+      <footer className="border-t border-slate-200/80 bg-slate-100/70 py-8 px-4 text-xs text-slate-500 print:hidden">
+        <div className="max-w-7xl mx-auto space-y-4">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
+              <div className="flex items-center gap-2">
+                <Image
+                  src="/icon.png"
+                  alt="Logo Cari Kelas"
+                  width={20}
+                  height={20}
+                  className="w-5 h-5 rounded-lg object-cover shadow-2xs"
+                />
+                <span className="font-bold text-slate-900">CARI KELAS</span>
+              </div>
+              <span className="hidden sm:inline text-slate-300">•</span>
+              <span>Kolej Poly-Tech MARA Ipoh</span>
+              <span className="hidden sm:inline text-slate-300">•</span>
+              <span className="text-slate-600 font-medium">oleh Muhammad Syafiq Haron</span>
+            </div>
+
+            {/* Quick Links: Changelog, Disclaimer, Terms */}
+            <div className="flex flex-wrap items-center justify-center gap-3 text-xs">
+              <Link
+                href="/changelog"
+                className="text-slate-600 hover:text-slate-950 font-semibold underline underline-offset-4 transition-colors"
+              >
+                Changelog
+              </Link>
+              <span className="text-slate-300">•</span>
+              <button
+                type="button"
+                onClick={() => openLegalModal('disclaimer')}
+                className="text-slate-600 hover:text-slate-950 font-semibold underline underline-offset-4 transition-colors cursor-pointer"
+              >
+                Penafian (Disclaimer)
+              </button>
+              <span className="text-slate-300">•</span>
+              <button
+                type="button"
+                onClick={() => openLegalModal('terms')}
+                className="text-slate-600 hover:text-slate-950 font-semibold underline underline-offset-4 transition-colors cursor-pointer"
+              >
+                Terma & Syarat
+              </button>
+            </div>
+          </div>
+
+          {/* Legal Protection Statement Note */}
+          <div className="pt-3 border-t border-slate-200/60 text-[11px] text-slate-400 leading-relaxed text-center sm:text-left flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <p className="max-w-3xl">
+              <strong>Penafian Undang-Undang:</strong> Sistem ini merupakan inisiatif utiliti pembantu bebas. Segala carian slot bilik dan waktu adalah berpandukan data EduPage semasa. Pembangun tidak bertanggungjawab atas sebarang pertembungan jadual, ketidaktepatan data sumber, atau salah faham. Pengguna diwajibkan mematuhi SOP dan pengesahan rasmi pihak KPTM Ipoh.
+            </p>
+            <span className="shrink-0 text-slate-400">
+              © {new Date().getFullYear()} CARI KELAS
+            </span>
+          </div>
         </div>
-        <span className="hidden sm:inline">•</span>
-        <span>Kolej Poly-Tech MARA Ipoh</span>
-        <span className="hidden sm:inline">•</span>
-        <span className="text-slate-600 font-medium">by Muhammad Syafiq Haron</span>
-        <span className="hidden sm:inline">•</span>
-        <Link href="/changelog" className="text-slate-500 hover:text-slate-900 font-semibold underline underline-offset-4 transition-colors">
-          Changelog
-        </Link>
       </footer>
+
+      {/* Legal Modal Dialog */}
+      <LegalModal
+        isOpen={legalModalOpen}
+        activeTab={legalActiveTab}
+        onClose={() => setLegalModalOpen(false)}
+        onTabChange={setLegalActiveTab}
+      />
+
       {/* Feedback Survey Floating Toast */}
       <SurveyToast />
     </div>

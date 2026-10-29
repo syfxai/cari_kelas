@@ -115,7 +115,7 @@ export default function ClassesPage() {
         </div>
       ) : (
         <div className="space-y-6">
-          {/* Search & Quick Suggestions - Gaya Apple Minimal */}
+          {/* Search & Quick Suggestions */}
           <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.04)] space-y-4">
             <div className="space-y-1.5">
               <label className="text-xs font-semibold text-slate-800">Cari Kod Kelas</label>
@@ -123,6 +123,7 @@ export default function ClassesPage() {
                 placeholder="Taip kod kelas (cth: DTE0101, DIM0301, DDB0101)..."
                 suggestions={classes.map(c => c.name)}
                 onSearch={handleSearch}
+                onClear={() => setSelected(null)}
                 loading={loading}
               />
             </div>

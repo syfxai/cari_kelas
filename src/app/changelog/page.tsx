@@ -22,26 +22,34 @@ const CHANGELOG_DATA: ChangelogEntry[] = [
     badge: 'Versi Terkini',
     badgeColor: 'bg-emerald-50 text-emerald-800 border-emerald-200/80',
     date: 'Oktober 2026',
-    title: 'Seni Bina Dwi-Semester & Kad Maklum Balas Pengguna',
+    title: 'Seni Bina Dwi-Semester, Penyelarasan Reka Letak PC & Borang Maklum Balas',
     summary:
-      'Peningkatan menyeluruh pangkalan data dengan sokongan 2 semester berasingan (Semester Semasa & Semester Lepas), pemilih semester pantas, dan sistem tinjauan mesra pengguna.',
+      'Peningkatan menyeluruh pangkalan data dengan sokongan 2 semester berasingan (Semester Semasa & Semester Lepas), penjajaran grid PC yang seimbang, pemilih semester pantas, dan sistem tinjauan mesra pengguna.',
     categories: [
       {
         name: 'Pangkalan Data & Dwi-Semester',
         items: [
           'Pengenalan struktur arkib dwi-semester: data Semester Semasa (Aktif) dan Semester Lepas (Arkib Rujukan) disimpan berasingan tanpa risiko tertindih.',
           'Logik pintar kemas kini EduPage: pindaan jadual 2–3 kali dalam semester yang sama hanya menyegerak semester semasa tanpa memadamkan backup semester terdahulu.',
-          'Butang Pemilih Semester (Dropdown Pill) di bar atas dengan indikator status neutral Apple Minimal dan sokongan penyimpanan cookie + localStorage.',
+          'Butang Pemilih Semester & status kolej dipindahkan setempat ke halaman Jadual Pensyarah bersebelahan butang Kemaskini EduPage.',
           'Palang amaran moden (Dark Slate) apabila pengguna melihat data arkib semester lepas dengan butang 1-klik untuk kembali ke semester semasa.',
+        ],
+      },
+      {
+        name: 'Reka Letak & Antaramuka PC',
+        items: [
+          'Penyelarasan lebar bar navigasi atas (max-w-7xl) agar sejajar rapi dengan grid kad kandungan utama pada paparan komputer/PC.',
+          'Susunan logo kompak baharu: Kapsyen "Cari kelas ganti dengan mudah" disusun rapi di bawah teks CARI KELAS tanpa mengganggu ketinggian header.',
+          'Kemas kini kod kursus rasmi KPTM Ipoh: Penyeragaman 115 kumpulan kelas mengikut kod sebenar kolej (DTE, DIM, DDB, DDM, DIA, DGD).',
         ],
       },
       {
         name: 'Maklum Balas & UX Mesra Pengguna',
         items: [
-          'Kad jemputan survey Google Form melayang (Floating Toast) di sudut bawah skrin yang tidak menyekat atau menggelapkan skrin.',
+          'Kad jemputan survey Google Form melayang (Floating Toast) di sudut bawah skrin bersama modal tinjauan interaktif terbina dalam aplikasi.',
           'Pencetus penggunaan sebenar (Post-Usage Trigger): hanya muncul selepas pengguna berjaya menyalin memo kelas ganti atau membuat 2 carian aktif.',
           'Variasi ayat bergilir yang mesra, catchy, dan menyentuh emosi penghargaan komuniti KPTM.',
-          'Aturan penyejukan pintar (Snooze Cooldown): tidak muncul lagi jika sudah dijawab atau rehat selama 3 hari jika ditutup.',
+          'Aturan penyejukan pintar (Snooze Cooldown 7 hari) dan pengesahan borang dihantar untuk mengelakkan gangguan.',
         ],
       },
       {
@@ -110,10 +118,10 @@ const CHANGELOG_DATA: ChangelogEntry[] = [
   },
   {
     version: 'v1.1.0',
-    badge: 'Apple Minimal',
+    badge: 'Minimalis Moden',
     badgeColor: 'bg-slate-100 text-slate-800 border-slate-200/80',
     date: 'Pertengahan September 2026',
-    title: 'Transformasi Reka Bentuk Apple Minimalist & Matriks Baharu',
+    title: 'Transformasi Reka Bentuk Minimalis & Matriks Baharu',
     summary:
       'Penyusunan semula keseluruhan estetika antaramuka berpandukan Master Design Guidelines, sistem fon sans-serif moden, dan penamaan bilik rasmi KPTM Ipoh.',
     categories: [
@@ -186,7 +194,7 @@ export default function ChangelogPage(): React.ReactElement {
           </div>
           <div className="p-3 bg-slate-50/80 rounded-2xl border border-slate-100">
             <span className="text-[10px] text-slate-400 font-medium uppercase tracking-wider block">Reka Bentuk</span>
-            <span className="text-sm sm:text-base font-extrabold text-slate-900">Apple Minimal</span>
+            <span className="text-sm sm:text-base font-extrabold text-slate-900">Minimalis Moden</span>
           </div>
           <div className="p-3 bg-slate-50/80 rounded-2xl border border-slate-100">
             <span className="text-[10px] text-slate-400 font-medium uppercase tracking-wider block">Pembangun</span>
