@@ -2019,7 +2019,7 @@ export default function ReplacementPage() {
                                       {startingItem.sourceSlot.class}
                                     </span>
                                     {span > 1 && (
-                                      <span className="text-[8.5px] font-extrabold px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 leading-none">
+                                      <span className="text-[8.5px] font-extrabold px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200/60 leading-none">
                                         {span}J
                                       </span>
                                     )}

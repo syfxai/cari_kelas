@@ -98,9 +98,9 @@ export default function LegalModal({
         <div className="p-6 overflow-y-auto space-y-5 text-xs text-slate-600 leading-relaxed">
           {activeTab === 'disclaimer' ? (
             <>
-              <div className="p-3.5 rounded-2xl bg-amber-50/80 border border-amber-200/60 text-amber-900 space-y-1">
-                <span className="font-bold block text-xs">Peringatan Penting Untuk Semua Pengguna:</span>
-                <p className="text-[11px] leading-relaxed">
+              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/90 text-slate-700 space-y-1">
+                <span className="font-bold block text-xs text-slate-950">Peringatan Penting Untuk Semua Pengguna:</span>
+                <p className="text-[11px] leading-relaxed text-slate-600">
                   Sistem ini adalah inisiatif utiliti pembantu bebas untuk memudahkan carian. Sebarang keputusan rasmi penggantian kelas tetap tertakluk kepada kelulusan dan prosedur pentadbiran Kolej Poly-Tech MARA (KPTM) Ipoh.
                 </p>
               </div>

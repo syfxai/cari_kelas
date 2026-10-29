@@ -124,7 +124,7 @@ function SlotCard({
           />
         </div>
         {spanHours > 1 && (
-          <span className="shrink-0 text-[8.5px] font-extrabold px-1.5 py-0.5 rounded bg-amber-50 text-amber-700 shadow-2xs leading-none">
+          <span className="shrink-0 text-[8.5px] font-extrabold px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200/60 leading-none">
             {spanHours}J
           </span>
         )}
