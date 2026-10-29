@@ -53,6 +53,15 @@ const CHANGELOG_DATA: ChangelogEntry[] = [
         ],
       },
       {
+        name: 'Sokongan PWA (Progressive Web App)',
+        items: [
+          'Sokongan penuh PWA dengan Service Worker (sw.js) dan Web Manifest untuk pemasangan terus ke telefon pintar dan desktop.',
+          'Butang "Pasang Aplikasi (PWA)" di Halaman Utama dengan pengesanan pintar sistem operasi.',
+          'Panduan khas iOS Safari: Penyelesaian interaktif langkah demi langkah menambah ke Skrin Utama bagi pengguna iPhone & iPad.',
+          'Pengesanan status pasang automatik (Standalone Mode) yang memaparkan lencana sedia terpasang.',
+        ],
+      },
+      {
         name: 'Penambahbaikan Mudah Alih (Mobile Fixes)',
         items: [
           'Kotak semakan Mod Lanjutan dioptimumkan dengan maklum balas segera (0ms Instant Tick) pada telefon pintar tanpa perlu menunggu server.',

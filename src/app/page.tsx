@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import PwaInstallButton from '@/components/PwaInstallButton';
 
 export default function Home() {
   const features = [
@@ -119,6 +120,7 @@ export default function Home() {
             >
               <span>Semak Bilik Kosong</span>
             </Link>
+            <PwaInstallButton />
           </div>
         </div>
 
