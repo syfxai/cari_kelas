@@ -14,30 +14,42 @@ declare global {
   }
 }
 
-// 1. Crisp Official Apple SVG
-function AppleIcon({ className = 'w-4 h-4' }: { className?: string }): React.ReactElement {
+// 1. Exact Flaticon Apple Icon (ID 747)
+function AppleIcon({ className = 'w-4 h-4', light = false }: { className?: string; light?: boolean }): React.ReactElement {
   return (
-    <svg className={className} viewBox="0 0 24 24" fill="currentColor" aria-label="Apple">
-      <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.37c.61-.75 1.04-1.8 0.92-2.85-.9.04-2 .6-2.64 1.35-.56.65-.96 1.7-.84 2.73 1.01.08 2-.48 2.56-1.23z" />
-    </svg>
+    <Image
+      src="/icons/apple.png"
+      alt="Apple"
+      width={18}
+      height={18}
+      className={`${className} object-contain shrink-0 ${light ? '' : 'brightness-0 invert'}`}
+    />
   );
 }
 
-// 2. Crisp Official Android Robot SVG
+// 2. Exact Flaticon Android Icon
 function AndroidIcon({ className = 'w-4 h-4' }: { className?: string }): React.ReactElement {
   return (
-    <svg className={className} viewBox="0 0 24 24" fill="currentColor" aria-label="Android">
-      <path d="M17.523 15.341c-.551 0-.999-.448-.999-.999s.448-.999.999-.999c.551 0 .999.448.999.999s-.448.999-.999.999m-11.046 0c-.551 0-.999-.448-.999-.999s.448-.999.999-.999c.551 0 .999.448.999.999s-.448.999-.999.999m11.405-6.02l1.997-3.459a.416.416 0 00-.152-.568.416.416 0 00-.568.152l-2.022 3.503C15.59 8.412 13.853 8.081 12 8.081s-3.59.331-5.137.869L4.841 5.447a.416.416 0 00-.568-.152.416.416 0 00-.152.568l1.997 3.459C2.689 11.187.343 14.659 0 18.761h24c-.343-4.102-2.689-7.574-6.118-9.44" />
-    </svg>
+    <Image
+      src="/icons/android.png"
+      alt="Android"
+      width={18}
+      height={18}
+      className={`${className} object-contain shrink-0`}
+    />
   );
 }
 
-// 3. Crisp Official Windows SVG
+// 3. Exact Flaticon Windows Icon
 function WindowsIcon({ className = 'w-4 h-4' }: { className?: string }): React.ReactElement {
   return (
-    <svg className={className} viewBox="0 0 24 24" fill="currentColor" aria-label="Windows">
-      <path d="M0 0h11v11H0zm13 0h11v11H13zM0 13h11v11H0zm13 13h11V13H13z" />
-    </svg>
+    <Image
+      src="/icons/windows.png"
+      alt="Windows"
+      width={18}
+      height={18}
+      className={`${className} object-contain shrink-0`}
+    />
   );
 }
 
@@ -152,33 +164,6 @@ export default function PwaBanner(): React.ReactElement | null {
         <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
           {/* Left Column: Information & Actions (7 Cols) */}
           <div className="lg:col-span-7 space-y-5">
-            {/* Badges Row */}
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-slate-900 text-white text-[11px] font-bold shadow-xs">
-                {/* Clean Crisp Apple, Android & Windows Icons */}
-                <span className="flex items-center gap-1.5 text-slate-300">
-                  <AppleIcon className="w-3.5 h-3.5 text-white" />
-                  <span className="w-1 h-1 rounded-full bg-slate-600" />
-                  <AndroidIcon className="w-3.5 h-3.5 text-emerald-400" />
-                  <span className="w-1 h-1 rounded-full bg-slate-600" />
-                  <WindowsIcon className="w-3 h-3 text-sky-400" />
-                </span>
-                <span className="text-white/95">Apple iOS • Android • Windows PC</span>
-              </span>
-
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-sky-50 text-[#3f8ceb] text-[11px] font-bold border border-sky-100/80">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#3f8ceb] animate-pulse" />
-                <span>Tanpa Perlu Muat Turun di App Store</span>
-              </span>
-
-              {isInstalled && (
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-800 text-[11px] font-bold border border-emerald-200">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                  <span>Aplikasi Sedia Terpasang ✓</span>
-                </span>
-              )}
-            </div>
-
             {/* Title & Description */}
             <div className="space-y-2">
               <h2 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-slate-950 tracking-tight leading-tight">
@@ -232,9 +217,9 @@ export default function PwaBanner(): React.ReactElement | null {
                 >
                   {/* Clean Crisp Apple, Android & Windows Multi-Platform Pill */}
                   <span className="flex items-center gap-2 px-2.5 py-1.5 rounded-xl bg-white/10 shrink-0 group-hover/btn:bg-white/15 transition-colors">
-                    <AppleIcon className="w-4 h-4 text-white" />
-                    <AndroidIcon className="w-4 h-4 text-emerald-400" />
-                    <WindowsIcon className="w-3.5 h-3.5 text-sky-400" />
+                    <AppleIcon className="w-4 h-4" />
+                    <AndroidIcon className="w-4 h-4" />
+                    <WindowsIcon className="w-4 h-4" />
                   </span>
                   <span>{isIos ? 'Tambah ke Skrin Utama iPhone' : 'Pasang Aplikasi Sekarang'}</span>
                   <span className="font-extrabold text-sm group-hover/btn:translate-x-1 transition-transform text-white/80">→</span>
@@ -247,7 +232,7 @@ export default function PwaBanner(): React.ReactElement | null {
                 onClick={() => setShowIosModal(true)}
                 className="h-12 sm:h-13 px-4 text-xs font-semibold text-slate-700 hover:text-slate-950 bg-slate-100 hover:bg-slate-200/80 rounded-2xl transition-colors cursor-pointer flex items-center justify-center gap-2 border border-slate-200/70"
               >
-                <AppleIcon className="w-4 h-4 text-slate-900" />
+                <AppleIcon className="w-4 h-4" light />
                 <span>Panduan iPhone / iPad</span>
               </button>
             </div>
