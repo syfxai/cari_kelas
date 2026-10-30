@@ -22,9 +22,9 @@ const CHANGELOG_DATA: ChangelogEntry[] = [
     badge: 'Versi Terkini',
     badgeColor: 'bg-emerald-50 text-emerald-800 border-emerald-200/80',
     date: 'Oktober 2026',
-    title: 'Seni Bina Dwi-Semester, Penyelarasan Reka Letak PC & Borang Maklum Balas',
+    title: 'Seni Bina Dwi-Semester, Pemasangan Aplikasi Skrin Utama & Borang Maklum Balas',
     summary:
-      'Peningkatan menyeluruh pangkalan data dengan sokongan 2 semester berasingan (Semester Semasa & Semester Lepas), penjajaran grid PC yang seimbang, pemilih semester pantas, dan sistem tinjauan mesra pengguna.',
+      'Peningkatan menyeluruh pangkalan data dengan sokongan 2 semester berasingan (Semester Semasa & Semester Lepas), pemasangan aplikasi terus ke skrin telefon pintar & desktop bergaya Apple, penjajaran grid PC yang seimbang, dan sistem tinjauan mesra pengguna.',
     categories: [
       {
         name: 'Pangkalan Data & Dwi-Semester',
@@ -33,6 +33,16 @@ const CHANGELOG_DATA: ChangelogEntry[] = [
           'Logik pintar kemas kini EduPage: pindaan jadual 2–3 kali dalam semester yang sama hanya menyegerak semester semasa tanpa memadamkan backup semester terdahulu.',
           'Butang Pemilih Semester & status kolej dipindahkan setempat ke halaman Jadual Pensyarah bersebelahan butang Kemaskini EduPage.',
           'Palang amaran moden (Dark Slate) apabila pengguna melihat data arkib semester lepas dengan butang 1-klik untuk kembali ke semester semasa.',
+        ],
+      },
+      {
+        name: 'Pemasangan Aplikasi ke Telefon & Komputer',
+        items: [
+          'Pemasangan terus ke Skrin Utama (Home Screen) telefon pintar dan komputer tanpa perlu memuat turun fail berat dari kedai aplikasi.',
+          'Banner pameran interaktif baharu dengan mockup telefon pintar gaya Apple (iPhone 16 Pro) yang anggun dan kemas.',
+          'Pintasan pantas 1-klik untuk akses segera, lengkap dengan paparan skrin penuh tanpa bar carian pelayar.',
+          'Panduan khas iOS Safari: Arahan langkah demi langkah interaktif untuk pengguna iPhone dan iPad menambah ikon terus ke Skrin Utama.',
+          'Pengesanan status automatik (Standalone Mode) yang memaparkan lencana apabila aplikasi telah sedia terpasang pada peranti anda.',
         ],
       },
       {
@@ -50,15 +60,6 @@ const CHANGELOG_DATA: ChangelogEntry[] = [
           'Pencetus penggunaan sebenar (Post-Usage Trigger): hanya muncul selepas pengguna berjaya menyalin memo kelas ganti atau membuat 2 carian aktif.',
           'Variasi ayat bergilir yang mesra, catchy, dan menyentuh emosi penghargaan komuniti KPTM.',
           'Aturan penyejukan pintar (Snooze Cooldown 7 hari) dan pengesahan borang dihantar untuk mengelakkan gangguan.',
-        ],
-      },
-      {
-        name: 'Sokongan PWA (Progressive Web App)',
-        items: [
-          'Sokongan penuh PWA dengan Service Worker (sw.js) dan Web Manifest untuk pemasangan terus ke telefon pintar dan desktop.',
-          'Butang "Pasang Aplikasi (PWA)" di Halaman Utama dengan pengesanan pintar sistem operasi.',
-          'Panduan khas iOS Safari: Penyelesaian interaktif langkah demi langkah menambah ke Skrin Utama bagi pengguna iPhone & iPad.',
-          'Pengesanan status pasang automatik (Standalone Mode) yang memaparkan lencana sedia terpasang.',
         ],
       },
       {

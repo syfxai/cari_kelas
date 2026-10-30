@@ -14,6 +14,33 @@ declare global {
   }
 }
 
+// 1. Crisp Official Apple SVG
+function AppleIcon({ className = 'w-4 h-4' }: { className?: string }): React.ReactElement {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor" aria-label="Apple">
+      <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.37c.61-.75 1.04-1.8 0.92-2.85-.9.04-2 .6-2.64 1.35-.56.65-.96 1.7-.84 2.73 1.01.08 2-.48 2.56-1.23z" />
+    </svg>
+  );
+}
+
+// 2. Crisp Official Android Robot SVG
+function AndroidIcon({ className = 'w-4 h-4' }: { className?: string }): React.ReactElement {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor" aria-label="Android">
+      <path d="M17.523 15.341c-.551 0-.999-.448-.999-.999s.448-.999.999-.999c.551 0 .999.448.999.999s-.448.999-.999.999m-11.046 0c-.551 0-.999-.448-.999-.999s.448-.999.999-.999c.551 0 .999.448.999.999s-.448.999-.999.999m11.405-6.02l1.997-3.459a.416.416 0 00-.152-.568.416.416 0 00-.568.152l-2.022 3.503C15.59 8.412 13.853 8.081 12 8.081s-3.59.331-5.137.869L4.841 5.447a.416.416 0 00-.568-.152.416.416 0 00-.152.568l1.997 3.459C2.689 11.187.343 14.659 0 18.761h24c-.343-4.102-2.689-7.574-6.118-9.44" />
+    </svg>
+  );
+}
+
+// 3. Crisp Official Windows SVG
+function WindowsIcon({ className = 'w-4 h-4' }: { className?: string }): React.ReactElement {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor" aria-label="Windows">
+      <path d="M0 0h11v11H0zm13 0h11v11H13zM0 13h11v11H0zm13 13h11V13H13z" />
+    </svg>
+  );
+}
+
 export default function PwaBanner(): React.ReactElement | null {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [isInstalled, setIsInstalled] = useState(false);
@@ -102,7 +129,7 @@ export default function PwaBanner(): React.ReactElement | null {
           window.__deferredPwaPrompt = null;
         }
       } catch (err) {
-        console.warn('PWA install prompt error:', err);
+        console.warn('Install prompt error:', err);
       }
       return;
     }
@@ -127,12 +154,16 @@ export default function PwaBanner(): React.ReactElement | null {
           <div className="lg:col-span-7 space-y-5">
             {/* Badges Row */}
             <div className="flex flex-wrap items-center gap-2">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900 text-white text-[11px] font-bold shadow-xs">
-                {/* Apple Logo SVG */}
-                <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 170 170" aria-hidden="true">
-                  <path d="M150.37 130.25c-2.45 5.66-5.35 10.87-8.71 15.66-4.58 6.53-8.33 11.05-11.22 13.56-4.48 4.12-9.28 6.23-14.42 6.35-3.69 0-8.14-1.05-13.32-3.18-5.19-2.12-9.97-3.17-14.34-3.17-4.58 0-9.49 1.05-14.75 3.17-5.26 2.13-9.5 3.24-12.74 3.35-4.35.13-9.16-1.9-14.42-6.08-3.69-3.08-7.5-7.79-11.44-14.14-5.85-9.39-10.4-20.2-13.65-32.44-3.25-12.24-4.88-23.77-4.88-34.59 0-14.24 3.42-25.7 10.27-34.39 6.84-8.69 15.34-13.12 25.49-13.3 4.9.11 10.05 1.34 15.45 3.69 5.4 2.36 9.4 3.59 11.98 3.69 2.22 0 6.42-1.29 12.6-3.86 6.18-2.58 11.59-3.76 16.24-3.56 10.74.55 19.34 4.34 25.8 11.37-9.44 5.74-14.07 13.88-13.88 24.42.2 8.35 3.42 15.22 9.68 20.61 6.25 5.39 13.79 8.44 22.61 9.15-2.22 6.84-4.84 13.43-7.86 19.78zm-30.83-108.62c0-6.19 2.27-12.01 6.81-17.46 4.54-5.46 10.27-9.17 17.2-11.14.71 5.74-.75 11.52-4.38 17.34-3.63 5.82-9.28 9.53-16.95 11.14-.81.08-1.7.12-2.68.12z" />
-                </svg>
-                <span>Apple iOS & Android PWA</span>
+              <span className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-slate-900 text-white text-[11px] font-bold shadow-xs">
+                {/* Clean Crisp Apple, Android & Windows Icons */}
+                <span className="flex items-center gap-1.5 text-slate-300">
+                  <AppleIcon className="w-3.5 h-3.5 text-white" />
+                  <span className="w-1 h-1 rounded-full bg-slate-600" />
+                  <AndroidIcon className="w-3.5 h-3.5 text-emerald-400" />
+                  <span className="w-1 h-1 rounded-full bg-slate-600" />
+                  <WindowsIcon className="w-3 h-3 text-sky-400" />
+                </span>
+                <span className="text-white/95">Apple iOS • Android • Windows PC</span>
               </span>
 
               <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-sky-50 text-[#3f8ceb] text-[11px] font-bold border border-sky-100/80">
@@ -186,7 +217,7 @@ export default function PwaBanner(): React.ReactElement | null {
               </div>
             </div>
 
-            {/* CTA Button */}
+            {/* CTA Button & Guide */}
             <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
               {isInstalled ? (
                 <div className="h-12 px-6 bg-emerald-50 text-emerald-800 border border-emerald-200/90 rounded-2xl text-xs sm:text-sm font-bold flex items-center justify-center gap-2.5 shadow-2xs">
@@ -197,16 +228,16 @@ export default function PwaBanner(): React.ReactElement | null {
                 <button
                   type="button"
                   onClick={handleInstallClick}
-                  className="h-12 sm:h-13 px-7 bg-slate-950 hover:bg-slate-900 active:scale-95 text-white rounded-2xl text-xs sm:text-sm font-extrabold transition-all shadow-md shadow-slate-950/20 hover:shadow-xl flex items-center justify-center gap-3 cursor-pointer group/btn border border-slate-800 hover:border-slate-700 hover:scale-[1.01]"
+                  className="h-12 sm:h-13 px-6 sm:px-7 bg-slate-950 hover:bg-slate-900 active:scale-95 text-white rounded-2xl text-xs sm:text-sm font-extrabold transition-all shadow-md shadow-slate-950/20 hover:shadow-xl flex items-center justify-center gap-3.5 cursor-pointer group/btn border border-slate-800 hover:border-slate-700 hover:scale-[1.01]"
                 >
-                  <span className="w-7 h-7 rounded-xl bg-white/10 flex items-center justify-center shrink-0 group-hover/btn:bg-[#3f8ceb]/20 transition-colors">
-                    {/* Apple Logo or Device Install Icon */}
-                    <svg className="w-4 h-4 fill-current text-white" viewBox="0 0 170 170" aria-hidden="true">
-                      <path d="M150.37 130.25c-2.45 5.66-5.35 10.87-8.71 15.66-4.58 6.53-8.33 11.05-11.22 13.56-4.48 4.12-9.28 6.23-14.42 6.35-3.69 0-8.14-1.05-13.32-3.18-5.19-2.12-9.97-3.17-14.34-3.17-4.58 0-9.49 1.05-14.75 3.17-5.26 2.13-9.5 3.24-12.74 3.35-4.35.13-9.16-1.9-14.42-6.08-3.69-3.08-7.5-7.79-11.44-14.14-5.85-9.39-10.4-20.2-13.65-32.44-3.25-12.24-4.88-23.77-4.88-34.59 0-14.24 3.42-25.7 10.27-34.39 6.84-8.69 15.34-13.12 25.49-13.3 4.9.11 10.05 1.34 15.45 3.69 5.4 2.36 9.4 3.59 11.98 3.69 2.22 0 6.42-1.29 12.6-3.86 6.18-2.58 11.59-3.76 16.24-3.56 10.74.55 19.34 4.34 25.8 11.37-9.44 5.74-14.07 13.88-13.88 24.42.2 8.35 3.42 15.22 9.68 20.61 6.25 5.39 13.79 8.44 22.61 9.15-2.22 6.84-4.84 13.43-7.86 19.78zm-30.83-108.62c0-6.19 2.27-12.01 6.81-17.46 4.54-5.46 10.27-9.17 17.2-11.14.71 5.74-.75 11.52-4.38 17.34-3.63 5.82-9.28 9.53-16.95 11.14-.81.08-1.7.12-2.68.12z" />
-                    </svg>
+                  {/* Clean Crisp Apple, Android & Windows Multi-Platform Pill */}
+                  <span className="flex items-center gap-2 px-2.5 py-1.5 rounded-xl bg-white/10 shrink-0 group-hover/btn:bg-white/15 transition-colors">
+                    <AppleIcon className="w-4 h-4 text-white" />
+                    <AndroidIcon className="w-4 h-4 text-emerald-400" />
+                    <WindowsIcon className="w-3.5 h-3.5 text-sky-400" />
                   </span>
                   <span>{isIos ? 'Tambah ke Skrin Utama iPhone' : 'Pasang Aplikasi Sekarang'}</span>
-                  <span className="font-extrabold text-sm group-hover/btn:translate-x-1 transition-transform">→</span>
+                  <span className="font-extrabold text-sm group-hover/btn:translate-x-1 transition-transform text-white/80">→</span>
                 </button>
               )}
 
@@ -214,10 +245,10 @@ export default function PwaBanner(): React.ReactElement | null {
               <button
                 type="button"
                 onClick={() => setShowIosModal(true)}
-                className="h-11 px-4 text-xs font-semibold text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200/80 rounded-xl transition-colors cursor-pointer flex items-center justify-center gap-1.5"
+                className="h-12 sm:h-13 px-4 text-xs font-semibold text-slate-700 hover:text-slate-950 bg-slate-100 hover:bg-slate-200/80 rounded-2xl transition-colors cursor-pointer flex items-center justify-center gap-2 border border-slate-200/70"
               >
-                <span>Cara Pasang di iPhone / iPad</span>
-                <span>ⓘ</span>
+                <AppleIcon className="w-4 h-4 text-slate-900" />
+                <span>Panduan iPhone / iPad</span>
               </button>
             </div>
           </div>
@@ -300,7 +331,7 @@ export default function PwaBanner(): React.ReactElement | null {
                         </div>
                       </div>
                       <span className="px-1.5 py-0.5 rounded-full bg-sky-50 text-[#3f8ceb] text-[7.5px] font-bold">
-                        PWA
+                        App
                       </span>
                     </div>
 
@@ -371,9 +402,7 @@ export default function PwaBanner(): React.ReactElement | null {
               <div className="space-y-1">
                 <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-slate-900 text-white text-[10px] font-bold">
                   {/* Apple Logo SVG */}
-                  <svg className="w-3 h-3 fill-current" viewBox="0 0 170 170" aria-hidden="true">
-                    <path d="M150.37 130.25c-2.45 5.66-5.35 10.87-8.71 15.66-4.58 6.53-8.33 11.05-11.22 13.56-4.48 4.12-9.28 6.23-14.42 6.35-3.69 0-8.14-1.05-13.32-3.18-5.19-2.12-9.97-3.17-14.34-3.17-4.58 0-9.49 1.05-14.75 3.17-5.26 2.13-9.5 3.24-12.74 3.35-4.35.13-9.16-1.9-14.42-6.08-3.69-3.08-7.5-7.79-11.44-14.14-5.85-9.39-10.4-20.2-13.65-32.44-3.25-12.24-4.88-23.77-4.88-34.59 0-14.24 3.42-25.7 10.27-34.39 6.84-8.69 15.34-13.12 25.49-13.3 4.9.11 10.05 1.34 15.45 3.69 5.4 2.36 9.4 3.59 11.98 3.69 2.22 0 6.42-1.29 12.6-3.86 6.18-2.58 11.59-3.76 16.24-3.56 10.74.55 19.34 4.34 25.8 11.37-9.44 5.74-14.07 13.88-13.88 24.42.2 8.35 3.42 15.22 9.68 20.61 6.25 5.39 13.79 8.44 22.61 9.15-2.22 6.84-4.84 13.43-7.86 19.78zm-30.83-108.62c0-6.19 2.27-12.01 6.81-17.46 4.54-5.46 10.27-9.17 17.2-11.14.71 5.74-.75 11.52-4.38 17.34-3.63 5.82-9.28 9.53-16.95 11.14-.81.08-1.7.12-2.68.12z" />
-                  </svg>
+                  <AppleIcon className="w-3 h-3 text-white" />
                   <span>Apple iOS Safari</span>
                 </div>
                 <h3 className="text-base sm:text-lg font-extrabold text-slate-950">
