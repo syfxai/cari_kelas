@@ -154,7 +154,7 @@ export default function PwaBanner(): React.ReactElement | null {
                 Pasang CARI KELAS Terus di Skrin Telefon Anda
               </h2>
               <p className="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-xl">
-                Akses pantas dengan 1-ketukan dari skrin utama telefon (Home Screen) seperti aplikasi asli iPhone dan Android. Pantas, ringan, dan paparan skrin penuh tanpa bar carian pelayar.
+                Akses pantas dengan 1-klik dari skrin utama telefon (Home Screen) seperti aplikasi asli iPhone dan Android. Pantas, ringan, dan paparan skrin penuh tanpa bar carian pelayar.
               </p>
             </div>
 
@@ -164,7 +164,7 @@ export default function PwaBanner(): React.ReactElement | null {
                 <div className="w-5 h-5 rounded-lg bg-emerald-500/10 text-emerald-600 flex items-center justify-center shrink-0 font-bold text-xs">
                   ✓
                 </div>
-                <span className="font-medium">1-Ketukan Pantas dari Home Screen</span>
+                <span className="font-medium">1-Klik Pantas dari Home Screen</span>
               </div>
               <div className="flex items-center gap-2 p-2 rounded-xl bg-slate-50/80 border border-slate-100">
                 <div className="w-5 h-5 rounded-lg bg-[#3f8ceb]/10 text-[#3f8ceb] flex items-center justify-center shrink-0 font-bold text-xs">
@@ -232,7 +232,7 @@ export default function PwaBanner(): React.ReactElement | null {
                 </div>
                 <div className="text-[10px] leading-tight">
                   <span className="font-bold text-slate-900 block">Sedia di Home Screen</span>
-                  <span className="text-slate-500 text-[9px]">1-Ketukan Terus Buka</span>
+                  <span className="text-slate-500 text-[9px]">1-Klik Terus Buka</span>
                 </div>
               </div>
 
