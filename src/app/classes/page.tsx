@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import SearchBar from '@/components/SearchBar';
 import TimetableGrid from '@/components/TimetableGrid';
 import ScrapeButton from '@/components/ScrapeButton';
@@ -8,10 +8,10 @@ import type { ClassData } from '@/lib/types';
 
 const SAMPLE_POPULAR_CLASSES = [
   'DTE0101 - Oct (SEC 1)',
-  'DIM0301 - Jul (SEC 52)',
+  'DIM0301  - Oct (SEC 52)',
   'DDB0101 - Oct (SEC 1)',
   'DDM0101 - Oct (SEC 1)',
-  'DIA0301 - Jul (SEC 40)',
+  'DIA0101 - Oct (SEC 34)',
   'DGD0101 - Oct (SEC 1)',
 ];
 
@@ -20,10 +20,22 @@ export default function ClassesPage() {
   const [selected, setSelected] = useState<ClassData | null>(null);
   const [loading, setLoading] = useState(false);
   const [scrapeNeeded, setScrapeNeeded] = useState(false);
+  const selectedClassNameRef = useRef<string | null>(null);
 
-  const fetchClasses = async () => {
+  const getSavedSemester = useCallback((): string => {
+    if (typeof window !== 'undefined') {
+      const local = localStorage.getItem('kptm_semester');
+      if (local) return local;
+      const match = document.cookie.match(/kptm_semester=([^;]+)/);
+      if (match) return decodeURIComponent(match[1]);
+    }
+    return 'current';
+  }, []);
+
+  const fetchClasses = useCallback(async (semOverride?: string) => {
+    const sem = semOverride || getSavedSemester();
     try {
-      const res = await fetch('/api/classes');
+      const res = await fetch(`/api/classes?semester=${encodeURIComponent(sem)}&t=${Date.now()}`);
       const data = await res.json();
       if (data.success) {
         setClasses(data.data);
@@ -34,26 +46,14 @@ export default function ClassesPage() {
     } catch {
       setScrapeNeeded(true);
     }
-  };
+  }, [getSavedSemester]);
 
-  useEffect(() => {
-    fetchClasses();
-
-    const handleGlobalUpdate = () => {
-      fetchClasses();
-    };
-    window.addEventListener('timetable-updated', handleGlobalUpdate);
-    window.addEventListener('semester-changed', handleGlobalUpdate);
-    return () => {
-      window.removeEventListener('timetable-updated', handleGlobalUpdate);
-      window.removeEventListener('semester-changed', handleGlobalUpdate);
-    };
-  }, []);
-
-  const handleSearch = async (name: string) => {
+  const handleSearch = useCallback(async (name: string, semOverride?: string) => {
+    selectedClassNameRef.current = name;
     setLoading(true);
+    const sem = semOverride || getSavedSemester();
     try {
-      const res = await fetch(`/api/classes?name=${encodeURIComponent(name)}`);
+      const res = await fetch(`/api/classes?name=${encodeURIComponent(name)}&semester=${encodeURIComponent(sem)}&t=${Date.now()}`);
       const data = await res.json();
       if (data.success) {
         setSelected(data.data);
@@ -69,7 +69,28 @@ export default function ClassesPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [getSavedSemester]);
+
+  useEffect(() => {
+    const initialSem = getSavedSemester();
+    fetchClasses(initialSem);
+
+    const handleSemesterChange = (e: Event) => {
+      const customEvt = e as CustomEvent<{ semester?: string }>;
+      const nextSem = customEvt.detail?.semester || getSavedSemester();
+      fetchClasses(nextSem);
+      if (selectedClassNameRef.current) {
+        handleSearch(selectedClassNameRef.current, nextSem);
+      }
+    };
+
+    window.addEventListener('timetable-updated', handleSemesterChange);
+    window.addEventListener('semester-changed', handleSemesterChange);
+    return () => {
+      window.removeEventListener('timetable-updated', handleSemesterChange);
+      window.removeEventListener('semester-changed', handleSemesterChange);
+    };
+  }, [fetchClasses, handleSearch, getSavedSemester]);
 
   return (
     <div className="space-y-8 max-w-7xl mx-auto">
@@ -90,7 +111,10 @@ export default function ClassesPage() {
 
         {selected && (
           <button
-            onClick={() => setSelected(null)}
+            onClick={() => {
+              setSelected(null);
+              selectedClassNameRef.current = null;
+            }}
             className="self-start sm:self-auto text-xs font-semibold text-slate-700 hover:text-slate-950 px-4 py-2 rounded-xl border border-slate-900 bg-transparent hover:bg-slate-900 hover:text-white hover:scale-[1.02] transition-all duration-200 cursor-pointer"
           >
             Padam Pilihan

@@ -132,6 +132,10 @@ export function parseEdupageData(raw: EdupageApiResponse): RawTimetableDatabase 
       }
     }
 
+    if (!card.period || String(card.period).trim() === '') {
+      continue;
+    }
+
     const startPeriodNum = parseInt(String(card.period || '1'), 10);
     const duration = parseInt(String(lesson.durationperiods || 1), 10);
     const endPeriodNum = startPeriodNum + duration - 1;

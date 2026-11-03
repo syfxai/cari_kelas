@@ -18,9 +18,43 @@ interface ChangelogEntry {
 
 const CHANGELOG_DATA: ChangelogEntry[] = [
   {
-    version: 'v1.4.0',
+    version: 'v1.5.0',
     badge: 'Versi Terkini',
     badgeColor: 'bg-emerald-50 text-emerald-800 border-emerald-200/80',
+    date: 'November 2026',
+    title: 'Penyegerakan Jadual Sesi Oktober – November 2026 & Pembaikan Pertukaran Semester',
+    summary:
+      'Penyelarasan penuh jadual waktu kepada Sesi Oktober – November 2026 terus daripada portal EduPage, pembaikan enjin scraper terhadap slot draf kosong, dan penambahbaikan fungsi pertukaran semester secara interaktif di skrin.',
+    categories: [
+      {
+        name: 'Penyegerakan Sesi Baharu EduPage',
+        items: [
+          'Pangkalan data aktif kini dikemas kini kepada Sesi Oktober – November 2026 terus dari pelayan EduPage KPTM Ipoh (merangkumi 100 kumpulan kelas dan 100 pensyarah).',
+          'Jadual terdahulu (Sesi Julai – Oktober 2026) dipindahkan sebagai arkib rujukan semester lepas secara automatik.',
+          'Cadangan pintas kod kelas diploma di halaman Jadual Kelas dikemas kini mengikut kumpulan aktif sesi semasa.',
+        ],
+      },
+      {
+        name: 'Pembaikan Enjin Scraper EduPage',
+        items: [
+          'Menangani ralat ValueError semasa memproses kad jadual unplaced (kad tanpa slot waktu) agar proses muat turun data berjalan lancar.',
+          'Peningkatan kestabilan komunikasi sambungan ke pelayan EduPage bagi mengelakkan ralat terputus.',
+        ],
+      },
+      {
+        name: 'Penambahbaikan Pertukaran Semester Interaktif',
+        items: [
+          'Penukaran semester pada dropdown kini memuat semula (re-fetch) jadual pensyarah dan kelas yang sedang dipaparkan di skrin serta-merta tanpa perlu klik semula.',
+          'Parameter semester dihantar secara tepat dan eksplisit pada setiap panggilan API data.',
+          'Header navigasi utama dikekalkan bersih, kemas, dan bebas gangguan.',
+        ],
+      },
+    ],
+  },
+  {
+    version: 'v1.4.0',
+    badge: 'Arkib Stabil',
+    badgeColor: 'bg-slate-100 text-slate-700 border-slate-200/80',
     date: 'Oktober 2026',
     title: 'Seni Bina Dwi-Semester, Pemasangan Aplikasi Skrin Utama & Borang Maklum Balas',
     summary:
@@ -196,7 +230,7 @@ export default function ChangelogPage(): React.ReactElement {
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-6 mt-6 border-t border-slate-100 text-left">
           <div className="p-3 bg-slate-50/80 rounded-2xl border border-slate-100">
             <span className="text-[10px] text-slate-400 font-medium uppercase tracking-wider block">Versi Terkini</span>
-            <span className="text-sm sm:text-base font-extrabold text-slate-900">v1.4.0</span>
+            <span className="text-sm sm:text-base font-extrabold text-slate-900">v1.5.0</span>
           </div>
           <div className="p-3 bg-slate-50/80 rounded-2xl border border-slate-100">
             <span className="text-[10px] text-slate-400 font-medium uppercase tracking-wider block">Seni Bina</span>

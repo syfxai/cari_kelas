@@ -1,10 +1,9 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import TimetableGrid from '@/components/TimetableGrid';
 import SemesterSelector from '@/components/SemesterSelector';
-import SemesterArchiveBanner from '@/components/SemesterArchiveBanner';
 import type { TeacherData } from '@/lib/types';
 
 export default function TeachersPage() {
@@ -16,6 +15,18 @@ export default function TeachersPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [scrapingTeacher, setScrapingTeacher] = useState('');
   const [scrapedAt, setScrapedAt] = useState<string>('');
+  const [activeSemester, setActiveSemester] = useState<string>('current');
+  const selectedTeacherNameRef = useRef<string | null>(null);
+
+  const getSavedSemester = useCallback((): string => {
+    if (typeof window !== 'undefined') {
+      const local = localStorage.getItem('kptm_semester');
+      if (local) return local;
+      const match = document.cookie.match(/kptm_semester=([^;]+)/);
+      if (match) return decodeURIComponent(match[1]);
+    }
+    return 'current';
+  }, []);
 
   const doScrape = useCallback(async () => {
     setScraping(true);
@@ -24,7 +35,8 @@ export default function TeachersPage() {
       const res = await fetch('/api/scrape', { method: 'POST' });
       const data = await res.json();
       if (data.success) {
-        const tRes = await fetch('/api/scrape/teachers');
+        const sem = getSavedSemester();
+        const tRes = await fetch(`/api/scrape/teachers?semester=${encodeURIComponent(sem)}&t=${Date.now()}`);
         const tData = await tRes.json();
         if (tData.success && tData.data) {
           setTeachers(tData.data);
@@ -33,7 +45,7 @@ export default function TeachersPage() {
           setScrapedAt(data.data.scrapedAt);
         }
         setScrapeMsg(data.message || 'Jadual EduPage berjaya dikemas kini!');
-        window.dispatchEvent(new CustomEvent('timetable-updated'));
+        window.dispatchEvent(new CustomEvent('timetable-updated', { detail: { semester: sem } }));
       } else {
         setScrapeMsg(data.message || 'Kemaskini gagal.');
       }
@@ -42,12 +54,13 @@ export default function TeachersPage() {
     } finally {
       setScraping(false);
     }
-  }, []);
+  }, [getSavedSemester]);
 
-  const fetchTeachers = useCallback(async () => {
+  const fetchTeachers = useCallback(async (semOverride?: string) => {
     setLoading(true);
+    const sem = semOverride || getSavedSemester();
     try {
-      const res = await fetch('/api/scrape/teachers');
+      const res = await fetch(`/api/scrape/teachers?semester=${encodeURIComponent(sem)}&t=${Date.now()}`);
       const data = await res.json();
       if (data.success && data.data.length > 0) {
         setTeachers(data.data);
@@ -61,26 +74,16 @@ export default function TeachersPage() {
     } finally {
       setLoading(false);
     }
-  }, [doScrape]);
+  }, [doScrape, getSavedSemester]);
 
-  // Auto-fetch teacher list on load & listen for global updates
-  useEffect(() => {
-    fetchTeachers();
-
-    const handleGlobalUpdate = () => {
-      fetchTeachers();
-    };
-    window.addEventListener('timetable-updated', handleGlobalUpdate);
-    return () => window.removeEventListener('timetable-updated', handleGlobalUpdate);
-  }, [fetchTeachers]);
-
-  const handleSelectTeacher = async (name: string) => {
+  const handleSelectTeacher = useCallback(async (name: string, semOverride?: string) => {
+    selectedTeacherNameRef.current = name;
     setSearchQuery('');
     setScrapingTeacher(name);
     setLoading(true);
-    setSelected(null);
+    const sem = semOverride || getSavedSemester();
     try {
-      const res = await fetch(`/api/teachers?name=${encodeURIComponent(name)}`);
+      const res = await fetch(`/api/teachers?name=${encodeURIComponent(name)}&semester=${encodeURIComponent(sem)}&t=${Date.now()}`);
       const data = await res.json();
       if (data.success) {
         setSelected(data.data);
@@ -88,6 +91,7 @@ export default function TeachersPage() {
           window.dispatchEvent(new CustomEvent('kptm-user-interacted', { detail: { action: 'teacher_selected' } }));
         }
       } else {
+        setSelected(null);
         alert(data.message || 'Jadual tidak dijumpai');
       }
     } catch {
@@ -96,7 +100,33 @@ export default function TeachersPage() {
       setLoading(false);
       setScrapingTeacher('');
     }
-  };
+  }, [getSavedSemester]);
+
+  // Auto-fetch teacher list on load & listen for global updates
+  useEffect(() => {
+    const initialSem = getSavedSemester();
+    setActiveSemester(initialSem);
+    fetchTeachers(initialSem);
+
+    const handleSemesterUpdate = (e: Event) => {
+      const customEvt = e as CustomEvent<{ semester?: string }>;
+      const nextSem = customEvt.detail?.semester || getSavedSemester();
+      setActiveSemester(nextSem);
+      fetchTeachers(nextSem);
+
+      // Re-fetch currently selected teacher if any
+      if (selectedTeacherNameRef.current) {
+        handleSelectTeacher(selectedTeacherNameRef.current, nextSem);
+      }
+    };
+
+    window.addEventListener('semester-changed', handleSemesterUpdate);
+    window.addEventListener('timetable-updated', handleSemesterUpdate);
+    return () => {
+      window.removeEventListener('semester-changed', handleSemesterUpdate);
+      window.removeEventListener('timetable-updated', handleSemesterUpdate);
+    };
+  }, [fetchTeachers, handleSelectTeacher, getSavedSemester]);
 
   const filteredTeachers = teachers.filter(t =>
     t.toLowerCase().includes(searchQuery.toLowerCase())
@@ -237,11 +267,6 @@ export default function TeachersPage() {
         </div>
       </div>
 
-      {/* Makluman Mod Arkib Semester Lepas */}
-      <div className="rounded-2xl overflow-hidden">
-        <SemesterArchiveBanner />
-      </div>
-
       {/* Teacher List Grid - Gaya Apple Minimal */}
       {teachers.length > 0 && !selected && !scrapingTeacher && (
         <div className="bg-white rounded-3xl shadow-[0_4px_24px_-4px_rgba(0,0,0,0.04)] p-6 sm:p-8 space-y-4">
@@ -295,7 +320,10 @@ export default function TeachersPage() {
         <div className="space-y-5">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <button
-              onClick={() => setSelected(null)}
+              onClick={() => {
+                setSelected(null);
+                selectedTeacherNameRef.current = null;
+              }}
               className="h-10 px-4 text-xs font-semibold text-slate-700 hover:text-slate-950 bg-white rounded-xl shadow-sm hover:shadow-md hover:scale-[1.02] transition-all inline-flex items-center gap-2 cursor-pointer"
             >
               <svg className="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

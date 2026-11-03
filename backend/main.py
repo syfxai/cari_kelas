@@ -86,7 +86,11 @@ def parse_timetable(raw_data):
             if c:
                 class_names.append(c.get("name", "Unknown"))
 
-        start_period_num = int(card.get("period", "1"))
+        raw_period = card.get("period")
+        if not raw_period:
+            continue
+
+        start_period_num = int(raw_period)
         duration = int(lesson.get("durationperiods", 1))
         end_period_num = start_period_num + duration - 1
 

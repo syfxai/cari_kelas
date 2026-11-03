@@ -35,11 +35,22 @@ def update_all():
 
     backend_dir = Path(__file__).parent
     root_dir = backend_dir.parent
-
     raw_file = backend_dir / 'data' / 'raw_edupage.json'
-    print(f'3. Saving raw data to {raw_file}...')
-    with open(raw_file, 'w', encoding='utf-8') as f:
-        json.dump(raw_data, f, ensure_ascii=False)
+
+    try:
+        with urllib.request.urlopen(req2, timeout=60) as res2:
+            raw_data = json.loads(res2.read().decode('utf-8'))
+        print(f'3. Saving raw data to {raw_file}...')
+        with open(raw_file, 'w', encoding='utf-8') as f:
+            json.dump(raw_data, f, ensure_ascii=False)
+    except Exception as fetch_err:
+        print(f'Warning fetching live regulartt: {fetch_err}')
+        if raw_file.exists():
+            print(f'3. Using cached raw data from {raw_file}...')
+            with open(raw_file, 'r', encoding='utf-8') as f:
+                raw_data = json.load(f)
+        else:
+            raise
 
     print('4. Parsing timetable...')
     parsed = parse_timetable(raw_data)
@@ -51,6 +62,13 @@ def update_all():
 
     backend_json = backend_dir / 'data' / 'timetable.json'
     src_json = root_dir / 'src' / 'data' / 'timetable.json'
+    prev_json = root_dir / 'src' / 'data' / 'timetable_previous.json'
+
+    # Backup current to previous if previous is missing or identical
+    if src_json.exists() and not prev_json.exists():
+        print(f'Backing up old timetable to {prev_json}...')
+        with open(src_json, 'r', encoding='utf-8') as f_in, open(prev_json, 'w', encoding='utf-8') as f_out:
+            f_out.write(f_in.read())
 
     print(f'5. Writing to {backend_json}...')
     with open(backend_json, 'w', encoding='utf-8') as f:

@@ -52,7 +52,7 @@ export default function Home() {
       title: 'Jadual Kelas',
       href: '/classes',
       description: 'Semak jadual waktu subjek, kod pensyarah, dan lokasi bilik untuk setiap kumpulan kelas diploma.',
-      tag: '115 Kumpulan Kelas',
+      tag: '100 Kumpulan Kelas',
       tagColor: 'bg-slate-100 text-slate-800',
       highlights: [
         'Sokongan kelas DTE, DIM, DDB, DDM, DIA, DGD',
@@ -83,7 +83,7 @@ export default function Home() {
               href="/changelog"
               className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 hover:bg-white text-slate-600 hover:text-slate-950 text-xs font-medium border border-slate-200/80 shadow-2xs transition-all group cursor-pointer"
             >
-              <span className="px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700 text-[10px] font-bold">v1.4.0</span>
+              <span className="px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700 text-[10px] font-bold">v1.5.0</span>
               <span>Apa yang baharu?</span>
               <span className="group-hover:translate-x-0.5 transition-transform text-slate-400">→</span>
             </Link>
@@ -204,7 +204,7 @@ export default function Home() {
             href="/changelog"
             className="text-xs font-semibold text-slate-500 hover:text-slate-900 flex items-center gap-1 transition-colors"
           >
-            <span>Log Versi (v1.4.0)</span>
+            <span>Log Versi (v1.5.0)</span>
             <span>→</span>
           </Link>
           <Link
