@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getTimetableDb, setTimetableDb } from '@/lib/timetableService';
+import { ensureCloudDbLoaded, getTimetableDb, setTimetableDb } from '@/lib/timetableService';
 import { fetchLiveEdupageTimetable } from '@/lib/edupageScraper';
+import { saveLiveEdupageToCloud } from '@/lib/cloudStore';
 
 export const dynamic = 'force-dynamic';
 
@@ -9,6 +10,9 @@ export async function POST() {
     // 1. Ambil data jadual langsung dari EduPage (mengambil masa ~1-2 saat)
     const freshDb = await fetchLiveEdupageTimetable();
     setTimetableDb(freshDb, 'current');
+
+    // 2. Simpan secara automatik ke Netlify Blobs (dengan auto-rolling archive)
+    await saveLiveEdupageToCloud(freshDb);
 
     return NextResponse.json({
       success: true,
@@ -47,7 +51,7 @@ export async function POST() {
 export async function GET(request: NextRequest) {
   try {
     const semester = request.nextUrl.searchParams.get('semester') || request.cookies.get('kptm_semester')?.value || 'current';
-    const db = getTimetableDb(semester);
+    const db = await ensureCloudDbLoaded(semester);
     return NextResponse.json({
       success: true,
       data: {

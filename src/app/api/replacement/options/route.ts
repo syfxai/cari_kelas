@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { calculateReplacementOptions, type ReplacementQueryRequest } from '@/lib/timetableService';
+import { calculateReplacementOptions, ensureCloudDbLoaded, type ReplacementQueryRequest } from '@/lib/timetableService';
 
 const PYTHON_API = process.env.PYTHON_API_URL;
 
@@ -24,6 +24,7 @@ export async function POST(request: NextRequest) {
 
     // 2. Native TypeScript execution (Works 100% on Netlify, Vercel & Node.js)
     const semester = request.nextUrl.searchParams.get('semester') || request.cookies.get('kptm_semester')?.value || 'current';
+    await ensureCloudDbLoaded(semester);
     const result = calculateReplacementOptions(body, semester);
     return NextResponse.json({
       success: true,

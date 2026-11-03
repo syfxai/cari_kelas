@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getClassByName, getClassesList } from '@/lib/timetableService';
+import { ensureCloudDbLoaded, getClassByName, getClassesList } from '@/lib/timetableService';
 
 export const dynamic = 'force-dynamic';
 
@@ -34,6 +34,7 @@ export async function GET(request: NextRequest) {
 
   // 2. Native TypeScript execution (Works 100% on Netlify, Vercel & Node.js)
   try {
+    await ensureCloudDbLoaded(semester);
     if (name) {
       const cls = getClassByName(name, semester);
       if (cls) {

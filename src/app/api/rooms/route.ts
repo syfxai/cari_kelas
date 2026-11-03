@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getAvailableRooms, getRoomsList } from '@/lib/timetableService';
+import { ensureCloudDbLoaded, getAvailableRooms, getRoomsList } from '@/lib/timetableService';
 
 export const dynamic = 'force-dynamic';
 
@@ -43,6 +43,7 @@ export async function GET(request: NextRequest) {
 
   // 2. Native TypeScript execution (Works 100% on Netlify, Vercel & Node.js)
   try {
+    await ensureCloudDbLoaded(semester);
     if (day && time) {
       const data = getAvailableRooms(day, time, timeEnd, semester);
       return NextResponse.json({

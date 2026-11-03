@@ -49,6 +49,14 @@ const CHANGELOG_DATA: ChangelogEntry[] = [
           'Header navigasi utama dikekalkan bersih, kemas, dan bebas gangguan.',
         ],
       },
+      {
+        name: 'Penyimpanan Awan Netlify Blobs (Bebas Had Firebase)',
+        items: [
+          'Integrasi Netlify Blobs untuk penyimpanan pangkalan data awan kekal: tiada risiko kuota sempit dan tiada masalah projek dipadam/pause jika tidak aktif.',
+          'Logik Auto-Rolling Archive pintar: kemas kini jadual terus daripada web automatik menggilis semester semasa ke arkib dan membersihkan data tertua (saiz kekal bawah 2MB).',
+          'Sokongan hibrid telus: menggunakan Cloud Blobs pada pelayan Netlify dengan sandaran keselamatan fail JSON tempatan.',
+        ],
+      },
     ],
   },
   {

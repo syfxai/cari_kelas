@@ -1,6 +1,7 @@
 import rawTimetableData from '@/data/timetable.json';
 import rawPreviousTimetableData from '@/data/timetable_previous.json';
 import semestersConfigData from '@/data/semesters.json';
+import { getCloudTimetable } from './cloudStore';
 import type {
   ClassData,
   MultiPlannedSlotItem,
@@ -238,6 +239,20 @@ export function setTimetableDb(
   };
 
   return cachedDbs[semKey];
+}
+
+export async function ensureCloudDbLoaded(
+  semesterId: string = 'current'
+): Promise<RawTimetableDatabase> {
+  const semKey = semesterId === 'previous' ? 'previous' : 'current';
+  if (cachedDbs[semKey]) return cachedDbs[semKey];
+
+  try {
+    const cloudData = await getCloudTimetable(semKey);
+    return setTimetableDb(cloudData, semKey);
+  } catch {
+    return getTimetableDb(semKey);
+  }
 }
 
 // 1. Get Teacher List & Single Teacher

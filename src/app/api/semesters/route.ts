@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getSemesterMetadata, getSemestersConfig } from '@/lib/timetableService';
+import { getSemesterMetadata } from '@/lib/timetableService';
+import { getCloudSemestersConfig } from '@/lib/cloudStore';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
   try {
-    const config = getSemestersConfig();
+    const config = await getCloudSemestersConfig();
     const cookieSemester = request.cookies.get('kptm_semester')?.value;
     const requestedSemester = request.nextUrl.searchParams.get('semester');
 

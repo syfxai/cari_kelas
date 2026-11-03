@@ -1,13 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getTeachersList, getTimetableDb, setTimetableDb } from '@/lib/timetableService';
+import { ensureCloudDbLoaded, getTeachersList, getTimetableDb, setTimetableDb } from '@/lib/timetableService';
 import { fetchLiveEdupageTimetable } from '@/lib/edupageScraper';
+import { saveLiveEdupageToCloud } from '@/lib/cloudStore';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
   try {
     const semester = request.nextUrl.searchParams.get('semester') || request.cookies.get('kptm_semester')?.value || 'current';
-    const db = getTimetableDb(semester);
+    const db = await ensureCloudDbLoaded(semester);
     const teachers = getTeachersList(semester);
     return NextResponse.json({
       success: true,
@@ -30,6 +31,7 @@ export async function POST() {
   try {
     const freshDb = await fetchLiveEdupageTimetable();
     setTimetableDb(freshDb);
+    await saveLiveEdupageToCloud(freshDb);
     const teachers = getTeachersList();
 
     return NextResponse.json({
